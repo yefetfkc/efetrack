@@ -1,0 +1,63 @@
+{% load i18n %}
+{% load static %}
+
+{# efeTrack top bar actions: random pick, notification center, theme #}
+<div class="flex items-center gap-1 shrink-0 lg:absolute lg:right-4 lg:top-1/2 lg:-translate-y-1/2">
+  {# Random pick #}
+  <a href="{% url 'efe_random' %}"
+     title="{% trans 'Random Pick' %}"
+     aria-label="{% trans 'Random Pick' %}"
+     data-efe-sound="tap"
+     class="hidden sm:flex p-2 rounded-md text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover transition-colors">
+    {% include "app/icons/dice.svg" with classes="w-5 h-5" %}
+  </a>
+
+  {# Notification center #}
+  <div class="relative"
+       x-data="{ open: false, loaded: false }"
+       @click.away="open = false"
+       @keydown.escape.window="open = false">
+    <button type="button"
+            title="{% trans 'Notification Center' %}"
+            aria-label="{% trans 'Notification Center' %}"
+            data-efe-silent
+            class="relative p-2 rounded-md text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover transition-colors cursor-pointer"
+            @click="open = !open; if (open) { window.efe && efe.sound.play('tap'); $nextTick(() => htmx.trigger($refs.menu, 'efe-load')); }">
+      <span data-efe-bell>{% include "app/icons/bell.svg" with classes="w-5 h-5" %}</span>
+      <span data-efe-unread-badge
+            class="hidden absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 px-1 rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-ef-chrome"></span>
+    </button>
+    <div x-cloak
+         x-show="open"
+         x-transition:enter="transition ease-out duration-150"
+         x-transition:enter-start="opacity-0 -translate-y-1 scale-95"
+         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+         x-transition:leave="transition ease-in duration-100"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="absolute right-0 mt-2 w-[22rem] max-w-[calc(100vw-1.5rem)] bg-ef-menu border border-ef-line rounded-xl shadow-2xl overflow-hidden z-30">
+      <div x-ref="menu"
+           hx-get="{% url 'efe_notifications_menu' %}"
+           hx-trigger="efe-load"
+           hx-swap="innerHTML">
+        <div class="p-6 flex justify-center">
+          {% include "app/icons/circle-spinning-clockwise.svg" with classes="w-6 h-6 animate-spin text-gray-400" %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# Theme toggle #}
+  <button type="button"
+          x-data="{ theme: document.documentElement.dataset.theme || 'dark' }"
+          @efe-theme-changed.window="theme = $event.detail.theme"
+          @click="efe.theme.cycle()"
+          data-efe-silent
+          :title="theme === 'dark' ? '{{ _('Theme: dark')|escapejs }}' : (theme === 'light' ? '{{ _('Theme: light')|escapejs }}' : '{{ _('Theme: system')|escapejs }}')"
+          aria-label="{% trans 'Change theme' %}"
+          class="p-2 rounded-md text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover transition-colors cursor-pointer">
+    <span x-show="theme === 'dark'">{% include "app/icons/moon.svg" with classes="w-5 h-5" %}</span>
+    <span x-cloak x-show="theme === 'light'">{% include "app/icons/sun.svg" with classes="w-5 h-5" %}</span>
+    <span x-cloak x-show="theme === 'system'">{% include "app/icons/monitor.svg" with classes="w-5 h-5" %}</span>
+  </button>
+</div>

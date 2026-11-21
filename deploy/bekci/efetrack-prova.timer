@@ -1,0 +1,9 @@
+[Unit]
+Description=efeTrack yedek provası - her ayın 1'i, 04:30 (gecelik yedekten bir saat sonra)
+
+[Timer]
+OnCalendar=*-*-01 04:30:00 Europe/Istanbul
+Persistent=true
+
+[Install]
+WantedBy=timers.target

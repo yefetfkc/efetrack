@@ -1,0 +1,29 @@
+services:
+  efetrack:
+    container_name: efetrack
+    build: .
+    image: efetrack:latest
+    restart: unless-stopped
+    depends_on:
+      - redis
+    environment:
+      - TZ=Europe/Istanbul
+      # Bunu uzun ve rastgele bir değerle değiştir!
+      - SECRET=bunu-uzun-ve-rastgele-bir-degerle-degistir
+      - REDIS_URL=redis://redis:6379
+      # Ters vekil sunucu / alan adı kullanıyorsan aç:
+      # - URLS=https://efetrack.alanadin.com
+    volumes:
+      - ./db:/yamtrack/db
+    ports:
+      - "8000:8000"
+
+  redis:
+    container_name: efetrack-redis
+    image: redis:8-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

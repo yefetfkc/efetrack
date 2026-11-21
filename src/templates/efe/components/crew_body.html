@@ -1,0 +1,12 @@
+{# efeTrack: crew cards, same look as the cast cards (the duties go where the character name is). #}
+{% if error %}
+  <p class="text-sm text-gray-400">Ekip bilgisi alınamadı. Biraz sonra yeniden dene.</p>
+{% elif crew %}
+  <div style="display: flex; flex-wrap: wrap; gap: 1rem;">
+    {% for member in crew %}
+      {% include "app/components/cast_card.html" with cast=member %}
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-sm text-gray-400">Bu yapım için ekip bilgisi yok.</p>
+{% endif %}

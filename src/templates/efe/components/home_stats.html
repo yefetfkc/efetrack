@@ -1,0 +1,75 @@
+{% load i18n %}
+{% load efe_tags %}
+{% load app_tags %}
+
+{# efeTrack: home summary tiles — watched this week, streak, upcoming #}
+<section class="efe-stats" aria-label="{% trans 'Summary' %}">
+
+  {# Watched this week #}
+  <a href="{% url 'journal' %}" class="efe-stat" data-efe-sound="tap">
+    <span class="efe-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="2"/><path d="M8 21h8M10 9.5v5l4-2.5-4-2.5Z"/></svg>
+    </span>
+    <span class="efe-stat-body">
+      <span class="efe-stat-label">{% trans "Watched this week" %}</span>
+      <span class="efe-stat-value">{{ stats.week_total }}</span>
+      <span class="efe-stat-sub">
+        {% blocktrans count count=stats.week_episodes %}{{ count }} episode{% plural %}{{ count }} episodes{% endblocktrans %}
+        · {% blocktrans count count=stats.week_movies %}{{ count }} movie{% plural %}{{ count }} movies{% endblocktrans %}
+        {% if stats.week_change > 0 %}<span class="efe-stat-up">▲ {{ stats.week_change }}</span>{% elif stats.week_change < 0 %}<span class="efe-stat-down">▼ {{ stats.week_change|stringformat:"d"|slice:"1:" }}</span>{% endif %}
+      </span>
+    </span>
+    <span class="efe-stat-bars" aria-hidden="true">
+      {% for day, count, is_today, is_future in stats.week_days %}
+        <span class="efe-stat-bar{% if is_today %} is-today{% endif %}{% if is_future %} is-future{% endif %}"
+              style="--h: {% widthratio count stats.week_peak 100 %}%"
+              title="{{ day|date:'l' }}: {{ count }}"><i></i><b>{{ day|date:"D" }}</b></span>
+      {% endfor %}
+    </span>
+  </a>
+
+  {# Streak #}
+  <a href="{% url 'statistics' %}" class="efe-stat" data-efe-sound="tap">
+    <span class="efe-stat-icon{% if stats.streak %} is-hot{% endif %}" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.5 3.5 4.5 5.5 4.5 10a4.5 4.5 0 0 1-9 0c0-2 1-3.4 2-4.4.2 1.4 1 2.4 2 2.9C11 9 11.2 6 12 3Z"/></svg>
+    </span>
+    <span class="efe-stat-body">
+      <span class="efe-stat-label">{% trans "Streak" %}</span>
+      <span class="efe-stat-value">{% blocktrans count count=stats.streak %}{{ count }} day{% plural %}{{ count }} days{% endblocktrans %}</span>
+      <span class="efe-stat-sub">
+        {% if stats.streak_at_risk %}{% trans "Watch something today to keep it going" %}
+        {% elif stats.streak %}{% trans "Keep it up!" %}
+        {% else %}{% trans "Watch something to start a streak" %}{% endif %}
+        {% if stats.best_streak > stats.streak %} · {% blocktrans with best=stats.best_streak %}best {{ best }}{% endblocktrans %}{% endif %}
+      </span>
+    </span>
+    <span class="efe-stat-dots" aria-hidden="true">
+      {% for day, active in stats.recent_days %}
+        <span class="efe-stat-day{% if active %} is-on{% endif %}{% if forloop.last %} is-today{% endif %}" title="{{ day|date:'j F' }}"><i class="efe-stat-dot"></i><b>{{ day|date:"D" }}</b></span>
+      {% endfor %}
+    </span>
+  </a>
+
+  {# Upcoming #}
+  <a href="{% url 'efe_notifications' %}" class="efe-stat" data-efe-sound="tap">
+    <span class="efe-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18M12 14v3l2 1"/></svg>
+    </span>
+    <span class="efe-stat-body">
+      <span class="efe-stat-label">{% trans "Upcoming episodes" %}</span>
+      <span class="efe-stat-value">{{ stats.upcoming_count }}</span>
+      <span class="efe-stat-sub">
+        {% if stats.upcoming_next %}
+          {% with entry=stats.upcoming_next %}
+            {% trans "Next" %}: <span class="efe-stat-strong">{{ entry.item.title }}</span>{% if entry.event.readable_content_number %} · {{ entry.event.readable_content_number }}{% endif %} · {{ entry|ef_countdown }}
+          {% endwith %}
+        {% else %}
+          {% blocktrans count days=stats.upcoming_days %}Nothing in the next {{ days }} day{% plural %}Nothing in the next {{ days }} days{% endblocktrans %}
+        {% endif %}
+      </span>
+    </span>
+    {% if stats.upcoming_next %}
+      <img class="efe-stat-poster" src="{{ stats.upcoming_next.item.image }}" alt="" loading="lazy">
+    {% endif %}
+  </a>
+</section>

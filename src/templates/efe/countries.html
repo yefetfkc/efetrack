@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Ülkeler - efeTrack
+{% endblock title %}
+
+{% block content %}
+  <div class="flex flex-col gap-5">
+    <div>
+      <a href="{% url 'efe_planned' %}" class="text-sm text-gray-400 hover:text-ef-fg">← Planlananlar</a>
+      <h1 class="text-3xl font-bold mb-1 mt-1">Ülkeler</h1>
+      <p class="text-gray-400">Planladıklarının yapım ülkeleri. Bir ülkeye dokun, o ülkenin yapımlarını gör.</p>
+      {% if pending %}<p class="text-xs text-gray-400 mt-2" role="status">Bazı yapımların ülkesi henüz hesaplanıyor; birazdan sayfayı yenile.</p>{% endif %}
+    </div>
+    {% if countries %}
+      <div class="efe-country-grid">
+        {% for c in countries %}
+          <a href="{% url 'efe_country' c.key %}" class="efe-country-card">
+            <span class="efe-country-flag" aria-hidden="true">{{ c.flag|default:"🌐" }}</span>
+            <span class="min-w-0">
+              <span class="block font-medium text-ef-fg truncate">{{ c.word }}</span>
+              <span class="block text-xs text-gray-400">{{ c.count }} planlanan</span>
+            </span>
+          </a>
+        {% endfor %}
+      </div>
+      {% if unknown %}<p class="text-xs text-gray-400">{{ unknown }} yapımın ülkesi bilinmiyor (kitap, oyun gibi türlerde ülke bilgisi yok).</p>{% endif %}
+    {% else %}
+      <p class="text-gray-400">Henüz ülke bilgisi olan bir planladığın yok.</p>
+    {% endif %}
+  </div>
+{% endblock content %}

@@ -1,0 +1,6 @@
+{# efeTrack: "FİNAL" / "İPTAL" label in the top-right corner of a TV poster. Needs: end_state, position classes in pos #}
+{% if end_state %}
+  <span class="absolute {{ pos|default:'top-2 right-2' }} z-10 text-[10px] font-bold tracking-wide uppercase text-white rounded-md shadow-md"
+        style="padding: .2rem .45rem; background: {% if end_state.kind == 'canceled' %}#dc2626{% else %}#7c3aed{% endif %};"
+        title="{{ end_state.text }}">{{ end_state.label }}</span>
+{% endif %}

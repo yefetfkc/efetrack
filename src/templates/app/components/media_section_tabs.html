@@ -1,0 +1,106 @@
+{% load app_tags %}
+{% load i18n %}
+{% media_section_count media user_medias watch_providers watch_provider_region watch_offers=watch_offers film_series=film_series trailers_url=trailers_url universe_url=universe_url crew_url=crew_url as section_count %}
+{% if section_count > 1 %}
+  <nav class="flex gap-x-6 overflow-x-auto scrollbar-hide border-b border-ef-line {{ extra_classes }}">
+    <button @click="tab = 'overview'"
+            class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+            :class="tab === 'overview' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+      {% trans "Overview" %}
+    </button>
+
+    {% if film_series %}
+      <button @click="tab = 'film-series'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'film-series' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        {% trans "Film Series" %}
+      </button>
+    {% endif %}
+
+    {% if media.cast %}
+      <button @click="tab = 'cast'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'cast' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        {% trans "Cast" %}
+      </button>
+    {% endif %}
+
+    {% if crew_url %}
+      <button @click="tab = 'crew'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'crew' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        Ekip
+      </button>
+    {% endif %}
+
+    {% if trailers_url %}
+      <button @click="tab = 'trailers'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'trailers' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        Fragman
+      </button>
+    {% endif %}
+
+    {% if universe_url %}
+      <button @click="tab = 'universe'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'universe' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        Evren
+      </button>
+    {% endif %}
+
+    {% if rating_chart_url %}
+      <button @click="tab = 'ratings'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'ratings' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        Puanlar
+      </button>
+    {% endif %}
+
+    {% if media.related %}
+      {% for name, related_items in media.related.items %}
+        {% if related_items %}
+          <button @click="tab = 'related-{{ forloop.counter }}'"
+                  class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+                  :class="tab === 'related-{{ forloop.counter }}' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+            {{ name|related_section_label }}
+          </button>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% if user_medias|length > 1 %}
+      <button @click="tab = 'repeats'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'repeats' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        {% trans "Repeats" %}
+      </button>
+    {% endif %}
+
+    {% if media.episodes %}
+      <button @click="tab = 'episodes'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'episodes' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        {% trans "Episodes" %}
+      </button>
+    {% endif %}
+
+    {% if media_type == MediaTypes.MOVIE.value or media_type == MediaTypes.TV.value or media_type == MediaTypes.SEASON.value %}
+      {% if watch_provider_region == "UNSET" and media.source == "tmdb" or watch_offers %}
+        <button @click="tab = 'streaming'"
+                class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+                :class="tab === 'streaming' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+          {% trans "Where to watch" %}
+        </button>
+      {% endif %}
+    {% endif %}
+
+    {% if media.time_to_beat %}
+      <button @click="tab = 'ttb'"
+              class="pb-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-200 cursor-pointer"
+              :class="tab === 'ttb' ? 'text-ef-fg border-indigo-500' : 'text-gray-400 border-transparent hover:text-ef-fg'">
+        {% trans "Time to Beat" %}
+      </button>
+    {% endif %}
+  </nav>
+{% endif %}

@@ -1,0 +1,29 @@
+{# efeTrack: "Yenilikler" pop-up, once per device and release (localStorage "efe-yenilik"). #}
+{% load efe_tags %}
+{% efe_whats_new as whats_new %}
+{% if whats_new %}
+  <div x-data="{ open: false, id: '{{ whats_new.id }}',
+                 init() { try { this.open = localStorage.getItem('efe-yenilik') !== this.id; } catch (e) { this.open = false; } },
+                 seen() { try { localStorage.setItem('efe-yenilik', this.id); } catch (e) {} this.open = false; } }"
+       x-show="open" x-cloak @keydown.escape.window="open && seen()"
+       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div class="bg-ef-card rounded-lg shadow-2xl w-full max-w-md overflow-y-auto" style="max-height:85vh" @click.outside="seen()"
+         role="dialog" aria-labelledby="efe-yenilik-baslik">
+      <div class="p-5 border-b border-ef-line">
+        <p class="text-xs font-medium uppercase tracking-wide text-indigo-400">Yenilikler{% if whats_new.surum %} · Sürüm {{ whats_new.surum }}{% endif %}</p>
+        <h2 id="efe-yenilik-baslik" class="text-xl font-bold mt-1">{{ whats_new.title }}</h2>
+      </div>
+      <ul class="p-5 space-y-3">
+        {% for icon, text in whats_new.items %}
+          <li class="flex gap-3 text-sm text-gray-200"><span class="shrink-0">{{ icon }}</span><span>{{ text }}</span></li>
+        {% endfor %}
+      </ul>
+      <div class="p-5 pt-0 flex justify-end gap-2">
+        <a href="{% url 'efe_whats_new' %}" @click="seen()"
+           class="px-4 py-2 text-sm bg-ef-raised hover:bg-ef-hover rounded-md transition-colors">Tümü</a>
+        <button type="button" @click="seen()"
+                class="px-4 py-2 text-sm text-white rounded-md transition-opacity cursor-pointer hover:opacity-90 bg-indigo-600">Tamam</button>
+      </div>
+    </div>
+  </div>
+{% endif %}

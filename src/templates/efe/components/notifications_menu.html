@@ -1,0 +1,41 @@
+{% load i18n %}
+
+<div class="flex items-center justify-between px-4 py-3 border-b border-ef-line">
+  <div class="flex items-center gap-2">
+    <h3 class="font-semibold">{% trans "Notifications" %}</h3>
+    {% if unread_count %}
+      <span class="px-2 py-0.5 rounded-full bg-red-600 text-white text-xs font-semibold">
+        {% blocktrans count count=unread_count %}{{ count }} new{% plural %}{{ count }} new{% endblocktrans %}
+      </span>
+    {% endif %}
+  </div>
+  {% if unread_count %}
+    <button type="button"
+            hx-post="{% url 'efe_notifications_mark_read' %}"
+            hx-target="closest [x-ref=menu]"
+            hx-swap="innerHTML"
+            data-efe-sound="success"
+            class="text-xs text-indigo-400 hover:text-indigo-300 cursor-pointer">
+      {% trans "Mark all as read" %}
+    </button>
+  {% endif %}
+</div>
+
+<div class="max-h-[26rem] overflow-y-auto p-2 space-y-1">
+  {% for entry in entries %}
+    {% include "efe/components/notification_entry.html" with entry=entry compact=True %}
+  {% empty %}
+    <div class="px-4 py-10 text-center">
+      <div class="mx-auto mb-3 w-12 h-12 rounded-full bg-ef-raised flex items-center justify-center text-gray-400">
+        {% include "app/icons/bell.svg" with classes="w-6 h-6" %}
+      </div>
+      <p class="text-sm font-medium">{% trans "You're all caught up" %}</p>
+      <p class="text-xs text-gray-400 mt-1">{% trans "New episodes and releases of what you track will appear here." %}</p>
+    </div>
+  {% endfor %}
+</div>
+
+<a href="{% url 'efe_notifications' %}"
+   class="block text-center text-sm font-medium py-3 border-t border-ef-line text-indigo-400 hover:bg-ef-hover transition-colors">
+  {% trans "Open the notification center" %}
+</a>

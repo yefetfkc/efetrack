@@ -1,0 +1,7 @@
+{# efeTrack: placeholder under a TV search result; the length loads when it scrolls into view #}
+{% if item.media_type == "tv" and item.source == "tmdb" %}
+  <p class="text-xs text-gray-400 mt-2 px-1"
+     hx-get="{% url 'efe_show_length' item.media_id %}"
+     hx-trigger="intersect once"
+     hx-swap="innerHTML">&nbsp;</p>
+{% endif %}

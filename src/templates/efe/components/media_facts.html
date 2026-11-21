@@ -1,0 +1,33 @@
+{# efeTrack: "🇬🇧 Britanya Yapımı" and the total watch time under the title. Needs: media, user, tv (season pages) #}
+{% load efe_tags %}
+{% efe_media_facts media user tv as facts %}
+{% if facts.country or facts.length or facts.lazy or facts.book %}
+  <div class="efe-facts mb-4">
+    {% if facts.country %}
+      {% if facts.country.key %}
+        <a class="efe-fact efe-fact-link" href="{% url 'efe_country' facts.country.key %}" title="Bu ülkenin yapımlarından planladıkların">
+          <span>{{ facts.country.text }}</span>
+        </a>
+      {% else %}
+        <span class="efe-fact" title="Yapım ülkesi">
+          <span>{{ facts.country.text }}</span>
+        </span>
+      {% endif %}
+    {% endif %}
+    {% if facts.length %}
+      {% include "efe/components/media_length.html" with length=facts.length %}
+    {% elif facts.lazy %}
+      <span class="efe-fact efe-fact-loading"
+            hx-get="{% url 'efe_media_length' media.media_id %}"
+            hx-trigger="load"
+            hx-swap="outerHTML">
+        {% include "app/icons/clock.svg" with classes="w-4 h-4" %}
+        <span>Toplam süre hesaplanıyor…</span>
+      </span>
+    {% endif %}
+    {% if facts.book %}
+      {# Book it was adapted from (Wikidata, lazy; nothing shows when there is none) #}
+      <span hx-get="{% url 'efe_book_source' facts.book.0 facts.book.1 %}" hx-trigger="load" hx-swap="outerHTML"></span>
+    {% endif %}
+  </div>
+{% endif %}

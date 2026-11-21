@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load app_tags %}
+{% load efe_tags %}
+{% load i18n %}
+
+{% block title %}
+  {% trans "Notification Center" %} - efeTrack
+{% endblock title %}
+
+{% block content %}
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold mb-2 flex items-center gap-3">
+        <span class="p-2 rounded-xl bg-indigo-600 text-white">{% include "app/icons/bell-ringing.svg" with classes="w-6 h-6" %}</span>
+        {% trans "Notification Center" %}
+      </h1>
+      <p class="text-gray-400">
+        {% blocktrans trimmed count days=days_ahead %}
+          New episodes and releases of what you track, for the next {{ days }} day.
+        {% plural %}
+          New episodes and releases of what you track, for the next {{ days }} days.
+        {% endblocktrans %}
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2"
+         x-data="{ supported: window.efe ? efe.notifications.supported() : false, enabled: window.efe ? efe.notifications.browserEnabled() : false, permission: window.efe ? efe.notifications.permission() : 'unsupported' }">
+      <template x-if="supported && !enabled && permission !== 'denied'">
+        <button type="button"
+                @click="efe.notifications.enableBrowser().then(ok => { enabled = ok; permission = efe.notifications.permission(); })"
+                class="px-4 py-2 text-sm rounded-md bg-indigo-600 hover:bg-indigo-700 text-white flex items-center gap-2 cursor-pointer transition-colors">
+          {% include "app/icons/bell.svg" with classes="w-4 h-4" %}
+          <span>{% trans "Enable browser notifications" %}</span>
+        </button>
+      </template>
+      <template x-if="supported && enabled">
+        <button type="button"
+                @click="efe.notifications.disableBrowser(); enabled = false"
+                class="px-4 py-2 text-sm rounded-md bg-ef-raised hover:bg-ef-hover flex items-center gap-2 cursor-pointer transition-colors">
+          {% include "app/icons/bell-off.svg" with classes="w-4 h-4" %}
+          <span>{% trans "Turn off browser notifications" %}</span>
+        </button>
+      </template>
+      <template x-if="permission === 'denied'">
+        <span class="text-xs text-amber-400">{% trans "Browser notifications are blocked in your browser settings." %}</span>
+      </template>
+      <form method="post" action="{% url 'reload_calendar' %}">
+        {% csrf_token %}
+        <button class="px-4 py-2 text-sm bg-ef-raised hover:bg-ef-hover rounded-md transition-colors flex items-center gap-2 cursor-pointer">
+          {% include "app/icons/circle-spinning-clockwise.svg" with classes="w-4 h-4" %}
+          <span>{% trans "Fetch New Releases" %}</span>
+        </button>
+      </form>
+      <a href="{% url 'notifications' %}"
+         class="px-4 py-2 text-sm bg-ef-raised hover:bg-ef-hover rounded-md transition-colors flex items-center gap-2">
+        {% include "app/icons/settings.svg" with classes="w-4 h-4" %}
+        <span>{% trans "Notification settings" %}</span>
+      </a>
+    </div>
+  </div>
+
+  {# Summary tiles #}
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+    <div class="bg-ef-card rounded-xl p-5 flex items-center gap-4">
+      <div class="p-3 rounded-lg bg-red-500/15 text-red-400">{% include "app/icons/sparkles.svg" with classes="w-6 h-6" %}</div>
+      <div>
+        <p class="text-2xl font-bold">{{ unread_count }}</p>
+        <p class="text-sm text-gray-400">{% trans "New notifications" %}</p>
+      </div>
+    </div>
+    <div class="bg-ef-card rounded-xl p-5 flex items-center gap-4">
+      <div class="p-3 rounded-lg bg-indigo-500/15 text-indigo-400">{% include "app/icons/calendar.svg" with classes="w-6 h-6" %}</div>
+      <div>
+        <p class="text-2xl font-bold">{{ center.today|length }}</p>
+        <p class="text-sm text-gray-400">{% trans "Releasing today" %}</p>
+      </div>
+    </div>
+    <div class="bg-ef-card rounded-xl p-5 flex items-center gap-4">
+      <div class="p-3 rounded-lg bg-amber-500/15 text-amber-400">{% include "app/icons/alarm-clock.svg" with classes="w-6 h-6" %}</div>
+      <div>
+        <p class="text-2xl font-bold">{{ center.upcoming|length }}</p>
+        <p class="text-sm text-gray-400">{% trans "Coming soon" %}</p>
+      </div>
+    </div>
+  </div>
+
+  {% if not center.entries %}
+    <div class="bg-ef-card rounded-xl p-12 text-center">
+      <div class="mx-auto mb-4 w-16 h-16 rounded-full bg-ef-raised flex items-center justify-center text-gray-400">
+        {% include "app/icons/bell.svg" with classes="w-8 h-8" %}
+      </div>
+      <h2 class="text-xl font-semibold mb-2">{% trans "You're all caught up" %}</h2>
+      <p class="text-gray-400 max-w-lg mx-auto">
+        {% trans "There are no upcoming releases for the media you track. Add TV shows, anime or movies to your list and their new episodes will show up here." %}
+      </p>
+    </div>
+  {% else %}
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div class="space-y-6">
+        {# Today #}
+        <section class="bg-ef-card rounded-xl overflow-hidden">
+          <div class="px-5 py-3 bg-indigo-600 text-white flex items-center justify-between">
+            <h2 class="font-semibold flex items-center gap-2">{% include "app/icons/calendar.svg" with classes="w-5 h-5" %}{% trans "Today" %}</h2>
+            <span class="text-sm opacity-90">{% now "l, j F" %}</span>
+          </div>
+          <div class="p-3 space-y-1">
+            {% for entry in center.today %}
+              {% include "efe/components/notification_entry.html" with entry=entry %}
+            {% empty %}
+              <p class="text-sm text-gray-400 px-2 py-4 text-center">{% trans "Nothing releases today." %}</p>
+            {% endfor %}
+          </div>
+        </section>
+
+        {# Recently released #}
+        <section class="bg-ef-card rounded-xl overflow-hidden">
+          <div class="px-5 py-3 border-b border-ef-line flex items-center justify-between">
+            <h2 class="font-semibold flex items-center gap-2 text-emerald-400">{% include "app/icons/circle-check.svg" with classes="w-5 h-5" %}{% trans "Recently released" %}</h2>
+            <span class="text-xs text-gray-400">{% trans "Last 7 days" %}</span>
+          </div>
+          <div class="p-3 space-y-1">
+            {% for entry in center.released %}
+              {% include "efe/components/notification_entry.html" with entry=entry %}
+            {% empty %}
+              <p class="text-sm text-gray-400 px-2 py-4 text-center">{% trans "Nothing was released in the last 7 days." %}</p>
+            {% endfor %}
+          </div>
+        </section>
+      </div>
+
+      {# Upcoming, grouped by day #}
+      <section class="bg-ef-card rounded-xl overflow-hidden self-start">
+        <div class="px-5 py-3 border-b border-ef-line flex items-center justify-between">
+          <h2 class="font-semibold flex items-center gap-2 text-amber-400">{% include "app/icons/alarm-clock.svg" with classes="w-5 h-5" %}{% trans "Coming soon" %}</h2>
+          <a href="{% url 'calendar' %}" class="text-xs text-indigo-400 hover:text-indigo-300">{% trans "Open calendar" %}</a>
+        </div>
+        <div class="p-3 space-y-4">
+          {% for day, entries in center.upcoming_by_day.items %}
+            <div>
+              <div class="flex items-center gap-2 px-2 mb-1">
+                <span class="text-xs font-semibold uppercase tracking-wide text-gray-400">{{ day|ef_long_date }}</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-ef-raised text-gray-300">{{ day|ef_relative_day }}</span>
+              </div>
+              <div class="space-y-1">
+                {% for entry in entries %}
+                  {% include "efe/components/notification_entry.html" with entry=entry %}
+                {% endfor %}
+              </div>
+            </div>
+          {% empty %}
+            <p class="text-sm text-gray-400 px-2 py-4 text-center">{% trans "No upcoming releases yet." %}</p>
+          {% endfor %}
+        </div>
+      </section>
+    </div>
+  {% endif %}
+{% endblock content %}

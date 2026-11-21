@@ -1,0 +1,29 @@
+{# efeTrack: "Watched up to here" – a separate button with a confirmation. Needs: episode, efe_season, request, csrf_token #}
+{% if not episode.history and episode.efe_upto > 0 %}
+  <div x-data="{ open: false, busy: false }" class="px-4 mt-2">
+    <button type="button" @click="open = true"
+            class="text-xs text-gray-400 hover:text-white border border-gray-600 rounded-md px-2 py-1 cursor-pointer">
+      ⤒ Buraya kadar izledim
+    </button>
+    <div x-show="open" x-cloak @keydown.escape.window="open = false"
+         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <form method="post"
+            action="{% url 'efe_season_upto' efe_season.source efe_season.media_id efe_season.season_number episode.episode_number %}?next={{ request.get_full_path|urlencode }}"
+            @click.outside="open = false"
+            @submit="busy = true"
+            class="w-96 p-4 bg-ef-raised border border-gray-600 rounded-lg shadow-xl" style="max-width: calc(100vw - 2rem);">
+        {% csrf_token %}
+        <h3 class="text-lg font-semibold mb-2">Buraya kadar izledim</h3>
+        <p class="text-sm text-gray-300 mb-4">
+          {{ efe_season.season_number }}. sezonun {{ episode.episode_number }}. bölümüne kadar (bu bölüm dahil) izlemediğin
+          <strong>{{ episode.efe_upto }} bölüm</strong> bugünün tarihiyle izlendi olarak işaretlenecek.
+          Yanlışsa hemen ardından çıkan "Geri al" ile geri alabilirsin.
+        </p>
+        <div class="flex justify-end gap-2">
+          <button type="button" @click="open = false" class="px-3 py-1.5 text-sm rounded-md bg-ef-hover cursor-pointer">Vazgeç</button>
+          <button type="submit" :disabled="busy" class="px-3 py-1.5 text-sm rounded-md bg-indigo-600 text-white font-semibold cursor-pointer disabled:opacity-40">{{ episode.efe_upto }} bölümü işaretle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endif %}

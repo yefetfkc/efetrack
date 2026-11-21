@@ -1,0 +1,91 @@
+{% load app_tags %}
+{% load i18n %}
+{% load efe_tags %}
+{# Status and watch date badge in the top-left corner of a media card. The owner can click it to change the date. #}
+{% if media.status %}
+  {% efe_watch_date_editable media request.user user as editable %}
+  {% trans "The date could not be saved." as save_error %}
+  <div id="watch-date-{{ media.item.media_type }}-{{ media.id }}"
+       class="efe-watch-date absolute top-2 left-2 z-10"
+       {% if editable %}x-data="{ open: false, saving: false, error: '' }"{% endif %}>
+    {% if editable %}
+      <button type="button"
+              class="efe-watch-date-chip bg-gray-900/90 text-white text-xs px-2 py-1 rounded-md flex items-center shadow-md cursor-pointer"
+              title="{% trans 'Change watch date' %}"
+              aria-label="{% trans 'Change watch date' %}"
+              @click.stop.prevent="open = true; error = ''">
+    {% else %}
+      <div class="bg-gray-900/90 text-white text-xs px-2 py-1 rounded-md flex items-center shadow-md">
+    {% endif %}
+        {% if media.status|status_config %}
+          <div class="w-4 h-4 {{ media.status|status_color }} {% if media.start_date or media.end_date %}mr-1.5{% endif %}">
+            {% include media.status|status_icon %}
+          </div>
+        {% endif %}
+        {% if media.end_date is not None %}
+          <span class="text-sm text-ef-fg">{{ media.end_date|date_format:user }}</span>
+        {% elif media.start_date is not None %}
+          <span class="text-sm text-ef-fg">{{ media.start_date|date_format:user }}</span>
+        {% endif %}
+    {% if editable %}
+      </button>
+
+      <template x-teleport="body">
+        <div x-show="open"
+             x-cloak
+             @keydown.escape.window="open = false"
+             class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          <form class="efe-watch-date-form bg-ef-card rounded-lg shadow-xl w-full p-5"
+                @click.outside="open = false"
+                x-init="htmx.process($el)"
+                hx-post="{% url 'efe_set_watch_date' %}"
+                hx-target="#watch-date-{{ media.item.media_type }}-{{ media.id }}"
+                hx-swap="outerHTML"
+                @htmx:before-request="saving = true; error = ''"
+                @htmx:after-request="saving = false; if (!$event.detail.successful) error = '{{ save_error|escapejs }}'">
+            {% csrf_token %}
+            <input type="hidden" name="media_type" value="{{ media.item.media_type }}">
+            <input type="hidden" name="instance_id" value="{{ media.id }}">
+            <div class="flex items-center gap-2 mb-1">
+              {% include "app/icons/calendar.svg" with classes="w-5 h-5 text-indigo-400" %}
+              <h3 class="text-base font-semibold text-ef-fg">{% trans "Watch date" %}</h3>
+            </div>
+            <p class="text-sm text-gray-400 mb-4 line-clamp-2">{{ media }}</p>
+            <label class="block text-xs text-gray-400 mb-2"
+                   for="watch-date-input-{{ media.item.media_type }}-{{ media.id }}">
+              {% if media.end_date is not None or media.start_date is None %}
+                {% trans "Finished on" %}
+              {% else %}
+                {% trans "Started on" %}
+              {% endif %}
+            </label>
+            <input id="watch-date-input-{{ media.item.media_type }}-{{ media.id }}"
+                   type="date"
+                   name="date"
+                   required
+                   min="1900-01-01"
+                   max="{% now 'Y-m-d' %}"
+                   value="{% if media.end_date is not None %}{{ media.end_date|date:'Y-m-d' }}{% elif media.start_date is not None %}{{ media.start_date|date:'Y-m-d' }}{% endif %}"
+                   class="w-full bg-ef-raised text-ef-fg rounded-md px-3 py-2 text-sm border border-transparent focus:border-indigo-500 focus:outline-none">
+            {% if media.item.media_type == MediaTypes.TV.value or media.item.media_type == MediaTypes.SEASON.value %}
+              <p class="text-xs text-gray-400 mt-2">
+                {% trans "The episodes you watched last move to this day. Earlier episodes keep their dates." %}
+              </p>
+            {% endif %}
+            <p class="text-xs text-red-400 mt-2" x-show="error" x-text="error"></p>
+            <div class="flex justify-end gap-2 mt-5">
+              <button type="button"
+                      class="efe-watch-date-cancel px-3 py-1.5 rounded-md text-sm bg-ef-raised text-ef-fg cursor-pointer"
+                      @click="open = false">{% trans "Cancel" %}</button>
+              <button type="submit"
+                      class="px-3 py-1.5 rounded-md text-sm bg-indigo-600 text-white hover:bg-indigo-500 cursor-pointer"
+                      :disabled="saving">{% trans "Save" %}</button>
+            </div>
+          </form>
+        </div>
+      </template>
+    {% else %}
+      </div>
+    {% endif %}
+  </div>
+{% endif %}

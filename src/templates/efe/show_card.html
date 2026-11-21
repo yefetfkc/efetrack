@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load app_tags %}
+
+{% block title %}
+  {{ card.title }} · Dizi kartı - efeTrack
+{% endblock title %}
+
+{% block content %}
+  <style>
+    .efe-card-wrap { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .efe-card-wrap canvas { width: min(100%, 420px); height: auto; aspect-ratio: 9 / 16; border-radius: 18px; box-shadow: 0 20px 60px rgba(0,0,0,.5); background: #0E1116; }
+    .efe-card-wrap button:disabled { opacity: .6; cursor: wait; }
+  </style>
+  {{ card|json_script:"efe-card-data" }}
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold mb-2">Dizi kartı</h1>
+      <p class="text-gray-400">
+        <a href="{{ tv.item|media_url }}" class="hover:text-ef-fg">{{ card.title }}</a> · hikâye boyutunda (1080 × 1920), paylaşmaya hazır
+      </p>
+    </div>
+  </div>
+  <div class="efe-card-wrap" x-data="efeCard()" x-init="draw()">
+    <canvas x-ref="canvas" width="1080" height="1920" aria-label="{{ card.title }} dizi kartı"></canvas>
+    <div class="flex gap-2">
+      <button type="button" @click="save()" :disabled="!ready"
+              class="px-4 py-2 text-sm bg-ef-raised hover:bg-ef-hover rounded-md transition-colors flex items-center gap-2 cursor-pointer">
+        {% include "app/icons/download.svg" with classes="w-4 h-4" %}
+        <span>Resim olarak kaydet</span>
+      </button>
+      <button type="button" x-show="canShare" x-cloak @click="share()" :disabled="!ready"
+              class="px-4 py-2 text-sm bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-colors flex items-center gap-2 cursor-pointer">
+        {% include "app/icons/export.svg" with classes="w-4 h-4" %}
+        <span>Paylaş</span>
+      </button>
+    </div>
+    <p class="text-xs text-gray-500" x-show="!ready">Kart hazırlanıyor…</p>
+  </div>
+
+  <script>
+    function efeCard() {
+      const card = JSON.parse(document.getElementById("efe-card-data").textContent);
+      const W = 1080, H = 1920;
+      const FONT = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      const fileName = "efeTrack-" + (card.title || "dizi").replace(/[^\p{L}\p{N}]+/gu, "-").replace(/^-|-$/g, "") + ".jpg";
+      const fmt = (v) => (v === null || v === undefined) ? "–" : String(Math.round(v * 10) / 10).replace(".", ",");
+      const band = (v) => {
+        if (v === null || v === undefined) return "rgba(255,255,255,.06)";
+        if (v >= 9) return "#16a34a"; if (v >= 8) return "#65a30d"; if (v >= 7) return "#ca8a04";
+        if (v >= 6) return "#ea580c"; if (v >= 5) return "#dc2626"; return "#7f1d1d";
+      };
+      const loadImage = (src) => new Promise((resolve) => {
+        if (!src) return resolve(null);
+        const img = new Image(); img.crossOrigin = "anonymous";
+        img.onload = () => resolve(img); img.onerror = () => resolve(null);
+        img.src = src.includes("image.tmdb.org") ? src : "{% url 'efe_poster_proxy' %}?u=" + encodeURIComponent(src);
+      });
+      const roundRect = (ctx, x, y, w, h, r) => {
+        ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+      };
+      const wrap = (ctx, text, maxWidth, maxLines) => {
+        const words = (text || "").split(/\s+/); const lines = []; let line = "";
+        for (const word of words) {
+          const test = line ? line + " " + word : word;
+          if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = word; } else { line = test; }
+        }
+        if (line) lines.push(line);
+        if (lines.length > maxLines) { lines.length = maxLines; lines[maxLines - 1] = lines[maxLines - 1].replace(/\s*\S*$/, "") + "…"; }
+        return lines;
+      };
+      return {
+        ready: false,
+        canShare: false,
+        async draw() {
+          const canvas = this.$refs.canvas, ctx = canvas.getContext("2d");
+          const poster = await loadImage(card.poster);
+
+          // Background: the poster, darkened, then a gradient.
+          ctx.fillStyle = "#0E1116"; ctx.fillRect(0, 0, W, H);
+          if (poster) {
+            const s = Math.max(W / poster.width, H / poster.height);
+            ctx.globalAlpha = 0.28;
+            ctx.drawImage(poster, (W - poster.width * s) / 2, (H - poster.height * s) / 2, poster.width * s, poster.height * s);
+            ctx.globalAlpha = 1;
+          }
+          let g = ctx.createLinearGradient(0, 0, 0, H);
+          g.addColorStop(0, "rgba(14,17,22,.55)"); g.addColorStop(0.45, "rgba(14,17,22,.85)"); g.addColorStop(1, "rgba(14,17,22,.98)");
+          ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+          // Poster
+          const pw = 520, ph = 780, px = (W - pw) / 2, py = 120;
+          ctx.save(); ctx.shadowColor = "rgba(0,0,0,.6)"; ctx.shadowBlur = 60; ctx.shadowOffsetY = 24;
+          roundRect(ctx, px, py, pw, ph, 28); ctx.fillStyle = "#1a1d24"; ctx.fill(); ctx.restore();
+          if (poster) {
+            ctx.save(); roundRect(ctx, px, py, pw, ph, 28); ctx.clip();
+            const s = Math.max(pw / poster.width, ph / poster.height);
+            ctx.drawImage(poster, px + (pw - poster.width * s) / 2, py + (ph - poster.height * s) / 2, poster.width * s, poster.height * s);
+            ctx.restore();
+          }
+
+          // Badge
+          let y = py + ph + 70;
+          ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+          const badge = card.done ? "✓ BİTİRDİM" : (card.status || "").toLocaleUpperCase("tr");
+          ctx.font = `700 30px ${FONT}`;
+          const bw = ctx.measureText(badge).width + 56;
+          g = ctx.createLinearGradient((W - bw) / 2, 0, (W + bw) / 2, 0);
+          g.addColorStop(0, "#4f46e5"); g.addColorStop(1, "#9333ea");
+          roundRect(ctx, (W - bw) / 2, y - 40, bw, 56, 28); ctx.fillStyle = g; ctx.fill();
+          ctx.fillStyle = "#fff"; ctx.fillText(badge, W / 2, y - 2);
+
+          // Title + years
+          y += 90;
+          ctx.font = `800 76px ${FONT}`; ctx.fillStyle = "#fff";
+          for (const line of wrap(ctx, card.title, W - 140, 2)) { ctx.fillText(line, W / 2, y); y += 86; }
+          if (card.years || card.seasons) {
+            ctx.font = `500 32px ${FONT}`; ctx.fillStyle = "#9aa3b5";
+            ctx.fillText([card.years, card.seasons ? card.seasons + " sezon" : ""].filter(Boolean).join(" · "), W / 2, y - 20);
+            y += 40;
+          }
+
+          // Stats
+          const stats = [
+            ["★ " + fmt(card.score), "Puanım"],
+            [String(card.episodes || 0), "bölüm"],
+            [card.hours ? card.hours + " sa" : "–", "izleme"],
+            [card.days ? card.days + "" : "–", card.days === 1 ? "gün" : "günde"],
+          ];
+          const sw = (W - 120) / stats.length; y += 40;
+          stats.forEach(([value, label], i) => {
+            const cx = 60 + sw * i + sw / 2;
+            ctx.font = `800 54px ${FONT}`; ctx.fillStyle = i === 0 ? "#facc15" : "#fff"; ctx.fillText(value, cx, y);
+            ctx.font = `500 28px ${FONT}`; ctx.fillStyle = "#9aa3b5"; ctx.fillText(label, cx, y + 42);
+          });
+          y += 100;
+          if (card.period) { ctx.font = `500 30px ${FONT}`; ctx.fillStyle = "#cbd5e1"; ctx.fillText(card.period, W / 2, y); y += 30; }
+
+          // Heatmap: seasons as rows, episodes as columns (fits the remaining space)
+          const rows = card.heatmap || [];
+          const top = y + 40, bottom = H - 130;
+          if (rows.length) {
+            ctx.font = `600 26px ${FONT}`; ctx.fillStyle = "#9aa3b5";
+            ctx.fillText(card.heatmap_mode === "mine" ? "Bölüm puanlarım" : "Bölüm puanları (TMDB)", W / 2, top);
+            const longest = Math.max(...rows.map((r) => r.values.length), 1);
+            const label = 64, gap = 5;
+            const cell = Math.max(6, Math.min(48, Math.floor((W - 120 - label) / longest) - gap,
+                                              Math.floor((bottom - top - 30) / rows.length) - gap));
+            const gridW = label + longest * (cell + gap);
+            let gx = (W - gridW) / 2, gy = top + 28;
+            rows.forEach((row) => {
+              ctx.font = `600 ${Math.min(26, cell)}px ${FONT}`; ctx.fillStyle = "#9aa3b5"; ctx.textAlign = "right";
+              ctx.fillText("S" + row.season, gx + label - 14, gy + cell * 0.75);
+              row.values.forEach((v, i) => {
+                roundRect(ctx, gx + label + i * (cell + gap), gy, cell, cell, Math.min(8, cell / 4));
+                ctx.fillStyle = band(v); ctx.fill();
+              });
+              gy += cell + gap;
+            });
+            ctx.textAlign = "center";
+          }
+
+          // Footer
+          ctx.font = `700 34px ${FONT}`; ctx.fillStyle = "#818cf8"; ctx.fillText("efeTrack", W / 2, H - 60);
+
+          this.canShare = !!(navigator.canShare && navigator.canShare({ files: [new File([""], "x.jpg", { type: "image/jpeg" })] }));
+          this.ready = true;
+        },
+        blob() { return new Promise((resolve) => this.$refs.canvas.toBlob(resolve, "image/jpeg", 0.92)); },
+        async save() {
+          const blob = await this.blob(); if (!blob) return alert("Resim oluşturulamadı.");
+          const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = fileName;
+          document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 60000);
+        },
+        async share() {
+          const blob = await this.blob(); if (!blob) return;
+          try { await navigator.share({ files: [new File([blob], fileName, { type: "image/jpeg" })], title: card.title }); } catch (e) { /* cancelled */ }
+        },
+      };
+    }
+  </script>
+{% endblock content %}

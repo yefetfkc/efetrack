@@ -1,0 +1,22 @@
+{# efeTrack: one title a person worked on behind the camera (same look as the filmography card). #}
+<a href="{{ credit.url }}" class="bg-ef-card rounded-lg overflow-hidden shadow-lg hover:bg-ef-panel transition-colors flex flex-col">
+  <div class="relative" style="aspect-ratio: 2 / 3;">
+    <img alt="{{ credit.title }}"
+         src="{{ IMG_NONE }}"
+         data-src="{{ credit.image }}"
+         class="lazyload absolute inset-0 w-full h-full bg-ef-raised {% if credit.image != IMG_NONE %}object-cover{% endif %}"
+         {% if credit.status and not credit.watched %}style="opacity: .85"{% endif %}>
+    {% if credit.status_label %}
+      <span class="absolute text-xs font-semibold text-white rounded-md shadow-lg"
+            style="top: .5rem; left: .5rem; padding: .15rem .45rem; background: {{ credit.status_colour }};">
+        {% if credit.watched %}✓ {% endif %}{{ credit.status_label }}
+      </span>
+    {% endif %}
+    <span class="absolute text-xs text-white rounded-md"
+          style="bottom: .5rem; right: .5rem; padding: .1rem .4rem; background: rgba(0,0,0,.6);">{% if credit.media_type == "tv" %}Dizi{% else %}Film{% endif %}</span>
+  </div>
+  <div class="px-3 py-2">
+    <div class="text-sm font-semibold text-ef-fg line-clamp-2" title="{{ credit.title }}">{{ credit.title }}</div>
+    <div class="text-xs text-gray-400 mt-0.5">{{ credit.year|default:"Yakında" }}</div>
+  </div>
+</a>

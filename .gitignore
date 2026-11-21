@@ -1,0 +1,30 @@
+__pycache__
+*.pyc
+.env
+.coverage*
+.venv
+src/staticfiles
+site
+src/db/db.sqlite3
+db.sqlite3-shm
+db.sqlite3-wal
+.vscode/launch.json
+.agents
+AGENTS.md
+.claude
+CLAUDE.md
+requests.http
+TODO.txt
+.codex
+.cache
+*.mo
+src/locale/*.pot
+dump.rdb
+
+# macOS / local tooling
+.DS_Store
+.pytest_cache/
+# Upstream Yamtrack CI/CD (publishes to their registries) is not used in this repository
+.github/workflows/
+.github/dependabot.yml
+.github/codecov.yml

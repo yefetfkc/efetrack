@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+  {% trans "Film Series" %} - efeTrack
+{% endblock title %}
+
+{% block content %}
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold mb-2 flex items-center gap-3">
+        <span class="p-2 rounded-xl bg-indigo-600 text-white">{% include "app/icons/film-stack.svg" with classes="w-6 h-6" %}</span>
+        {% trans "Film Series" %}
+      </h1>
+      <p class="text-gray-400">{% trans "The series of the movies you plan or watched, in watching order." %}</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="bg-ef-raised rounded-md p-1 flex gap-0.5 text-sm">
+        {% for key, label in filters %}
+          <a href="?filter={{ key }}"
+             class="px-3 py-1.5 rounded-md transition-colors {% if status_filter == key %}bg-indigo-600 text-white{% else %}text-gray-300 hover:bg-ef-hover{% endif %}">{{ label }}</a>
+        {% endfor %}
+      </div>
+      <form method="post" action="{% url 'efe_series_scan' %}">
+        {% csrf_token %}
+        <button title="{% trans 'Look for new series' %}"
+                class="p-2.5 bg-ef-raised hover:bg-ef-hover rounded-md transition-colors cursor-pointer">
+          {% include "app/icons/circle-spinning-clockwise.svg" with classes="w-4 h-4" %}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  {% include "efe/components/series_list.html" %}
+{% endblock content %}

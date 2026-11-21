@@ -1,0 +1,77 @@
+{# efeTrack: rating heatmap body, loaded by htmx into rating_chart.html. Needs: rating_chart or error #}
+{% if error %}
+  <p class="text-sm text-gray-400">Puanlar şu an yüklenemedi. Sayfayı yenileyip yeniden dene.</p>
+{% elif not rating_chart %}
+  <p class="text-sm text-gray-400">Bu dizinin henüz puanlanmış bölümü yok.</p>
+{% else %}
+  <p class="text-sm text-gray-400 mb-3">
+    <span x-show="mode === 'mine'">Senin ortalaman: {{ rating_chart.mine_overall_text|default:"henüz puan vermedin" }}</span>
+    <span x-show="mode === 'tmdb'" x-cloak>TMDB ortalaması: {{ rating_chart.tmdb_overall_text|default:"–" }}</span>
+  </p>
+  {% if rating_chart.hidden_seasons %}
+    <p class="text-xs text-gray-400 mb-2">Son {{ rating_chart.seasons|length }} sezon gösteriliyor ({{ rating_chart.hidden_seasons }} eski sezon gizli).</p>
+  {% endif %}
+  <div class="bg-ef-card rounded-lg p-3 overflow-x-auto">
+    <table style="border-collapse: separate; border-spacing: 3px;">
+      <thead>
+        <tr>
+          <th></th>
+          {% for season in rating_chart.seasons %}
+            <th class="text-xs font-semibold text-gray-300 px-1" style="padding-bottom: .25rem;">
+              <a href="{{ season.url }}"
+                 class="hover:text-white {% if season.number == rating_chart.current_season %}text-white{% endif %}"
+                 {% if season.number == rating_chart.current_season %}style="text-decoration: underline; text-underline-offset: 4px;"{% endif %}>S{{ season.number }}</a>
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for episode_number, cells in rating_chart.rows %}
+          <tr>
+            <th class="text-xs font-semibold text-gray-400 pr-2 text-right">B{{ episode_number }}</th>
+            {% for cell in cells %}
+              <td style="padding: 0;">
+                {% if cell %}
+                  {% for key, text, style in cell.views %}
+                    <a href="{{ cell.url }}"
+                       title="{{ cell.tooltip }}"
+                       x-show="mode === '{{ key }}'"
+                       {% if key != "mine" %}x-cloak{% endif %}
+                       class="flex items-center justify-center rounded text-xs font-semibold"
+                       style="{{ style }}; min-width: 2.75rem; height: 2rem;{% if cell.season_number == rating_chart.current_season %} box-shadow: inset 0 0 0 2px rgba(255,255,255,.55);{% endif %}">{{ text|default:"–" }}</a>
+                  {% endfor %}
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        <tr>
+          <th class="text-xs font-semibold text-gray-300 pr-2 pt-2 text-right">Ort.</th>
+          {% for season in rating_chart.seasons %}
+            <td style="padding: 6px 0 0 0;">
+              {% for key, text, style in season.average_views %}
+                <div x-show="mode === '{{ key }}'"
+                     {% if key != "mine" %}x-cloak{% endif %}
+                     title="Sezon {{ season.number }} ortalaması"
+                     class="flex items-center justify-center rounded text-xs font-bold"
+                     style="{{ style }}; min-width: 2.75rem; height: 2rem; outline: 1px solid rgba(255,255,255,.25);">{{ text|default:"–" }}</div>
+              {% endfor %}
+            </td>
+          {% endfor %}
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="flex flex-wrap gap-x-4 gap-y-2 mt-4 text-xs text-gray-300">
+      {% for low, label, background, colour in rating_chart.bands %}
+        <span class="flex items-center gap-1.5">
+          <span class="rounded" style="display:inline-block;width:.9rem;height:.9rem;background:{{ background }}"></span>
+          {{ label }}{% if low %} ({{ low|floatformat:0 }}+){% else %} (5 altı){% endif %}
+        </span>
+      {% endfor %}
+    </div>
+    <p x-show="mode === 'mine'" class="text-xs text-gray-400 mt-2">
+      Puanlarını bölüm kartlarındaki ★ düğmesinden ya da menü çubuğundaki "İzledim ✓" penceresinden verebilirsin.
+    </p>
+  </div>
+{% endif %}

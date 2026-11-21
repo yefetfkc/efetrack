@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% load static %}
+{% load app_tags %}
+
+{% block title %}
+  Poster Duvarı - efeTrack
+{% endblock title %}
+
+{% block content %}
+  <style>
+    .efe-wall-chips { display: flex; flex-wrap: wrap; gap: .375rem; }
+    .efe-wall-chips a { padding: .25rem .75rem; border-radius: 9999px; font-size: .8125rem; background: var(--ef-raised, rgba(255,255,255,.06)); color: #cbd5e1; text-decoration: none; transition: background .15s; }
+    .efe-wall-chips a:hover { background: rgba(99,102,241,.25); }
+    .efe-wall-chips a.on { background: #4f46e5; color: #fff; }
+    .efe-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 4px; }
+    @media (min-width: 768px) { .efe-wall { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); } }
+    .efe-wall a { position: relative; display: block; aspect-ratio: 2 / 3; overflow: hidden; border-radius: 3px; background: #1a1d24; }
+    .efe-wall img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s, filter .25s; }
+    .efe-wall a:hover img { transform: scale(1.06); filter: brightness(1.1); }
+    .efe-wall a span { position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 6px 5px; font-size: 11px; line-height: 1.2; color: #fff; background: linear-gradient(transparent, rgba(0,0,0,.85)); opacity: 0; transition: opacity .2s; }
+    .efe-wall a:hover span { opacity: 1; }
+    .efe-wall-full { background: #07080b; padding: 6px; overflow-y: auto; }
+    .efe-wall-full .efe-wall { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+    .efe-wall-fixed { position: fixed; inset: 0; z-index: 80; }
+    .efe-wall-close { position: fixed; top: max(12px, env(safe-area-inset-top)); right: 12px; z-index: 81; width: 40px; height: 40px; border-radius: 9999px; border: 0; background: rgba(0,0,0,.7); color: #fff; font-size: 20px; cursor: pointer; }
+    .efe-wall-btn { display: inline-flex; align-items: center; gap: .4rem; padding: .45rem .9rem; border-radius: .5rem; font-size: .875rem; background: var(--ef-raised, rgba(255,255,255,.06)); color: inherit; border: 0; cursor: pointer; }
+    .efe-wall-btn:hover { background: rgba(99,102,241,.25); }
+    .efe-wall-btn.primary { background: #4f46e5; color: #fff; }
+    .efe-wall-btn:disabled { opacity: .6; cursor: wait; }
+  </style>
+
+  <script src="{% static 'js/efe-poster-image.js' %}{% get_static_file_mtime 'js/efe-poster-image.js' %}"></script>
+  <script>
+    function efeWall() {
+      const proxy = "{% url 'efe_poster_proxy' %}?u=";
+      const kindLabel = "{{ kind_label|escapejs }}";
+      const subtitle = "{% if year %}{{ year }} · {% endif %}{% if kind %}{{ kind_label|escapejs }} · {% endif %}{{ entries|length }} yapım";
+      const fileName = "efeTrack-poster-duvari{% if year %}-{{ year }}{% endif %}{% if kind %}-{{ kind }}{% endif %}.jpg";
+      return {
+        busy: false, done: 0, total: 0, fixed: false,
+        close() {
+          this.fixed = false;
+          this.$refs.box.classList.remove("efe-wall-full", "efe-wall-fixed");
+          document.documentElement.style.overflow = "";
+        },
+        full() {
+          const box = this.$refs.box;
+          if (!box) return;
+          box.classList.add("efe-wall-full");
+          const request = box.requestFullscreen || box.webkitRequestFullscreen;
+          if (!request || !(document.fullscreenEnabled || document.webkitFullscreenEnabled)) {
+            // iPhone Safari and the Mac app: no element fullscreen, cover the window instead.
+            this.fixed = true;
+            box.classList.add("efe-wall-fixed");
+            document.documentElement.style.overflow = "hidden";
+            return;
+          }
+          const off = () => { if (!document.fullscreenElement && !document.webkitFullscreenElement) { box.classList.remove("efe-wall-full"); document.removeEventListener("fullscreenchange", off); document.removeEventListener("webkitfullscreenchange", off); } };
+          document.addEventListener("fullscreenchange", off);
+          document.addEventListener("webkitfullscreenchange", off);
+          request.call(box);
+        },
+        async save() {
+          const cards = [...document.querySelectorAll("[data-poster]")];
+          if (!cards.length || this.busy) return;
+          this.busy = true; this.done = 0; this.total = cards.length;
+          const ok = await efePosterImage.save(
+            cards.map((a) => ({ title: a.dataset.title, poster: a.dataset.poster, kind: a.dataset.kind })),
+            {
+              title: "Poster Duvarı",
+              subtitle: subtitle,
+              showKind: !kindLabel,
+              fileName: fileName,
+              proxy: proxy,
+              onProgress: (done) => { this.done = done; },
+            },
+          );
+          this.busy = false;
+          if (!ok) alert("Resim oluşturulamadı.");
+        },
+      };
+    }
+  </script>
+
+  <div x-data="efeWall()" class="flex flex-col gap-5">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-bold mb-1">Poster Duvarı</h1>
+        <p class="text-gray-400">
+          {% if year %}{{ year }} · {% endif %}{% if kind %}{{ kind_label }} · {% endif %}{{ entries|length }} yapım
+        </p>
+      </div>
+      {% if entries or collage.months %}
+        <div class="flex flex-wrap gap-2">
+          {% if collage.months %}
+            <button type="button" class="efe-wall-btn" @click="$dispatch('efe-collage-open')">▦ Ay kolajı</button>
+          {% endif %}
+          {% if entries %}<button type="button" class="efe-wall-btn" @click="full()">⛶ Tam ekran</button>{% endif %}
+          {% if entries %}
+            <button type="button" class="efe-wall-btn primary" @click="save()" :disabled="busy"
+                    x-text="busy ? `Hazırlanıyor… ${done}/${total}` : '⬇︎ Resim olarak kaydet'">⬇︎ Resim olarak kaydet</button>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="efe-wall-chips">
+        <a href="?{% if kind %}tur={{ kind }}{% endif %}" class="{% if not year %}on{% endif %}">Tüm yıllar</a>
+        {% for y in years %}
+          <a href="?yil={{ y }}{% if kind %}&tur={{ kind }}{% endif %}" class="{% if y == year %}on{% endif %}">{{ y }}</a>
+        {% endfor %}
+      </div>
+      <div class="efe-wall-chips">
+        <a href="?{% if year %}yil={{ year }}{% endif %}" class="{% if not kind %}on{% endif %}">Hepsi</a>
+        {% for key, label in kinds %}
+          <a href="?tur={{ key }}{% if year %}&yil={{ year }}{% endif %}" class="{% if key == kind %}on{% endif %}">{{ label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if entries %}
+      <div x-ref="box" @keydown.escape.window="fixed && close()">
+        <button type="button" class="efe-wall-close" x-show="fixed" x-cloak @click="close()" aria-label="Kapat">✕</button>
+        <div class="efe-wall">
+          {% for entry in entries %}
+            <a href="{{ entry.url }}" title="{{ entry.title }}{% if entry.date %} · {{ entry.date|date:'j F Y' }}{% endif %}"
+               data-poster="{{ entry.full }}" data-title="{{ entry.title }}" data-kind="{{ entry.kind_label }}">
+              <img src="{{ entry.image }}" alt="{{ entry.title }}" loading="lazy" decoding="async">
+              <span>{{ entry.title }}</span>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    {% else %}
+      <p class="text-gray-400">Bu seçimde izlediğin bir şey yok.</p>
+    {% endif %}
+  </div>
+
+  {% if collage.months %}
+    {{ collage|json_script:"efe-collage-data" }}
+    {# "Ay kolajı": the posters of one month as a picture of a chosen size (same look as "Resim olarak kaydet") #}
+    <div x-data="efeCollage()" @efe-collage-open.window="show()" x-show="open" x-cloak
+         class="efe-pc-overlay" @keydown.escape.window="open = false" @click.self="open = false"
+         role="dialog" aria-modal="true" aria-labelledby="efe-col-title">
+      <div class="efe-pc-box efe-col-box">
+        <div class="efe-pc-head">
+          <div class="min-w-0">
+            <h2 id="efe-col-title" class="text-lg font-semibold">Ay kolajı</h2>
+            <p class="text-xs text-gray-400">Bir ayda izlediklerin tek resimde. Boyutu sen seç.</p>
+          </div>
+          <button type="button" class="efe-pc-close" @click="open = false" aria-label="Kapat">✕</button>
+        </div>
+        <div class="efe-col-body">
+          <div class="efe-col-options">
+            <label class="efe-col-label" for="efe-col-month">Ay</label>
+            <select id="efe-col-month" class="efe-col-select" x-model="month" @change="draw()">
+              <template x-for="m in data.months" :key="m.key">
+                <option :value="m.key" x-text="`${m.label} · ${m.count} yapım`"></option>
+              </template>
+            </select>
+
+            <span class="efe-col-label">Boyut</span>
+            <div class="efe-col-sizes" role="radiogroup" aria-label="Boyut">
+              <template x-for="s in sizes" :key="s.key">
+                <label class="efe-rand-chip">
+                  <input type="radio" name="efe-col-size" class="sr-only" :value="s.key" x-model="size" @change="draw()">
+                  <span><i class="efe-col-shape" :style="`aspect-ratio: ${s.w} / ${s.h}`" aria-hidden="true"></i><em class="efe-col-txt" x-text="s.label"></em></span>
+                </label>
+              </template>
+            </div>
+            <p class="text-xs text-gray-400" x-text="`${current().w} × ${current().h} piksel`"></p>
+
+            <span class="efe-col-label">Yazılar</span>
+            <div class="efe-col-sizes">
+              <label class="efe-rand-chip"><input type="checkbox" class="sr-only" x-model="names" @change="draw()"><span>Adları yaz</span></label>
+              <label class="efe-rand-chip" x-show="names"><input type="checkbox" class="sr-only" x-model="kinds" @change="draw()"><span>Türü yaz</span></label>
+            </div>
+
+            <button type="button" class="efe-rand-go efe-col-go" @click="download()" :disabled="busy">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/></svg>
+              <span x-text="busy ? 'Hazırlanıyor…' : 'Kolajı indir'">Kolajı indir</span>
+            </button>
+          </div>
+          <div class="efe-col-preview" :class="{ 'is-busy': busy }">
+            <canvas x-ref="preview" aria-label="Kolaj önizlemesi"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function efeCollage() {
+        const proxy = "{% url 'efe_poster_proxy' %}?u=";
+        const data = JSON.parse(document.getElementById("efe-collage-data").textContent);
+        const SIZES = [
+          { key: "story", label: "Instagram hikâye", w: 1080, h: 1920 },
+          { key: "post", label: "Instagram gönderi", w: 1080, h: 1350 },
+          { key: "square", label: "Kare", w: 1080, h: 1080 },
+          { key: "wide", label: "Yatay 16:9", w: 1920, h: 1080 },
+          { key: "phone", label: "Telefon duvar kâğıdı", w: 1290, h: 2796 },
+          { key: "desktop", label: "Masaüstü 4K", w: 3840, h: 2160 },
+        ];
+        let saved = {};
+        try { saved = JSON.parse(localStorage.getItem("efe-kolaj") || "{}") || {}; } catch (e) { saved = {}; }
+        return {
+          open: false, busy: false, data: data, sizes: SIZES,
+          month: data.months[0].key, size: saved.size || "story",
+          names: saved.names !== false, kinds: saved.kinds !== false, ticket: 0,
+          current() { return SIZES.find((s) => s.key === this.size) || SIZES[0]; },
+          cards() {
+            return data.items.filter((i) => i.m === this.month).map((i) => ({ title: i.t, poster: i.p, kind: i.k }));
+          },
+          options(canvas) {
+            const m = data.months.find((x) => x.key === this.month);
+            const cards = this.cards();
+            const kinds = new Set(cards.map((c) => c.kind));
+            return {
+              width: this.current().w, height: this.current().h, canvas: canvas, proxy: proxy,
+              title: m ? m.label : "", subtitle: "İzlediklerim · " + cards.length + " yapım",
+              showNames: this.names, showKind: this.kinds && kinds.size > 1,
+            };
+          },
+          remember() {
+            try { localStorage.setItem("efe-kolaj", JSON.stringify({ size: this.size, names: this.names, kinds: this.kinds })); } catch (e) {}
+          },
+          show() { this.open = true; this.$nextTick(() => this.draw()); },
+          async draw() {
+            this.remember();
+            const ticket = ++this.ticket;
+            this.busy = true;
+            const off = document.createElement("canvas");
+            await efePosterImage.collage(this.cards(), this.options(off));
+            if (ticket !== this.ticket) return;  // a newer choice is being drawn
+            const view = this.$refs.preview;
+            view.width = off.width; view.height = off.height;
+            view.getContext("2d").drawImage(off, 0, 0);
+            view.style.aspectRatio = off.width + " / " + off.height;
+            this.busy = false;
+          },
+          async download() {
+            this.busy = true;
+            const canvas = await efePosterImage.collage(this.cards(), this.options(null));
+            const ok = await efePosterImage.download(canvas, "efeTrack-kolaj-" + this.month + "-" + this.size + ".jpg");
+            this.busy = false;
+            if (!ok) alert("Kolaj oluşturulamadı.");
+          },
+        };
+      }
+    </script>
+  {% endif %}
+{% endblock content %}

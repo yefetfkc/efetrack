@@ -1,0 +1,79 @@
+{% load app_tags %}
+{% load efe_tags %}
+{% load i18n %}
+
+{% if not chosen %}
+  <div class="efe-reel is-idle">
+    <div class="efe-reel-hint is-static">
+      <div class="efe-rand-empty-icon">{% include "app/icons/dice.svg" with classes="w-7 h-7" %}</div>
+      <p class="text-sm font-semibold text-ef-fg">{% trans "Nothing to pick from" %}</p>
+      <p class="text-xs text-gray-400">{% trans "There is nothing planned with these filters. Try other media types or another list." %}</p>
+    </div>
+  </div>
+{% else %}
+  <div x-data="efeReel()" x-init="start()" class="space-y-6 min-w-0">
+    {# Spinning reel (same frame as the idle one) #}
+    <div x-ref="frame" class="efe-reel">
+      <div class="efe-reel-window" :class="done ? 'ef-glow' : ''" aria-hidden="true"></div>
+      <div x-ref="track" class="flex gap-4 h-full items-center px-[50%] will-change-transform">
+        {% for media in reel %}
+          <img alt="{{ media.item.title }}"
+               {% if media == chosen %}data-chosen{% endif %}
+               src="{{ media.item.image }}"
+               class="h-60 w-[150px] max-w-none shrink-0 rounded-lg object-cover bg-ef-raised shadow-lg">
+        {% endfor %}
+      </div>
+    </div>
+
+    {# The pick #}
+    <div x-ref="card"
+         x-cloak
+         x-show="done"
+         x-transition:enter="transition ease-out duration-500"
+         x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+         x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+         class="efe-rand-pick">
+      <a href="{{ chosen.item|media_url }}" class="efe-rand-pick-poster" tabindex="-1" aria-hidden="true">
+        <img alt="" src="{{ chosen.item.image }}">
+      </a>
+      <div class="efe-rand-pick-body">
+        <span class="efe-cinema-label">
+          {% include "app/icons/dice.svg" with classes="w-3.5 h-3.5" %}
+          {% trans "Tonight's pick" %}
+        </span>
+        <h2 class="efe-rand-pick-title">{{ chosen.item.title }}</h2>
+        <div class="efe-facts">
+          <span class="efe-fact">
+            {% icon chosen.item.media_type is_active=False extra_classes="w-4 h-4" %}
+            <span>{{ chosen.item.media_type|media_type_readable }}</span>
+          </span>
+          <span class="efe-fact"><span>{{ chosen.status|media_status_readable }}</span></span>
+          {% if chosen.item.source %}
+            <span class="efe-fact efe-fact-soft"><span>{{ chosen.item.source|source_readable }}</span></span>
+          {% endif %}
+        </div>
+        {% if chosen.notes %}
+          <p class="text-sm text-gray-300 italic line-clamp-3">"{{ chosen.notes }}"</p>
+        {% endif %}
+        <p class="text-xs text-gray-400">
+          {% blocktrans trimmed with date=chosen.created_at|date:"j F Y" count count=candidates %}
+            Added to your list on {{ date }} · picked from {{ count }} title
+          {% plural %}
+            Added to your list on {{ date }} · picked from {{ count }} titles
+          {% endblocktrans %}
+        </p>
+        <div class="efe-cinema-actions">
+          <a href="{{ chosen.item|media_url }}" data-efe-sound="tap" class="efe-cinema-btn is-primary">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.9-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14Z"/></svg>
+            <span>{% trans "Let's go!" %}</span>
+          </a>
+          <button type="button" class="efe-cinema-btn"
+                  @click="document.getElementById('random-exclude').value = '{{ chosen.item_id }}'; document.getElementById('random-form').requestSubmit()">
+            {% include "app/icons/repeat.svg" with classes="w-4 h-4" %}
+            <span>{% trans "Pick another one" %}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}

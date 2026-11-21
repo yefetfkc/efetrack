@@ -1,0 +1,66 @@
+{% extends "users/base.html" %}
+
+{% block title %}
+  Oturumlar - efeTrack
+{% endblock title %}
+
+{% block settings_content %}
+  <div style="display:flex;flex-direction:column;gap:1.5rem">
+    <div class="bg-ef-card rounded-lg p-6">
+      <div class="flex items-center mb-4">
+        {% include "app/icons/padlock.svg" with classes="w-6 h-6 text-indigo-400 mr-3" %}
+        <h2 class="text-xl font-semibold">Oturumlar</h2>
+      </div>
+      <p class="text-gray-400 mb-5 text-sm">Hesabına açık olan cihazlar. Tanımadığın bir cihaz görürsen oradan çıkış yaptır.</p>
+
+      <div style="display:flex;flex-direction:column;gap:0.75rem">
+        {% for s in sessions %}
+          <div class="bg-ef-raised rounded-md p-4 flex flex-wrap items-center justify-between gap-3" x-data="{ editing: false }">
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-2" x-show="!editing">
+                <span class="font-medium">{% if s.name %}{{ s.name }}{% else %}{{ s.label }}{% endif %}</span>
+                {% if s.current %}<span class="text-xs px-2 rounded-md bg-indigo-600 text-white">Bu cihaz</span>{% endif %}
+                <button type="button" class="efe-session-rename" @click="editing = true; $nextTick(() => $refs.name.focus())"
+                        title="Bu oturuma ad ver" aria-label="Bu oturuma ad ver">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                  <span>{% if s.name %}Adı değiştir{% else %}Ad ver{% endif %}</span>
+                </button>
+              </div>
+              <form method="post" action="{% url 'sessions_rename' %}" class="efe-session-name-form" x-show="editing" x-cloak
+                    @keydown.escape="editing = false">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ s.id }}">
+                <input type="text" name="name" x-ref="name" value="{{ s.name }}" maxlength="40" autocomplete="off"
+                       placeholder="ör. Salon TV'si, İş bilgisayarı" aria-label="Oturum adı">
+                <button type="submit" class="efe-session-save">Kaydet</button>
+                <button type="button" class="efe-session-cancel" @click="editing = false">Vazgeç</button>
+              </form>
+              <div class="text-gray-400 text-xs mt-1">
+                {% if s.name %}{{ s.label }} · {% endif %}
+                {% if s.ip %}IP {{ s.ip }}{% else %}IP bilinmiyor{% endif %}
+                {% if s.login %} · Giriş: {{ s.login|date:"j F H:i" }}{% endif %}
+                {% if s.seen %} · Son görülme: {{ s.seen|date:"j F H:i" }}{% endif %}
+              </div>
+            </div>
+            {% if not s.current %}
+              <form method="post" action="{% url 'sessions_revoke' %}">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ s.id }}">
+                <button type="submit" class="px-3 py-2 rounded-md bg-red-600 text-white text-sm">Çıkış yaptır</button>
+              </form>
+            {% endif %}
+          </div>
+        {% empty %}
+          <p class="text-gray-400 text-sm">Açık oturum bulunamadı.</p>
+        {% endfor %}
+      </div>
+
+      {% if sessions|length > 1 %}
+        <form method="post" action="{% url 'sessions_revoke_others' %}" class="mt-5">
+          {% csrf_token %}
+          <button type="submit" class="px-3 py-2 rounded-md bg-red-600 text-white text-sm">Diğer tüm cihazlardan çık</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+{% endblock settings_content %}

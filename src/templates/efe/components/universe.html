@@ -1,0 +1,10 @@
+{# efeTrack: "Evren" tab — prequels, sequels, spin-offs (Wikidata), loaded when the tab opens. #}
+{% load app_tags %}
+{% media_section_count media user_medias watch_providers watch_provider_region watch_offers=watch_offers film_series=film_series trailers_url=trailers_url universe_url=universe_url crew_url=crew_url as efe_universe_sections %}
+<section class="mb-8" x-show="tab === 'universe'{% if efe_universe_sections <= 1 %} || tab === 'overview'{% endif %}" x-cloak>
+  <h2 class="text-xl font-bold mb-1">Evren</h2>
+  <p class="text-sm text-gray-400 mb-4">Öncesi, devamı, yan yapımları ve aynı dünyada geçenler.</p>
+  <div hx-get="{{ universe_url }}" hx-trigger="intersect once" hx-swap="innerHTML">
+    <p class="text-sm text-gray-400">Bağlantılı yapımlar aranıyor…</p>
+  </div>
+</section>

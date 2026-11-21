@@ -1,0 +1,574 @@
+{% load static %}
+{% load app_tags %}
+{% load i18n %}
+{% load efe_tags %}
+{% efe_festive as efe_festive_season %}
+{% efe_season as efe_season_fx %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}"
+      class="{% if user.is_authenticated and user.theme == 'light' %}light scheme-light{% else %}scheme-dark{% endif %} bg-ef-page"
+      data-theme="{% if user.is_authenticated %}{{ user.theme }}{% else %}anon{% endif %}"
+      data-sound="{% if not user.is_authenticated or user.sound_effects_enabled %}1{% else %}0{% endif %}"
+      data-volume="{% if user.is_authenticated %}{{ user.sound_volume }}{% else %}60{% endif %}"
+      data-season="{{ efe_season_fx }}"{% if efe_festive_season %}
+      data-xmas{% endif %}>
+  <head>
+    {# Required meta tags #}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="efeTrack, Media Tracker">
+    <meta name="description" content="Search and track media on efeTrack.">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-title" content="efeTrack">
+
+    <title>
+      {% block title %}
+        efeTrack
+      {% endblock title %}
+    </title>
+
+    {# efeTrack: apply the theme before the page is painted #}
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var theme = root.dataset.theme;
+        if (!theme || theme === 'anon') {
+          try { theme = localStorage.getItem('efe-theme') || 'dark'; } catch (e) { theme = 'dark'; }
+        }
+        var light = theme === 'light' || (theme === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches);
+        root.classList.toggle('light', light);
+        root.classList.toggle('scheme-light', light);
+        root.classList.toggle('scheme-dark', !light);
+        // efeTrack: snow — on/off any time per device (Preferences); unset = on from 1 Dec to 6 Jan
+        try {
+          var snow = localStorage.getItem('efe-xmas');
+          if (snow === 'on' || (snow !== 'off' && root.hasAttribute('data-xmas'))) root.dataset.snow = '1';
+          if (snow === 'off') root.dataset.xmasOff = '1';
+        } catch (e) { if (root.hasAttribute('data-xmas')) root.dataset.snow = '1'; }
+        // efeTrack: colour tone (red / purple / blue) and font, kept in this browser
+        try {
+          var tone = root.dataset.tone || localStorage.getItem('efe-tone') || '';
+          var font = root.dataset.font || localStorage.getItem('efe-font') || '';
+          if (/^(red|purple|blue|oled)$/.test(tone)) root.dataset.tone = tone; else delete root.dataset.tone;
+          if (/^(inter|jakarta|manrope|nunito|figtree)$/.test(font)) root.dataset.font = font; else delete root.dataset.font;
+          var accent = root.dataset.accent || localStorage.getItem('efe-accent') || '';
+          if (/^(indigo|blue|purple|pink|red|orange|amber|green|teal|graphite)$/.test(accent)) root.dataset.accent = accent; else delete root.dataset.accent;
+          if ((root.dataset.sidebar || localStorage.getItem('efe-sidebar')) === 'collapsed') root.dataset.sidebar = 'collapsed'; else delete root.dataset.sidebar;
+        } catch (e) {}
+        // efeTrack: ambient effects (rain, stars, fireflies, aurora, film grain) — per device, any combination
+        try {
+          var fx = (localStorage.getItem('efe-fx') || '').split(',');
+          ['rain', 'stars', 'fireflies', 'aurora', 'grain'].forEach(function (name) {
+            if (fx.indexOf(name) !== -1) root.setAttribute('data-fx-' + name, ''); else root.removeAttribute('data-fx-' + name);
+          });
+        } catch (e) {}
+        // efeTrack: seasonal effects (autumn leaves, spring blossoms, Halloween bats) — on by themselves in
+        // their season; "on" keeps one on all year, "off:<year>" hides it until next year's season.
+        try {
+          var season = (root.getAttribute('data-season') || '').split(' ');
+          var seasonal = JSON.parse(localStorage.getItem('efe-mevsim') || '{}') || {};
+          var year = String(new Date().getFullYear());
+          ['leaves', 'blossoms', 'bats'].forEach(function (name) {
+            var pref = seasonal[name] || '';
+            var on = pref === 'on' || (pref !== 'off:' + year && season.indexOf(name) !== -1);
+            if (on) root.setAttribute('data-fx-' + name, ''); else root.removeAttribute('data-fx-' + name);
+          });
+        } catch (e) {}
+        // efeTrack: grid density of the media lists (compact / comfortable / gallery), per device
+        try {
+          var density = localStorage.getItem('efe-grid');
+          if (density === 'compact' || density === 'gallery') root.dataset.grid = density; else delete root.dataset.grid;
+        } catch (e) {}
+        // efeTrack: cinema mode — one big "watch this now" picture on the home page (per device)
+        try { if (localStorage.getItem('efe-cinema') === 'on') root.dataset.cinema = '1'; else delete root.dataset.cinema; } catch (e) {}
+      })();
+    </script>
+
+    {% block extra_head %}
+    {% endblock extra_head %}
+
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'css/main.css' %}{% get_static_file_mtime 'css/main.css' %}">
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'css/efe-ui.css' %}{% get_static_file_mtime 'css/efe-ui.css' %}">
+
+    <script src="{% static 'js/libraries/htmx-2.0.4.min.js' %}"></script>
+    <script defer src="{% static 'js/libraries/alpinejs-3.14.9.min.js' %}"></script>
+    <script src="{% static 'js/libraries/lazysizes-5.3.2.min.js' %}" async></script>
+    <script src="{% url 'javascript-catalog' %}?language={{ LANGUAGE_CODE }}"></script>
+
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="{% static "favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/svg+xml" href="{% if efe_festive_season %}{% static "favicon/favicon-yilbasi.svg" %}{% else %}{% static "favicon/favicon.svg" %}{% endif %}">
+    {% if efe_festive_season %}
+      <script>try { if (localStorage.getItem('efe-xmas') === 'off') document.querySelector('link[rel="icon"][type="image/svg+xml"]').href = "{% static "favicon/favicon.svg" %}"; } catch (e) {}</script>
+    {% endif %}
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="{% static "favicon/favicon-32x32.png" %}">
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="{% static "favicon/favicon-16x16.png" %}">
+    <link rel="manifest" href="{% static "favicon/site.webmanifest" %}">
+    <link rel="mask-icon"
+          href="{% static "favicon/safari-pinned-tab.svg" %}" color="#7B61FF">
+    <link rel="shortcut icon" href="{% static "favicon/favicon.ico" %}">
+    <meta name="msapplication-TileColor" content="#0E1116">
+    <meta name="msapplication-config"
+          content="{% static "favicon/browserconfig.xml" %}">
+    <meta name="theme-color" content="#0E1116">
+
+  </head>
+
+  <body>
+    <div id="efe-snow" aria-hidden="true"></div>
+    <div id="efe-fx-aurora" class="efe-fx" aria-hidden="true"></div>
+    <div id="efe-fx-stars" class="efe-fx" aria-hidden="true"></div>
+    <div id="efe-fx-rain" class="efe-fx" aria-hidden="true"></div>
+    <div id="efe-fx-fireflies" class="efe-fx" aria-hidden="true"></div>
+    <div id="efe-fx-grain" class="efe-fx" aria-hidden="true"></div>
+    <div id="efe-fx-leaves" class="efe-fx efe-fx-season" aria-hidden="true"></div>
+    <div id="efe-fx-blossoms" class="efe-fx efe-fx-season" aria-hidden="true"></div>
+    <div id="efe-fx-bats" class="efe-fx efe-fx-season" aria-hidden="true"></div>
+    {% if request.efe_guest %}
+      <div style="position:sticky;top:0;z-index:60;display:flex;gap:.75rem;align-items:center;justify-content:center;flex-wrap:wrap;padding:6px 12px;font-size:13px;font-weight:600"
+           class="bg-indigo-600 text-white">
+        <span>👁 Misafir görünümü · salt okunur</span>
+        <form method="post" action="{% url 'account_logout' %}" style="margin:0">{% csrf_token %}
+          <button type="submit" style="background:rgba(255,255,255,.18);border:0;border-radius:6px;padding:2px 10px;color:#fff;cursor:pointer">Çıkış yap</button>
+        </form>
+      </div>
+    {% endif %}
+    {% block body %}
+      {# Main container for the layout #}
+      <div class="flex min-h-screen bg-ef-page text-gray-100"
+           x-data="{ isMobileMenuOpen: false }">
+
+        {# Mobile menu overlay #}
+        <div x-show="isMobileMenuOpen"
+             class="fixed inset-0 bg-black/50 z-30 lg:hidden"
+             @click="isMobileMenuOpen = false"></div>
+
+        {# Sidebar #}
+        <aside class="efe-sidebar fixed top-0 left-0 z-40 h-screen w-64 bg-ef-chrome transform transition-transform duration-300 ease-in-out border-r border-ef-line -translate-x-full lg:translate-x-0 lg:sticky flex flex-col"
+               :class="isMobileMenuOpen ? 'translate-x-0' : ''">
+          <div class="efe-sidebar-head h-16 flex items-center px-6">
+            <a href="{% url 'home' %}" class="flex items-center group" aria-label="efeTrack">
+              <h1 class="sr-only">efeTrack</h1>
+              <img src="{% static 'img/brand/efetrack-logo-dark.svg' %}" alt="efeTrack" class="ef-only-dark h-7 w-auto group-hover:scale-[1.03] transition-transform">
+              <img src="{% static 'img/brand/efetrack-logo-light.svg' %}" alt="efeTrack" class="ef-only-light h-7 w-auto group-hover:scale-[1.03] transition-transform">
+              <img src="{% static 'img/brand/efetrack-mark.svg' %}" alt="" class="efe-sidebar-mark">
+            </a>
+          </div>
+          <nav class="p-4 border-t border-ef-line flex-1 overflow-y-auto">
+            {% block sidebar_own_media %}
+              <ul class="space-y-1 mb-6" data-efe-sortable="media">
+                <li>
+                  <a href="{% url 'home' %}"
+                     class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == "/" %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                    {% if request.path|str_equals:"/" %}
+                      {% include "app/icons/house.svg" with classes="w-5 h-5 text-indigo-400 " %}
+
+                    {% else %}
+                      {% include "app/icons/house.svg" with classes="w-5 h-5" %}
+
+                    {% endif %}
+                    <span>{% trans "Home" %}</span>
+                  </a>
+                </li>
+
+                {% get_sidebar_media_types user as sidebar_media_types %}
+                {% for item in sidebar_media_types %}
+                  <li>
+                    {% if target_user is None or target_user == request.user %}
+                      <a href="{% url 'medialist' username=user.username media_type=item.media_type %}"
+                         data-efe-media-type="{{ item.media_type }}"
+                         class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if media_type == item.media_type %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                        {% icon item.media_type is_active=media_type|str_equals:item.media_type %}
+                        <span>{{ item.display_name }}</span>
+                      </a>
+                    {% else %}
+                      <a href="{% url 'medialist' username=user.username media_type=item.media_type %}"
+                         data-efe-media-type="{{ item.media_type }}"
+                         class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover">
+                        {% icon item.media_type is_active=False %}
+                        <span>{{ item.display_name }}</span>
+                      </a>
+                    {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endblock sidebar_own_media %}
+
+            {% block sidebar_external_media_view %}
+            {% endblock sidebar_external_media_view %}
+
+            {% block sidebar_utilities %}
+              <div class="border-t border-ef-line pt-4">
+                <ul class="space-y-1" data-efe-sortable="tools">
+                  {% url 'create_entry' as create_entry_url %}
+                  <li>
+                    <a href="{{ create_entry_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == create_entry_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path|str_equals:create_entry_url %}
+                        {% include "app/icons/circle-plus.svg" with classes="w-5 h-5 text-indigo-400 " %}
+
+                      {% else %}
+                        {% include "app/icons/circle-plus.svg" with classes="w-5 h-5" %}
+
+                      {% endif %}
+                      <span>{% trans "Create Custom" %}</span>
+                    </a>
+                  </li>
+
+                  {% url 'statistics' as statistics_url %}
+                  <li>
+                    <a href="{{ statistics_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == statistics_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path|str_equals:statistics_url %}
+                        {% include "app/icons/bars-pyramid.svg" with classes="w-5 h-5 text-indigo-400 " %}
+
+                      {% else %}
+                        {% include "app/icons/bars-pyramid.svg" with classes="w-5 h-5" %}
+
+                      {% endif %}
+                      <span>{% trans "Statistics" %}</span>
+                    </a>
+                  </li>
+
+                  {% url 'journal' as journal_url %}
+                  <li>
+                    <a href="{{ journal_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == journal_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path|str_equals:journal_url %}
+                        {% include "app/icons/history.svg" with classes="w-5 h-5 text-indigo-400 " %}
+
+                      {% else %}
+                        {% include "app/icons/history.svg" with classes="w-5 h-5" %}
+
+                      {% endif %}
+                      <span>{% trans "Journal" %}</span>
+                    </a>
+                  </li>
+
+                  {% url 'lists' as lists_url %}
+                  <li>
+                    <a href="{{ lists_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == lists_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path|str_equals:lists_url %}
+                        {% include "app/icons/folder-plus.svg" with classes="w-5 h-5 text-indigo-400 " %}
+
+                      {% else %}
+                        {% include "app/icons/folder-plus.svg" with classes="w-5 h-5" %}
+
+                      {% endif %}
+                      <span>{% trans "Lists" %}</span>
+                    </a>
+                  </li>
+
+                  {% url 'calendar' as calendar_url %}
+                  <li>
+                    <a href="{{ calendar_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == calendar_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path|str_equals:calendar_url %}
+                        {% include "app/icons/calendar.svg" with classes="w-5 h-5 text-indigo-400 " %}
+
+                      {% else %}
+                        {% include "app/icons/calendar.svg" with classes="w-5 h-5" %}
+
+                      {% endif %}
+                      <span>{% trans "Calendar" %}</span>
+                    </a>
+                  </li>
+
+                  {% url 'efe_notifications' as efe_notifications_url %}
+                  <li>
+                    <a href="{{ efe_notifications_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == efe_notifications_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path == efe_notifications_url %}
+                        {% include "app/icons/bell.svg" with classes="w-5 h-5 text-indigo-400 " %}
+                      {% else %}
+                        {% include "app/icons/bell.svg" with classes="w-5 h-5" %}
+                      {% endif %}
+                      <span class="flex-1">{% trans "Notification Center" %}</span>
+                      <span data-efe-unread-badge
+                            class="hidden min-w-5 h-5 px-1.5 rounded-full bg-red-600 text-white text-[11px] font-semibold flex items-center justify-center"></span>
+                    </a>
+                  </li>
+
+                  {% url 'efe_random' as efe_random_url %}
+                  <li>
+                    <a href="{{ efe_random_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == efe_random_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path == efe_random_url %}
+                        {% include "app/icons/dice.svg" with classes="w-5 h-5 text-indigo-400 " %}
+                      {% else %}
+                        {% include "app/icons/dice.svg" with classes="w-5 h-5" %}
+                      {% endif %}
+                      <span>{% trans "Random Pick" %}</span>
+                    </a>
+                  </li>
+
+                  {% if user.movie_enabled %}
+                    {% url 'efe_series' as efe_series_url %}
+                    <li>
+                      <a href="{{ efe_series_url }}"
+                         class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == efe_series_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                        {% if request.path == efe_series_url %}
+                          {% include "app/icons/film-stack.svg" with classes="w-5 h-5 text-indigo-400 " %}
+                        {% else %}
+                          {% include "app/icons/film-stack.svg" with classes="w-5 h-5" %}
+                        {% endif %}
+                        <span>{% trans "Film Series" %}</span>
+                      </a>
+                    </li>
+                  {% endif %}
+                  {% url 'efe_planned' as efe_planned_url %}
+                  <li>
+                    <a href="{{ efe_planned_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == efe_planned_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path == efe_planned_url %}
+                        {% include "app/icons/clock.svg" with classes="w-5 h-5 text-indigo-400 " %}
+                      {% else %}
+                        {% include "app/icons/clock.svg" with classes="w-5 h-5" %}
+                      {% endif %}
+                      <span>Planlananlar</span>
+                    </a>
+                  </li>
+                  {% url 'efe_poster_wall' as efe_poster_wall_url %}
+                  <li>
+                    <a href="{{ efe_poster_wall_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == efe_poster_wall_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% if request.path == efe_poster_wall_url %}
+                        {% include "app/icons/grid.svg" with classes="w-5 h-5 text-indigo-400 " %}
+                      {% else %}
+                        {% include "app/icons/grid.svg" with classes="w-5 h-5" %}
+                      {% endif %}
+                      <span>Poster Duvarı</span>
+                    </a>
+                  </li>
+                  {% url 'efe_whats_new' as efe_whats_new_url %}
+                  <li>
+                    <a href="{{ efe_whats_new_url }}"
+                       class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == efe_whats_new_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                      {% include "app/icons/sparkles.svg" with classes="w-5 h-5" %}
+                      <span>Yenilikler</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            {% endblock sidebar_utilities %}
+          </nav>
+
+          {% block sidebar_logout %}
+            <div class="p-4 border-t border-ef-line mt-auto">
+              <div class="space-y-2">
+                {% url 'account' as account_url %}
+                {% url 'notifications' as notifications_url %}
+                {% url 'sidebar' as sidebar_url %}
+                {% url 'integrations' as integrations_url %}
+                {% url 'import_data' as import_url %}
+                {% url 'export_data' as export_url %}
+                <button type="button"
+                        data-efe-sidebar-toggle
+                        data-efe-silent
+                        title="{% trans 'Collapse sidebar' %}"
+                        class="efe-sidebar-toggle w-full items-center space-x-3 px-4 py-2 rounded-md text-gray-400 hover:bg-ef-chrome-hover hover:text-ef-fg transition-colors duration-200 text-sm cursor-pointer">
+                  <svg class="efe-when-open w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M15 10l-2 2 2 2"/></svg>
+                  <svg class="efe-when-collapsed w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16M13 10l2 2-2 2"/></svg>
+                  <span>{% trans "Collapse sidebar" %}</span>
+                </button>
+                {# efeTrack: status panel #}
+                {% url 'efe_status' as status_url %}
+                <a href="{{ status_url }}"
+                   class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == status_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                  <svg class="w-5 h-5{% if request.path == status_url %} text-indigo-400{% endif %}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+                  <span>Durum paneli</span>
+                </a>
+                <a href="{{ account_url }}"
+                   class="flex items-center space-x-3 px-4 py-2 rounded-md transition-colors duration-200 text-sm {% if request.path == account_url or request.path == notifications_url or request.path == sidebar_url or request.path == integrations_url or request.path == import_url or request.path == export_url %}text-ef-fg bg-ef-line{% else %}text-gray-400 hover:text-ef-fg hover:bg-ef-chrome-hover{% endif %}">
+                  {% if request.path == account_url or request.path == notifications_url or request.path == sidebar_url or request.path == integrations_url or request.path == import_url or request.path == export_url %}
+                    {% include "app/icons/settings.svg" with classes="w-5 h-5 text-indigo-400 " %}
+
+                  {% else %}
+                    {% include "app/icons/settings.svg" with classes="w-5 h-5" %}
+
+                  {% endif %}
+                  <span>{% trans "Settings" %}</span>
+                </a>
+
+                <form method="post" action="{% url 'account_logout' %}" class="w-full">
+                  {% csrf_token %}
+                  <button type="submit"
+                          class="w-full flex items-center space-x-3 px-4 py-2 rounded-md text-gray-400 hover:bg-ef-chrome-hover hover:text-ef-fg transition-colors duration-200 text-sm cursor-pointer">
+                    {% include "app/icons/logout.svg" with classes="w-5 h-5" %}
+
+                    <span>{% trans "Logout" %}</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          {% endblock sidebar_logout %}
+
+          {% block anonymous_login %}
+          {% endblock anonymous_login %}
+        </aside>
+
+        {# Main content #}
+        <div class="flex-1 min-w-0 flex flex-col min-h-screen">
+          {# Top bar #}
+          <div class="efe-topbar sticky top-0 z-20 bg-ef-chrome border-b border-ef-line shadow-md">
+            <div class="container mx-auto px-4 relative">
+              <div class="efe-topbar-row flex items-center justify-between lg:justify-center gap-2 h-16">
+                {# Mobile: sidebar toggle button #}
+                <button @click="isMobileMenuOpen = !isMobileMenuOpen"
+                        class="lg:hidden pe-3 text-gray-400 hover:text-ef-fg transition-colors duration-200">
+                  {% include "app/icons/hamburger.svg" with classes="w-6 h-6" %}
+
+                </button>
+
+                {# efeTrack: the search box always starts on "Diziler"; only the search results page keeps the type just searched #}
+                {% if request.resolver_match.url_name == "search" and media_type and media_type != MediaTypes.SEASON.value %}
+                  {% firstof media_type as search_type %}
+                {% else %}
+                  {% firstof MediaTypes.TV.value as search_type %}
+                {% endif %}
+
+                {# Translators: {media} is replaced with the media type being searched, e.g. "TV shows". #}
+                {% trans "Search {media}..." as search_placeholder %}
+
+                {# Search bar #}
+                {% block search_bar %}
+                  <div class="relative w-full max-w-2xl">
+                    <form method="get"
+                          action="{% url 'search' %}"
+                          x-data=" { isOpen: false, selectedType: { display: '{{ search_type|media_type_readable_plural }}', value: '{{ search_type }}' }, mediaTypes: {% get_search_media_types user as search_types %}{{ search_types }}, getPlaceholder() { return '{{ search_placeholder|escapejs }}'.replace('{media}', this.selectedType.display.toLocaleLowerCase('{{ LANGUAGE_CODE }}')) } }">
+                      <div class="flex">
+                        <div class="relative grow">
+                          {# Search input #}
+                          <input type="search"
+                                 id="global-search"
+                                 name="q"
+                                 value="{{ request.GET.q }}"
+                                 :placeholder="getPlaceholder()"
+                                 class="w-full py-2 pl-10 pr-4 text-sm text-gray-300 bg-ef-field rounded-l-md focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:ring-inset placeholder-gray-500">
+                          <button type="submit"
+                                  class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-ef-fg transition-colors duration-200 focus:outline-none cursor-pointer">
+                            {% include "app/icons/magnifying-glass.svg" with classes="w-5 h-5" %}
+
+                          </button>
+                        </div>
+
+                        <input type="hidden" name="media_type" :value="selectedType.value">
+
+                        {# Media type dropdown #}
+                        <button type="button"
+                                @click="isOpen = !isOpen"
+                                @click.away="isOpen = false"
+                                class="efe-search-type flex items-center justify-between max-w-27.5 sm:max-w-none sm:w-32 px-2 sm:px-4 py-2 text-sm text-gray-300 bg-ef-field rounded-r-md focus:outline-none focus:ring-2 focus:ring-[#4a9eff] focus:ring-inset hover:bg-ef-menu transition-colors duration-200 cursor-pointer">
+                          <span class="truncate" x-text="selectedType.display"></span>
+                          {% include "app/icons/chevron-down.svg" with classes="w-4 h-4 ml-2" %}
+
+                        </button>
+                        <ul x-cloak
+                            x-show="isOpen"
+                            @keydown.escape.window="isOpen = false"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class="efe-search-menu absolute z-20 py-1 mt-12 overflow-auto text-sm text-gray-300 bg-ef-menu rounded-md shadow-lg right-0 w-32">
+                          <template x-for="type in mediaTypes" :key="type.value">
+                            <li @click="selectedType = type; isOpen = false"
+                                class="px-4 py-2 cursor-pointer hover:bg-ef-panel transition duration-150 ease-in-out"
+                                x-text="type.display"></li>
+                          </template>
+                        </ul>
+                      </div>
+                    </form>
+                  </div>
+                {% endblock search_bar %}
+
+                {% if user.is_authenticated %}
+                  {% include "efe/components/topbar_actions.html" %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <main class="flex-1 relative bg-ef-page">
+            <div class="container mx-auto px-8 py-12">
+              {% block content %}
+              {% endblock content %}
+            </div>
+          </main>
+        </div>
+      </div>
+    {% endblock body %}
+
+    <div class="fixed top-24 right-0 left-0 {% block messages_sidebar_offset %}lg:left-64{% endblock messages_sidebar_offset %} z-50 flex justify-center pointer-events-none">
+      <div id="messages-list"
+           class="w-full max-w-xl px-4 space-y-2 pointer-events-auto">
+        {% include "app/components/messages/messages_stack.html" %}
+      </div>
+    </div>
+
+    {# efeTrack: page state for the macOS context menus #}
+    <div id="efe-page-state" hidden
+         data-page="{{ request.resolver_match.url_name|default:'' }}"
+         data-username="{{ user.username|default:'' }}"
+         data-media-type="{{ media_type|default:'' }}"
+         data-sort="{{ current_sort|default:'' }}"
+         data-status="{{ current_status|default:'' }}"
+         data-layout="{{ current_layout|default:'' }}"
+         data-hide-unreleased="{% if hide_unreleased %}1{% else %}0{% endif %}"></div>
+
+    <div id="persistent-messages-actions">{% include "app/components/messages/persistent_messages_actions.html" %}</div>
+
+    {% block js %}
+    {% endblock js %}
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/static/js/serviceworker.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
+
+    <script src="{% static 'js/efe.js' %}{% get_static_file_mtime 'js/efe.js' %}"></script>
+    <script src="{% static 'js/efe-ui.js' %}{% get_static_file_mtime 'js/efe-ui.js' %}"></script>
+    <script src="{% static 'js/mediaStatusDateHandler.js' %}{% get_static_file_mtime 'js/mediaStatusDateHandler.js' %}"></script>
+    <script src="{% static 'js/searchShortcut.js' %}{% get_static_file_mtime 'js/searchShortcut.js' %}"></script>
+    {# efeTrack: "Undo" after marking episodes #}
+    {% efe_undo_toast as undo_toast %}
+    {% include "efe/components/undo_toast.html" %}
+    {% if user.is_authenticated %}
+      {% include "efe/components/whats_new.html" %}
+    {% endif %}
+    {% if user.is_authenticated %}
+      {# efeTrack: offline copies of visited pages (phone). The Mac app's web view ignores this. #}
+      <script>
+        if ("serviceWorker" in navigator) {
+          window.addEventListener("load", () => navigator.serviceWorker.register("{% url 'efe_service_worker' %}", { scope: "/" }).catch(() => {}));
+        }
+      </script>
+    {% endif %}
+  </body>
+</html>

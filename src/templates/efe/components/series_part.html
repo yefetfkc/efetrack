@@ -1,0 +1,27 @@
+{% load app_tags %}
+{% load efe_tags %}
+{% load i18n %}
+
+<a href="{{ part.item|media_url }}"
+   data-efe-sound="tap"
+   class="group relative shrink-0 w-32 sm:w-36 snap-start">
+  <div class="relative rounded-lg overflow-hidden ring-2 transition-all {% if part.is_current %}ring-indigo-500{% elif part.is_next %}ring-amber-400{% else %}ring-transparent group-hover:ring-gray-500{% endif %}">
+    <img alt="{{ part.title }}"
+         src="{{ part.image }}"
+         loading="lazy"
+         class="w-full aspect-[2/3] object-cover bg-ef-raised {% if part.status == 'Completed' %}opacity-90{% endif %} {% if not part.is_released %}grayscale-[60%]{% endif %}">
+    <span class="absolute top-1.5 left-1.5 w-7 h-7 rounded-full bg-black/75 text-white text-sm font-bold flex items-center justify-center">{{ part.order }}</span>
+    {% if part.status %}
+      <span class="absolute bottom-1.5 left-1.5 right-1.5 text-center px-2 py-0.5 rounded-md text-[11px] font-semibold {{ part.status|ef_status_class }}">{{ part.status|media_status_readable }}</span>
+    {% elif not part.is_released %}
+      <span class="absolute bottom-1.5 left-1.5 right-1.5 text-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-black/75 text-white">{% trans "Not released" %}</span>
+    {% endif %}
+    {% if part.is_next %}
+      <span class="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-md bg-amber-500 text-black text-[10px] font-bold uppercase">{% trans "Next" %}</span>
+    {% elif part.is_current %}
+      <span class="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-md bg-indigo-600 text-white text-[10px] font-bold uppercase">{% trans "You are here" %}</span>
+    {% endif %}
+  </div>
+  <p class="mt-2 text-sm font-medium line-clamp-2 group-hover:text-indigo-400 transition-colors">{{ part.title }}</p>
+  <p class="text-xs text-gray-400">{% if part.year %}{{ part.year }}{% else %}{% trans "TBA" %}{% endif %}</p>
+</a>

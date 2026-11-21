@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Yenilikler - efeTrack
+{% endblock title %}
+
+{% block content %}
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold mb-2">Yenilikler</h1>
+    <p class="text-gray-400">efeTrack'e eklenenler, yeniden eskiye.</p>
+  </div>
+  <div class="space-y-6 max-w-2xl">
+    {% for entry in entries %}
+      <section class="bg-ef-card rounded-lg p-5">
+        <p class="text-xs text-gray-400">{{ entry.date|date:"j F Y" }}{% if entry.surum %} · <span class="font-semibold text-indigo-400">Sürüm {{ entry.surum }}</span>{% endif %}</p>
+        <h2 class="text-xl font-bold mt-1 mb-4">{{ entry.title }}</h2>
+        <ul class="space-y-3">
+          {% for icon, text in entry.items %}
+            <li class="flex gap-3 text-sm text-gray-200"><span class="shrink-0">{{ icon }}</span><span>{{ text }}</span></li>
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
+{% endblock content %}

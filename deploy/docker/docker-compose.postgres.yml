@@ -1,0 +1,42 @@
+services:
+  efetrack:
+    container_name: efetrack
+    build: .
+    image: efetrack:latest
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    environment:
+      - TZ=Europe/Istanbul
+      # Bunu uzun ve rastgele bir değerle değiştir!
+      - SECRET=bunu-uzun-ve-rastgele-bir-degerle-degistir
+      - REDIS_URL=redis://redis:6379
+      - DB_HOST=db
+      - DB_NAME=efetrack
+      - DB_USER=efetrack
+      - DB_PASSWORD=efetrack
+      - DB_PORT=5432
+    ports:
+      - "8000:8000"
+
+  db:
+    image: postgres:16-alpine
+    container_name: efetrack-db
+    environment:
+      - POSTGRES_DB=efetrack
+      - POSTGRES_USER=efetrack
+      - POSTGRES_PASSWORD=efetrack
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    container_name: efetrack-redis
+    image: redis:8-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

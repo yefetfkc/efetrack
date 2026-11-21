@@ -1,0 +1,695 @@
+from pathlib import Path
+
+from django import template
+from django.conf import settings
+from django.urls import reverse
+from django.utils import formats, timezone
+from django.utils.dateparse import parse_date
+from django.utils.html import format_html
+from django.utils.translation import pgettext
+from unidecode import unidecode
+
+from app import config, helpers
+from app.models import MediaTypes, Sources, Status
+from users.models import WATCH_PROVIDER_REGION_UNSET
+
+register = template.Library()
+
+
+@register.simple_tag
+def get_static_file_mtime(file_path):
+    """Return the last modification time of a static file for cache busting."""
+    full_path = Path(settings.STATIC_ROOT) / file_path
+    try:
+        mtime = int(full_path.stat().st_mtime)
+    except OSError:
+        # Without collectstatic (e.g. the macOS app) the file only exists in the
+        # source static folders; look it up there so the URL still changes with it.
+        from django.contrib.staticfiles import finders  # noqa: PLC0415
+
+        found = finders.find(file_path)
+        if not found:
+            return ""
+        try:
+            mtime = int(Path(found).stat().st_mtime)
+        except OSError:
+            return ""
+    return f"?{mtime}"
+
+
+@register.simple_tag(takes_context=True)
+def absolute_app_url(context, path):
+    """Return an absolute app URL for links copied into external services."""
+    return helpers.build_absolute_app_url(context.get("request"), path)
+
+
+@register.filter
+def no_underscore(arg1):
+    """Return the title case of the string."""
+    return arg1.replace("_", " ")
+
+
+@register.filter
+def related_section_label(name):
+    """Return the translated heading for a related media section."""
+    # Keep literal strings inside pgettext so makemessages can extract them.
+    labels = {
+        "dlcs": lambda: pgettext("related section", "DLCs"),
+        "expanded_games": lambda: pgettext("related section", "Expanded Games"),
+        "expansions": lambda: pgettext("related section", "Expansions"),
+        "other_editions": lambda: pgettext("related section", "Other Editions"),
+        "parent_game": lambda: pgettext("related section", "Parent Game"),
+        "recommendations": lambda: pgettext("related section", "Recommendations"),
+        "related_anime": lambda: pgettext("related section", "Related Anime"),
+        "related_manga": lambda: pgettext("related section", "Related Manga"),
+        "remakes": lambda: pgettext("related section", "Remakes"),
+        "remasters": lambda: pgettext("related section", "Remasters"),
+        "seasons": lambda: pgettext("related section", "Seasons"),
+        "standalone_expansions": lambda: pgettext(
+            "related section", "Standalone Expansions"
+        ),
+    }
+    if name in labels:
+        return labels[name]()
+    # Fall back to the key itself for sections a provider adds later
+    return no_underscore(name).title()
+
+
+@register.filter
+def media_detail_label(name):
+    """Return the translated label for a key of a media's details."""
+    # Keep literal strings inside pgettext so makemessages can extract them.
+    labels = {
+        "author": lambda: pgettext("media detail", "Author"),
+        "authors": lambda: pgettext("media detail", "Authors"),
+        "broadcast": lambda: pgettext("media detail", "Broadcast"),
+        "companies": lambda: pgettext("media detail", "Companies"),
+        "country": lambda: pgettext("media detail", "Country"),
+        "designers": lambda: pgettext("media detail", "Designers"),
+        "end_date": lambda: pgettext("media detail", "End date"),
+        "episodes": lambda: pgettext("media detail", "Episodes"),
+        "first_air_date": lambda: pgettext("media detail", "First air date"),
+        "format": lambda: pgettext("media detail", "Format"),
+        "isbn": lambda: pgettext("media detail", "ISBN"),
+        "issues_count": lambda: pgettext("media detail", "Issues"),
+        "languages": lambda: pgettext("media detail", "Languages"),
+        "last_air_date": lambda: pgettext("media detail", "Last air date"),
+        "last_issue_name": lambda: pgettext("media detail", "Last issue name"),
+        "last_issue_number": lambda: pgettext("media detail", "Last issue number"),
+        "last_updated": lambda: pgettext("media detail", "Last updated"),
+        "latest_chapter_translated": lambda: pgettext(
+            "media detail", "Latest chapter translated"
+        ),
+        "min_age": lambda: pgettext("media detail", "Minimum age"),
+        "number_of_chapters": lambda: pgettext("media detail", "Chapters"),
+        "number_of_pages": lambda: pgettext("media detail", "Pages"),
+        "people": lambda: pgettext("media detail", "People"),
+        "physical_format": lambda: pgettext("media detail", "Physical format"),
+        "platforms": lambda: pgettext("media detail", "Platforms"),
+        "players": lambda: pgettext("media detail", "Players"),
+        "playtime": lambda: pgettext("media detail", "Playtime"),
+        "publish_date": lambda: pgettext("media detail", "Publish date"),
+        "publisher": lambda: pgettext("media detail", "Publisher"),
+        "publishers": lambda: pgettext("media detail", "Publishers"),
+        "release_date": lambda: pgettext("media detail", "Release date"),
+        "runtime": lambda: pgettext("media detail", "Runtime"),
+        # Translators: the anime's season of the year, e.g. "Spring 2024"
+        "season": lambda: pgettext("media detail", "Season"),
+        "seasons": lambda: pgettext("media detail", "Seasons"),
+        # Translators: the original material an anime is adapted from
+        "source": lambda: pgettext("media detail", "Source"),
+        "start_date": lambda: pgettext("media detail", "Start date"),
+        "status": lambda: pgettext("media detail", "Status"),
+        "status_in_country_of_origin": lambda: pgettext(
+            "media detail", "Status in country of origin"
+        ),
+        "studios": lambda: pgettext("media detail", "Studios"),
+        "themes": lambda: pgettext("media detail", "Themes"),
+        "total_runtime": lambda: pgettext("media detail", "Total runtime"),
+        "year": lambda: pgettext("media detail", "Year"),
+    }
+    if name in labels:
+        return labels[name]()
+    # Fall back to the key itself for details a provider adds later
+    return no_underscore(name)
+
+
+@register.filter
+def slug(arg1):
+    """Return the slug of the string.
+
+    Sometimes slugify removes all characters from a string, so we need to
+    urlencode the special characters first.
+    e.g Anime: 31687
+    """
+    cleaned = template.defaultfilters.slugify(arg1)
+    if cleaned == "":
+        cleaned = template.defaultfilters.slugify(
+            template.defaultfilters.urlencode(unidecode(arg1)),
+        )
+        if cleaned == "":
+            cleaned = template.defaultfilters.urlencode(unidecode(arg1))
+
+            if cleaned == "":
+                cleaned = template.defaultfilters.urlencode(arg1)
+
+    return cleaned
+
+
+@register.simple_tag
+def inline_link(url, html_class, label, *, new_tab=False):
+    """Build a safely escaped link fragment for translated template text.
+
+    With new_tab=True the link opens in a new tab, for external pages.
+    """
+    if new_tab:
+        return format_html(
+            '<a href="{}" class="{}" target="_blank" rel="noopener noreferrer">{}</a>',
+            url,
+            html_class,
+            label,
+        )
+    return format_html('<a href="{}" class="{}">{}</a>', url, html_class, label)
+
+
+@register.simple_tag
+def inline_code(text, html_class):
+    """Build a safely escaped code fragment for translated template text."""
+    return format_html('<code class="{}">{}</code>', html_class, text)
+
+
+@register.filter
+def date_format(datetime, user):
+    """Format a datetime using user's preferred date format (date only, no time).
+
+    Args:
+        datetime: The datetime object to format
+        user: User object to get preferred date format
+    """
+    if not datetime:
+        return None
+    local_dt = timezone.localtime(datetime)
+    return formats.date_format(local_dt, user.date_format)
+
+
+@register.filter
+def iso_date_format(value, user):
+    """Format an ISO date string (YYYY-MM-DD) using user's preferred date format.
+
+    If value is not a valid ISO date string, returns the original value.
+    """
+    if isinstance(value, str):
+        date_obj = parse_date(value)
+        if date_obj:
+            return formats.date_format(date_obj, user.date_format)
+
+    return value
+
+
+@register.filter
+def time_format(datetime, user):
+    """Format a datetime using user's preferred time format (time only, no date)."""
+    if not datetime:
+        return None
+    local_dt = timezone.localtime(datetime)
+    return formats.time_format(local_dt, user.time_format)
+
+
+@register.filter
+def datetime_format(datetime, user):
+    """Format a datetime using user's preferred formats.
+
+    Includes time only if TRACK_TIME setting is enabled.
+
+    Args:
+        datetime: The datetime object to format
+        user: User object to get preferred date/time format
+    """
+    if not datetime:
+        return None
+    local_dt = timezone.localtime(datetime)
+    formatted_date = formats.date_format(local_dt, user.date_format)
+
+    if settings.TRACK_TIME:
+        formatted_time = formats.time_format(local_dt, user.time_format)
+        return f"{formatted_date} {formatted_time}"
+    return formatted_date
+
+
+@register.filter
+def is_list(arg1):
+    """Return True if the object is a list."""
+    return isinstance(arg1, list)
+
+
+@register.filter
+def source_readable(source):
+    """Return the readable source name."""
+    return Sources(source).label
+
+
+@register.filter
+def media_type_readable(media_type):
+    """Return the readable media type."""
+    return MediaTypes(media_type).label
+
+
+@register.filter
+def media_type_readable_plural(media_type):
+    """Return the readable media type in plural form."""
+    # Keep literal strings inside pgettext so makemessages can extract them.
+    plural_translators = {
+        MediaTypes.TV.value: lambda: pgettext("media type plural label", "TV Shows"),
+        MediaTypes.SEASON.value: lambda: pgettext(
+            "media type plural label", "TV Seasons"
+        ),
+        MediaTypes.EPISODE.value: lambda: pgettext(
+            "media type plural label", "Episodes"
+        ),
+        MediaTypes.MOVIE.value: lambda: pgettext("media type plural label", "Movies"),
+        MediaTypes.ANIME.value: lambda: pgettext("media type plural label", "Anime"),
+        MediaTypes.MANGA.value: lambda: pgettext("media type plural label", "Manga"),
+        MediaTypes.GAME.value: lambda: pgettext("media type plural label", "Games"),
+        MediaTypes.BOOK.value: lambda: pgettext("media type plural label", "Books"),
+        MediaTypes.COMIC.value: lambda: pgettext("media type plural label", "Comics"),
+        MediaTypes.BOARDGAME.value: lambda: pgettext(
+            "media type plural label", "Boardgames"
+        ),
+    }
+
+    return plural_translators[media_type]()
+
+
+@register.filter
+def media_status_readable(media_status):
+    """Return the readable media status."""
+    return Status(media_status).label
+
+
+@register.filter
+def default_source(media_type):
+    """Return the default source for the media type."""
+    return config.get_default_source_name(media_type).label
+
+
+@register.filter
+def media_past_verb(media_type):
+    """Return the past tense verb for the given media type."""
+    return config.get_translated_verb(media_type, past_tense=True)
+
+
+@register.filter
+def sample_search(media_type):
+    """Return a sample search URL for the given media type using GET parameters."""
+    return config.get_sample_search_url(media_type)
+
+
+@register.filter
+def short_unit(media_type):
+    """Return the short unit for the media type."""
+    return config.get_translated_short_unit(media_type)
+
+
+@register.filter
+def long_unit(media_type):
+    """Return the long unit for the media type."""
+    return config.get_translated_unit(media_type)
+
+
+@register.filter
+def unit_for_count(media_type, count):
+    """Return the translated unit in singular or plural form for a count."""
+    return config.get_translated_unit(media_type, plural=count != 1)
+
+
+@register.filter
+def sources(media_type):
+    """Template filter to get source options for a media type."""
+    return config.get_sources(media_type)
+
+
+@register.simple_tag
+def get_search_media_types(user):
+    """Return available media types for search based on user preferences."""
+    enabled_types = user.get_enabled_media_types()
+
+    # Filter and format the types for search
+    return [
+        {
+            "display": media_type_readable_plural(media_type),
+            "value": media_type,
+        }
+        for media_type in enabled_types
+        if media_type != MediaTypes.SEASON.value
+    ]
+
+
+@register.simple_tag
+def get_sidebar_media_types(user):
+    """Return available media types for sidebar navigation based on user preferences."""
+    enabled_types = user.get_enabled_media_types()
+
+    # Format the types for sidebar
+    return [
+        {
+            "media_type": media_type,
+            "display_name": media_type_readable_plural(media_type),
+        }
+        for media_type in enabled_types
+    ]
+
+
+@register.filter
+def media_color(media_type):
+    """Return the color associated with the media type."""
+    return config.get_text_color(media_type)
+
+
+@register.filter
+def journal_accent(accent):
+    """Return the badge background class and icon template for a journal accent."""
+    return config.get_journal_accent(accent)
+
+
+@register.filter
+def status_config(status):
+    """Return the config dict for a status, or None if it is unrecognized."""
+    return config.get_status_config(status)
+
+
+@register.filter
+def status_color(status):
+    """Return the color associated with the status."""
+    return config.get_status_text_color(status)
+
+
+@register.filter
+def status_icon(status):
+    """Return the icon template associated with the status."""
+    return config.get_status_icon(status)
+
+
+@register.filter
+def status_background_color(status):
+    """Return the background color associated with the status."""
+    return config.get_status_background_color(status)
+
+
+@register.filter
+def status_button_color(status):
+    """Return the button background and hover classes for the status."""
+    return config.get_status_button_color(status)
+
+
+@register.filter
+def natural_day(datetime, user):
+    """Format date with natural language (Today, Tomorrow, etc.)."""
+    if not datetime:
+        return None
+
+    today = timezone.localdate()
+
+    local_dt = timezone.localtime(datetime)
+    datetime_date = local_dt.date()
+    formatted_date = formats.date_format(local_dt, user.date_format)
+    formatted_time = formats.time_format(local_dt, user.time_format)
+    days = (datetime_date - today).days
+
+    if days == 0:
+        return pgettext("natural day", "Today %(time)s") % {"time": formatted_time}
+    if days == 1:
+        return pgettext("natural day", "Tomorrow %(time)s") % {
+            "time": formatted_time,
+        }
+
+    return f"{formatted_date} {formatted_time}"
+
+
+@register.filter
+def media_url(media):
+    """Return the media URL for both metadata and model object cases."""
+    is_dict = isinstance(media, dict)
+
+    # Get attributes using either dict access or object attribute
+    media_type = media["media_type"] if is_dict else media.media_type
+    source = media["source"] if is_dict else media.source
+    media_id = media["media_id"] if is_dict else media.media_id
+    title = media["title"] if is_dict else media.title
+
+    if media_type in [MediaTypes.SEASON.value, MediaTypes.EPISODE.value]:
+        season_number = media["season_number"] if is_dict else media.season_number
+        return reverse(
+            "season_details",
+            kwargs={
+                "source": source,
+                "media_id": media_id,
+                "title": slug(title),
+                "season_number": season_number,
+            },
+        )
+
+    return reverse(
+        "media_details",
+        kwargs={
+            "source": source,
+            "media_type": media_type,
+            "media_id": media_id,
+            "title": slug(title),
+        },
+    )
+
+
+@register.simple_tag
+def media_view_url(view_name, media):
+    """Return the modal URL for both metadata and model object cases."""
+    is_dict = isinstance(media, dict)
+
+    # Build kwargs using either dict access or object attribute
+    kwargs = {
+        "source": media["source"] if is_dict else media.source,
+        "media_type": media["media_type"] if is_dict else media.media_type,
+        "media_id": media["media_id"] if is_dict else media.media_id,
+    }
+
+    # Handle season/episode numbers if they exist
+    if is_dict:
+        if "season_number" in media:
+            kwargs["season_number"] = media["season_number"]
+        if "episode_number" in media:
+            kwargs["episode_number"] = media["episode_number"]
+    else:
+        if media.season_number is not None:
+            kwargs["season_number"] = media.season_number
+        if media.episode_number is not None:
+            kwargs["episode_number"] = media.episode_number
+
+    return reverse(view_name, kwargs=kwargs)
+
+
+@register.simple_tag
+def component_id(component_type, media, instance_id=None):
+    """Return the component ID for both metadata and model object cases."""
+    is_dict = isinstance(media, dict)
+
+    # Get base attributes using either dict access or object attribute
+    media_type = media["media_type"] if is_dict else media.media_type
+    media_id = media["media_id"] if is_dict else media.media_id
+
+    component_id = f"{component_type}-{media_type}-{media_id}"
+
+    # Handle season/episode numbers if they exist
+    if is_dict:
+        if "season_number" in media:
+            component_id += f"-{media['season_number']}"
+        if "episode_number" in media:
+            component_id += f"-{media['episode_number']}"
+    else:
+        if media.season_number is not None:
+            component_id += f"-{media.season_number}"
+        if media.episode_number is not None:
+            component_id += f"-{media.episode_number}"
+
+    # Add instance id if provided
+    if instance_id:
+        component_id += f"-{instance_id}"
+
+    return component_id
+
+
+@register.simple_tag
+def unicode_icon(name):
+    """Return the Unicode icon for the media type."""
+    return config.get_unicode_icon(name)
+
+
+@register.simple_tag
+def icon(name, is_active, extra_classes="w-5 h-5"):
+    """Return the SVG icon for the given name."""
+    base_svg = """<svg xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="{active_class}{extra_classes}">
+                      {content}
+                 </svg>"""
+
+    content = config.get_svg_icon(name)
+    active_class = "text-indigo-400 " if is_active else ""
+
+    svg = base_svg.format(
+        content=content,
+        active_class=active_class,
+        extra_classes=extra_classes,
+    )
+
+    return format_html(svg)
+
+
+@register.filter
+def str_equals(value, arg):
+    """Return True if the string value is equal to the argument."""
+    return str(value) == str(arg)
+
+
+@register.filter
+def get_range(value):
+    """Return a range from 1 to the given value."""
+    return range(1, int(value) + 1)
+
+
+@register.simple_tag
+def get_pagination_range(current_page, total_pages, window):
+    """
+    Return a list of page numbers to display in pagination.
+
+    Args:
+        current_page: The current page number
+        total_pages: Total number of pages
+        window: Number of pages to show before and after current page
+
+    Returns:
+        A list of page numbers and None values (for ellipses)
+    """
+    if total_pages <= 5 + window * 2:
+        # If few pages, show all
+        return list(range(1, total_pages + 1))
+
+    # Calculate left and right boundaries
+    left_boundary = max(2, current_page - window)
+    right_boundary = min(total_pages - 1, current_page + window)
+
+    # Add ellipsis indicators and page numbers
+    result = [1]
+
+    second_page = 2
+    # Add left ellipsis if needed
+    if left_boundary > second_page:
+        result.append(None)  # None represents ellipsis
+
+    # Add pages around current page
+    result.extend(range(left_boundary, right_boundary + 1))
+
+    # Add right ellipsis if needed
+    if right_boundary < total_pages - 1:
+        result.append(None)  # None represents ellipsis
+
+    # Add last page if not already included
+    if total_pages not in result:
+        result.append(total_pages)
+
+    return result
+
+
+@register.filter
+def show_media_score(rating, user):
+    """
+    Return if we should show the rating of a media.
+
+    Args:
+        rating: the rating value of the media
+        user: the user to check preferences for
+
+    Returns:
+        True if we should show the media score
+    """
+    return rating is not None and (not user.hide_zero_rating or rating > 0)
+
+
+@register.simple_tag
+def media_section_count(
+    media,
+    user_medias,
+    watch_providers=None,
+    watch_provider_region=None,
+    watch_offers=None,
+    film_series=None,
+    trailers_url=None,
+    universe_url=None,
+    crew_url=None,
+):
+    """Return the number of content sections on the media details page."""
+    count = 0
+    if trailers_url:  # efeTrack: "Fragman" tab
+        count += 1
+    if universe_url:  # efeTrack: "Evren" tab
+        count += 1
+    if crew_url:  # efeTrack: "Ekip" tab
+        count += 1
+    if film_series:
+        count += 1
+    if media.get("cast"):
+        count += 1
+    related = media.get("related") or {}
+    count += sum(1 for related_items in related.values() if related_items)
+    if len(user_medias) > 1:
+        count += 1
+    if media.get("episodes"):
+        count += 1
+    has_streaming = (
+        watch_provider_region == WATCH_PROVIDER_REGION_UNSET
+        and media.get("source", "tmdb") == "tmdb"
+    ) or bool(watch_offers or watch_providers)
+    if (
+        media.get("media_type")
+        in (MediaTypes.MOVIE.value, MediaTypes.TV.value, MediaTypes.SEASON.value)
+        and has_streaming
+    ):
+        count += 1
+    if media.get("time_to_beat"):
+        count += 1
+    return count
+
+
+@register.filter
+def seconds_to_duration(seconds):
+    """Convert seconds to human-readable duration.
+
+    Under 30 min: rounds to nearest 5 min. 30 min and above: rounds to nearest 30 min.
+    """
+    if not seconds:
+        return None
+
+    def fmt(hours=0, minutes=0):
+        parts = []
+        if hours:
+            parts.append(pgettext("duration", "%(hours)sh") % {"hours": hours})
+        if minutes:
+            parts.append(
+                pgettext("duration", "%(minutes)sm") % {"minutes": minutes},
+            )
+        return " ".join(parts)
+
+    total_minutes = seconds // 60
+    if total_minutes < 30:  # noqa: PLR2004
+        return fmt(minutes=max(5, round(total_minutes / 5) * 5))
+    hours, minutes = divmod(total_minutes, 60)
+    if hours == 0:
+        return fmt(minutes=30) if minutes < 45 else fmt(hours=1)  # noqa: PLR2004
+    if minutes >= 45:  # noqa: PLR2004
+        return fmt(hours=hours + 1)
+    return fmt(hours=hours) if minutes < 15 else fmt(hours=hours, minutes=30)  # noqa: PLR2004

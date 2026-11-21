@@ -1,0 +1,10 @@
+[Unit]
+Description=efeTrack yedek provası (son yedeği deneme ortamında açar, sonucu Telegram'a yazar)
+After=docker.service network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /opt/efeTrack/bekci/yedek_prova.py
+TimeoutStartSec=900
+Nice=10

@@ -1,0 +1,23 @@
+{% load i18n %}
+{# Cancel a queued task or stop a running one. Inputs: task_id, running (bool), next (optional URL). #}
+{% if running %}
+  {% trans "Stop this task? What it has done so far is kept." as confirm_text %}
+  {% trans "Stop task" as button_text %}
+{% else %}
+  {% trans "Cancel this queued task?" as confirm_text %}
+  {% trans "Cancel task" as button_text %}
+{% endif %}
+<form method="post"
+      action="{% url 'efe_cancel_task' task_id %}"
+      class="efe-cancel-task inline-flex"
+      onsubmit="return window.confirm(this.dataset.confirm)"
+      data-confirm="{{ confirm_text }}">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ next|default:request.get_full_path }}">
+  <button type="submit"
+          class="efe-cancel-task-button inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium cursor-pointer"
+          title="{{ confirm_text }}">
+    {% include "app/icons/x.svg" with classes="w-3.5 h-3.5" %}
+    {{ button_text }}
+  </button>
+</form>

@@ -1,0 +1,90 @@
+{# efeTrack: trailer list. A video starts only when its thumbnail is clicked (youtube-nocookie). #}
+<div class="efe-trailers">
+  <style>
+    .efe-trailers .efe-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 768px) { .efe-trailers .efe-grid { grid-template-columns: 1fr 1fr; } }
+    .efe-trailers .efe-frame { position: relative; aspect-ratio: 16 / 9; border-radius: .5rem; overflow: hidden; background: #000; }
+    .efe-trailers .efe-frame img, .efe-trailers .efe-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border: 0; }
+    .efe-trailers .efe-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.25); transition: background .2s; cursor: pointer; border: 0; padding: 0; width: 100%; }
+    .efe-trailers .efe-play:hover { background: rgba(0,0,0,.1); }
+    .efe-trailers .efe-play span { width: 64px; height: 64px; border-radius: 9999px; background: rgba(79,70,229,.92); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,.5); }
+    .efe-trailers h3 { font-size: 1rem; font-weight: 600; margin: 0 0 .75rem; }
+    .efe-trailers .efe-block + .efe-block { margin-top: 1.5rem; }
+    .efe-trailers .efe-recap { margin-bottom: 1.75rem; }
+  </style>
+  {% if recap %}
+    <div class="efe-block efe-recap">
+      <h3>📼 {{ recap.title }}</h3>
+      {% if recap.videos %}
+        <div class="efe-grid">
+          {% for video in recap.videos %}
+            <div x-data="{ play: false }">
+              <div class="efe-frame">
+                <template x-if="!play">
+                  <div>
+                    <img src="https://i.ytimg.com/vi/{{ video.key }}/hqdefault.jpg" alt="" loading="lazy">
+                    <button type="button" class="efe-play" @click="play = true" aria-label="{{ video.name }} oynat">
+                      <span><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+                    </button>
+                  </div>
+                </template>
+                <template x-if="play">
+                  <iframe src="https://www.youtube-nocookie.com/embed/{{ video.key }}?autoplay=1&rel=0&playsinline=1"
+                          title="{{ video.name }}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+                </template>
+              </div>
+              <p class="text-sm mt-2"><span class="text-indigo-400 font-medium">Özet</span>{% if video.language %}<span class="text-gray-500"> · {{ video.language }}</span>{% endif %}<span class="text-gray-300"> · {{ video.name }}</span></p>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="text-sm text-gray-400 mb-2">TMDB'de bu sezon için özet videosu yok.</p>
+      {% endif %}
+      {% if recap.links %}
+        <div class="flex flex-wrap gap-2 mt-3">
+          {% for label, url in recap.links %}
+            <a href="{{ url }}" target="_blank" rel="noopener"
+               class="px-3 py-1.5 text-sm bg-ef-raised hover:bg-ef-hover rounded-md transition-colors">{{ label }} ↗</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if error %}
+    <p class="text-sm text-gray-400">Fragmanlar şu an yüklenemedi. Biraz sonra tekrar dene.</p>
+  {% elif not sections %}
+    <p class="text-sm text-gray-400{% if recap %} mt-6{% endif %}">Bu yapım için fragman bulunamadı.</p>
+  {% else %}
+    {% for title, videos in sections %}
+      <div class="efe-block">
+        {% if title %}<h3>{{ title }}</h3>{% endif %}
+        <div class="efe-grid">
+          {% for video in videos %}
+            <div x-data="{ play: false }">
+              <div class="efe-frame">
+                <template x-if="!play">
+                  <div>
+                    <img src="https://i.ytimg.com/vi/{{ video.key }}/hqdefault.jpg" alt="" loading="lazy">
+                    <button type="button" class="efe-play" @click="play = true" aria-label="{{ video.name }} oynat">
+                      <span><svg width="26" height="26" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+                    </button>
+                  </div>
+                </template>
+                <template x-if="play">
+                  <iframe src="https://www.youtube-nocookie.com/embed/{{ video.key }}?autoplay=1&rel=0&playsinline=1"
+                          title="{{ video.name }}"
+                          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                          allowfullscreen></iframe>
+                </template>
+              </div>
+              <p class="text-sm mt-2">
+                <span class="text-indigo-400 font-medium">{{ video.kind }}</span>{% if video.language %}<span class="text-gray-500"> · {{ video.language }}</span>{% endif %}
+                <span class="text-gray-300"> · {{ video.name }}</span>
+              </p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>

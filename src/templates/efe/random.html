@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load app_tags %}
+{% load efe_tags %}
+{% load i18n %}
+
+{% block title %}
+  {% trans "Random Pick" %} - efeTrack
+{% endblock title %}
+
+{% block content %}
+  {# efeTrack: same page header as the other pages #}
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold mb-2">{% trans "Random Pick" %}</h1>
+    <p class="text-gray-400">{% trans "Can't decide? Let efeTrack pick something from your planning list." %}</p>
+  </div>
+
+  {% if not total %}
+    <div class="bg-ef-card rounded-lg p-10 text-center">
+      <div class="efe-rand-empty-icon">{% include "app/icons/dice.svg" with classes="w-7 h-7" %}</div>
+      <h2 class="text-lg font-semibold mb-1">{% trans "Your planning list is empty" %}</h2>
+      <p class="text-sm text-gray-400 max-w-lg mx-auto">
+        {% trans "Add movies, TV shows, anime, books or games with the Planning status and come back for a suggestion." %}
+      </p>
+    </div>
+  {% else %}
+    {# Choices #}
+    <form id="random-form"
+          class="efe-rand-panel"
+          hx-post="{% url 'efe_random_roll' %}"
+          hx-target="#random-result"
+          hx-swap="innerHTML"
+          x-data="{ selected: [{% for media_type in media_types %}'{{ media_type }}',{% endfor %}] }">
+      {% csrf_token %}
+      <div class="efe-rand-row">
+        <div>
+          <p class="text-sm font-medium text-gray-200">{% trans "What are you in the mood for?" %}</p>
+          <p class="text-xs text-gray-400">Seçtiklerinin planlananları arasından biri seçilir.</p>
+        </div>
+        {% if lists %}
+          <select id="random-list" name="list_id" aria-label="{% trans 'Only from a list' %}"
+                  class="efe-rand-select p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            <option value="">{% trans "All my planning list" %}</option>
+            {% for custom_list in lists %}
+              <option value="{{ custom_list.id }}">{{ custom_list.name }}</option>
+            {% endfor %}
+          </select>
+        {% endif %}
+      </div>
+
+      <div class="efe-rand-types" role="group" aria-label="{% trans 'What are you in the mood for?' %}">
+        {% for media_type in media_types %}
+          <label class="efe-fx-card efe-rand-type" data-efe-silent
+                 :aria-checked="selected.includes('{{ media_type }}') ? 'true' : 'false'">
+            <input type="checkbox" name="media_types" value="{{ media_type }}" class="sr-only"
+                   x-model="selected" @change="efe.sound.play('tap')">
+            <span class="efe-rand-type-icon" aria-hidden="true">{% icon media_type is_active=False extra_classes="w-5 h-5" %}</span>
+            <span class="min-w-0">
+              <span class="block text-sm font-medium text-ef-fg">{{ media_type|media_type_readable_plural }}</span>
+              <span class="block text-xs text-gray-400">{{ counts|get_item:media_type }} planlanan</span>
+            </span>
+            <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+          </label>
+        {% endfor %}
+      </div>
+
+      {# Advanced filters: use the cached facts of the planned titles #}
+      <div class="efe-rand-filters" role="group" aria-label="Ayrıntılı seçim"
+           x-data="{ duration: '', genre: '', score: '', allGenres: false }">
+        <div class="efe-rand-filters-head">
+          <p class="text-sm font-medium text-gray-200">Ayrıntılı seçim <span class="text-xs font-normal text-gray-400">· isteğe bağlı</span></p>
+          <button type="button" class="efe-rand-clear" x-show="duration || genre || score" x-cloak
+                  @click="duration = ''; genre = ''; score = ''; efe.sound.play('tap')">Temizle</button>
+        </div>
+
+        <div class="efe-rand-filter">
+          <span class="efe-rand-filter-label">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            Süre
+          </span>
+          <div class="efe-rand-chips" role="radiogroup" aria-label="Süre">
+            {% for key, label in durations %}
+              <label class="efe-rand-chip">
+                <input type="radio" name="duration" value="{{ key }}" class="sr-only" x-model="duration" @change="efe.sound.play('tap')">
+                <span>{% if not key %}Fark etmez{% else %}{{ label }}{% endif %}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if genres %}
+          <div class="efe-rand-filter">
+            <span class="efe-rand-filter-label">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+              Tür
+            </span>
+            <div class="efe-rand-chips" role="radiogroup" aria-label="Tür" :class="{ 'is-open': allGenres }">
+              <label class="efe-rand-chip">
+                <input type="radio" name="genre" value="" class="sr-only" x-model="genre" @change="efe.sound.play('tap')">
+                <span>Fark etmez</span>
+              </label>
+              {% for value, label in genres %}
+                <label class="efe-rand-chip"{% if forloop.counter > 11 %} x-show="allGenres || genre === '{{ value|escapejs }}'" x-cloak{% endif %}>
+                  <input type="radio" name="genre" value="{{ value }}" class="sr-only" x-model="genre" @change="efe.sound.play('tap')">
+                  <span>{{ label }}</span>
+                </label>
+              {% endfor %}
+              {% if genres|length > 11 %}
+                <button type="button" class="efe-rand-more" @click="allGenres = !allGenres"
+                        x-text="allGenres ? 'Daha az' : '+{{ genres|length|add:"-11" }} tür daha'">+{{ genres|length|add:"-11" }} tür daha</button>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="efe-rand-filter">
+          <span class="efe-rand-filter-label">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9Z"/></svg>
+            Puan
+          </span>
+          <div class="efe-rand-chips" role="radiogroup" aria-label="En düşük puan">
+            {% for key, label in min_scores %}
+              <label class="efe-rand-chip">
+                <input type="radio" name="min_score" value="{{ key }}" class="sr-only" x-model="score" @change="efe.sound.play('tap')">
+                <span>{% if not key %}Fark etmez{% else %}★ {{ key }}+{% endif %}</span>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+
+        <p class="text-xs text-gray-400">
+          {% if computing %}Süre, tür ve puan bilgileri hesaplanıyor; bilgisi henüz olmayan yapımlar süzgeç seçilirse elenir.
+          {% else %}Süzgeç seçersen bilgisi olmayan yapımlar (ör. kitaplar) elenir.{% endif %}
+        </p>
+      </div>
+
+      <input type="hidden" name="exclude" id="random-exclude" value="">
+
+      <div class="efe-rand-row efe-rand-foot">
+        <p class="text-xs text-gray-400">
+          {% blocktrans trimmed count count=total %}
+            {{ count }} planned title to choose from
+          {% plural %}
+            {{ count }} planned titles to choose from
+          {% endblocktrans %}
+        </p>
+        <button type="submit" :disabled="selected.length === 0" class="efe-rand-go">
+          {% include "app/icons/dice.svg" with classes="w-5 h-5" %}
+          <span>{% trans "Pick for me!" %}</span>
+        </button>
+      </div>
+    </form>
+
+    {# Result: while waiting, the reel stands still with a few planned posters #}
+    <div id="random-result" class="mt-6 min-w-0">
+      <div class="efe-reel is-idle">
+        <div class="efe-reel-window" aria-hidden="true"></div>
+        <div class="efe-reel-idle-track" aria-hidden="true">
+          {% for media in preview %}
+            <img alt="" src="{{ media.item.image|efe_poster:'w342' }}">
+          {% empty %}
+            {% for blank in "12345" %}<span class="efe-reel-blank"></span>{% endfor %}
+          {% endfor %}
+        </div>
+        <div class="efe-reel-hint">
+          <p class="text-sm font-semibold text-ef-fg">{% trans "Ready when you are" %}</p>
+          <p class="text-xs text-gray-400">{% trans "Choose what you feel like and press the button." %}</p>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block js %}
+  <script>
+    window.efeReel = function () {
+      return {
+        done: false,
+        start() {
+          const track = this.$refs.track;
+          const frame = this.$refs.frame;
+          const items = track ? track.children : [];
+          const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!track || !items.length) { this.finish(); return; }
+          const target = track.querySelector('[data-chosen]') || items[items.length - 1];
+          const count = Array.prototype.indexOf.call(items, target) + 1;
+          const offset = target.offsetLeft + target.offsetWidth / 2 - frame.clientWidth / 2;
+          if (reduce) {
+            track.style.transform = 'translateX(' + (-offset) + 'px)';
+            this.finish();
+            return;
+          }
+          const duration = 2800;
+          for (let index = 1; index < count; index += 1) {
+            const at = (1 - Math.pow(1 - index / count, 1 / 3)) * duration;
+            window.setTimeout(() => efe.sound.play('tick'), at);
+          }
+          requestAnimationFrame(() => {
+            track.style.transition = 'transform ' + duration + 'ms cubic-bezier(.12,.8,.18,1)';
+            track.style.transform = 'translateX(' + (-offset) + 'px)';
+          });
+          window.setTimeout(() => this.finish(), duration + 80);
+        },
+        finish() {
+          this.done = true;
+          efe.sound.play('tada');
+          this.$nextTick(() => efe.confetti(this.$refs.card || this.$el));
+        },
+      };
+    };
+  </script>
+{% endblock js %}

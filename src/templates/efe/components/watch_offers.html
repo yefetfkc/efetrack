@@ -1,0 +1,74 @@
+{% load i18n %}
+
+{# Where to watch, grouped by offer type (efeTrack) #}
+<section class="mb-8" x-show="tab === 'overview' || tab === 'streaming'">
+  <div class="flex flex-wrap items-end justify-between gap-2 mb-4">
+    <h2 class="text-xl font-bold flex items-center gap-2">
+      {% include "app/icons/tv-screen.svg" with classes="w-5 h-5 text-indigo-400" %}
+      {% if watch_offers.region == "TR" %}
+        {% trans "Where to watch in Turkey" %}
+      {% else %}
+        {% blocktrans with region=watch_offers.region %}Where to watch ({{ region }}){% endblocktrans %}
+      {% endif %}
+    </h2>
+    <div class="flex items-center gap-3 text-xs">
+      {% if watch_offers.link %}
+        <a href="{{ watch_offers.link }}" target="_blank" rel="noopener" class="text-indigo-400 hover:text-indigo-300 inline-flex items-center gap-1">
+          {% trans "All offers" %}
+          {% include "app/icons/external-link.svg" with classes="w-3.5 h-3.5" %}
+        </a>
+      {% endif %}
+      <a href="{{ watch_offers.justwatch_url }}" target="_blank" rel="noopener" class="text-gray-400 hover:text-gray-200 inline-flex items-center gap-1">
+        JustWatch
+        {% include "app/icons/external-link.svg" with classes="w-3.5 h-3.5" %}
+      </a>
+    </div>
+  </div>
+
+  {% if watch_offers.has_any %}
+    <div class="bg-ef-card rounded-xl divide-y divide-white/5">
+      {% for offer in watch_offers.offers %}
+        <div class="p-4 flex flex-col sm:flex-row sm:items-start gap-3">
+          <div class="sm:w-40 shrink-0 flex items-center gap-2 pt-1">
+            <span class="w-2 h-2 rounded-full {% if offer.key == 'flatrate' %}bg-indigo-500{% elif offer.key == 'free' or offer.key == 'ads' %}bg-emerald-500{% elif offer.key == 'rent' %}bg-amber-500{% else %}bg-sky-500{% endif %}"></span>
+            <span class="text-sm font-semibold text-gray-300">{{ offer.label }}</span>
+          </div>
+          <div class="flex flex-wrap gap-2.5">
+            {% for provider in offer.providers %}
+              <a href="{{ provider.url }}"
+                 target="_blank"
+                 rel="noopener"
+                 data-efe-sound="tap"
+                 title="{% if provider.search_url %}{% blocktrans with name=provider.provider_name %}Search on {{ name }}{% endblocktrans %}{% else %}{% blocktrans with name=provider.provider_name %}Open {{ name }}{% endblocktrans %}{% endif %}"
+                 class="group flex items-center gap-x-2.5 bg-ef-raised hover:bg-ef-hover rounded-lg p-1.5 pr-3 transition-all hover:-translate-y-0.5">
+                <img class="w-9 h-9 rounded-md shrink-0 overflow-hidden bg-ef-hover text-[0px]" src="{{ provider.image }}" alt="{{ provider.provider_name }}" loading="lazy" />
+                <span class="text-sm font-medium text-gray-200">{{ provider.provider_name }}</span>
+                {% include "app/icons/external-link.svg" with classes="w-3.5 h-3.5 text-gray-500 group-hover:text-indigo-400" %}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <p class="text-xs text-gray-500 mt-2">{% trans "Streaming data provided by JustWatch through TMDB. Availability may change." %}</p>
+  {% else %}
+    <div class="bg-ef-card rounded-xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+      <div class="p-3 rounded-lg bg-ef-raised text-gray-400 self-start">{% include "app/icons/tv-screen.svg" with classes="w-6 h-6" %}</div>
+      <div class="flex-1">
+        <p class="font-medium">
+          {% if watch_offers.region == "TR" %}
+            {% trans "Not available on any platform in Turkey right now." %}
+          {% else %}
+            {% trans "Not available on any platform in your region right now." %}
+          {% endif %}
+        </p>
+        <p class="text-sm text-gray-400">{% trans "You can check JustWatch for the latest availability." %}</p>
+      </div>
+      <a href="{{ watch_offers.justwatch_url }}" target="_blank" rel="noopener"
+         class="px-4 py-2 rounded-md bg-ef-raised hover:bg-ef-hover text-sm font-medium inline-flex items-center gap-2 self-start sm:self-auto">
+        {% trans "Search on JustWatch" %}
+        {% include "app/icons/external-link.svg" with classes="w-4 h-4" %}
+      </a>
+    </div>
+  {% endif %}
+</section>

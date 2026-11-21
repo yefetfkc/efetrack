@@ -1,0 +1,32 @@
+{# efeTrack: episode rating heatmap (seasons × episodes), like seriesgraph.com. Collapsed by default; #}
+{# opens on click or on the "Puanlar" tab. Needs: rating_chart_url; the heatmap loads when first opened. #}
+<section class="mb-8"
+         x-show="tab === 'overview' || tab === 'ratings'"
+         x-data="{ mode: 'mine', open: false }"
+         x-effect="if (tab === 'ratings') open = true">
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3" :class="open ? 'mb-4' : ''">
+    <button type="button" @click="open = !open" :aria-expanded="open"
+            class="flex items-center gap-2 text-left cursor-pointer">
+      <h2 class="text-xl font-bold">Bölüm puanları</h2>
+      <span class="text-gray-400 text-sm transition-transform" :style="open ? 'transform: rotate(90deg)' : ''" aria-hidden="true">▶</span>
+      <span x-show="!open" class="text-xs text-gray-400">göstermek için tıkla</span>
+    </button>
+    <div x-show="open" x-cloak class="bg-ef-raised rounded-md p-1 flex gap-1 text-sm" role="radiogroup" aria-label="Puan türü">
+      <button type="button" role="radio" :aria-checked="mode === 'mine'"
+              @click="mode = 'mine'"
+              :class="mode === 'mine' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-ef-hover'"
+              class="px-3 py-1 rounded-md transition-colors cursor-pointer">Benim puanım</button>
+      <button type="button" role="radio" :aria-checked="mode === 'tmdb'"
+              @click="mode = 'tmdb'"
+              :class="mode === 'tmdb' ? 'bg-indigo-600 text-white' : 'text-gray-300 hover:bg-ef-hover'"
+              class="px-3 py-1 rounded-md transition-colors cursor-pointer">TMDB puanı</button>
+    </div>
+  </div>
+
+  <div x-show="open" x-cloak
+       hx-get="{{ rating_chart_url }}"
+       hx-trigger="intersect once"
+       hx-swap="innerHTML">
+    <p class="text-sm text-gray-400">Puanlar yükleniyor…</p>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+{# efeTrack: "Kitaptan uyarlama" chip(s). Needs: books (book_source.lookup + owned_url), can_add #}
+{% for book in books %}
+  <span class="efe-fact efe-book" title="{% if book.series %}Kitap serisinden uyarlama{% else %}Kitaptan uyarlama{% endif %}">
+    <span>{% if book.series %}Kitap serisi{% else %}Kitaptan uyarlama{% endif %}: <b>{{ book.title }}</b>{% if book.author %} · {{ book.author }}{% endif %}{% if book.year %} · {{ book.year }}{% endif %}</span>
+    <span class="efe-book-action">
+      {% if book.owned_url %}
+        <a href="{{ book.owned_url }}" class="efe-book-btn is-done">✓ Kitap listende</a>
+      {% elif book.series %}
+        <a href="{% url 'search' %}?q={{ book.search_title|default:book.title|urlencode }}&media_type=book" class="efe-book-btn">Kitaplarda ara</a>
+      {% elif can_add %}
+        <button type="button" class="efe-book-btn"
+                hx-post="{% url 'efe_book_source_add' %}"
+                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                hx-vals='{"title": "{{ book.title|escapejs }}", "search_title": "{{ book.search_title|escapejs }}", "author": "{{ book.author|escapejs }}"}'
+                hx-target="closest .efe-book-action"
+                hx-swap="innerHTML"
+                hx-disabled-elt="this">
+          ＋ Kitap listeme ekle
+        </button>
+      {% endif %}
+    </span>
+  </span>
+{% endfor %}

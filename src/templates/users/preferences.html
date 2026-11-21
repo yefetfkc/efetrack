@@ -1,0 +1,802 @@
+{% extends "users/base.html" %}
+{% load user_tags %}
+{% load app_tags %}
+{% load i18n %}
+{% load efe_tags %}
+
+{% block title %}
+  {% trans "Preferences" %} - efeTrack
+{% endblock title %}
+
+{% block settings_content %}
+  <div class="bg-ef-card rounded-lg p-6">
+    <div class="flex items-center mb-4">
+      {% include "app/icons/vertical-sliders.svg" with classes="w-6 h-6 text-indigo-400 mr-3" %}
+      <h2 class="text-xl font-semibold">{% trans "Preferences" %}</h2>
+    </div>
+    <p class="text-gray-400 mb-5 text-sm">{% trans "Customize the look and behavior of the application." %}</p>
+
+    <form method="post">
+      {% csrf_token %}
+
+      {# efeTrack: appearance, sounds and the app — same layout as the rows below #}
+      <div class="flex items-center mb-1">
+        {% include "app/icons/sparkles.svg" with classes="w-5 h-5 text-indigo-400 mr-2" %}
+        <h3 class="text-lg font-semibold">Görünüm</h3>
+      </div>
+      <p class="text-gray-400 mb-4 text-sm">Tema, renk ve yazı tipi bu cihazda saklanır; her cihazda ayrı seçebilirsin.</p>
+
+      <div x-data="{ preset: efe.theme.preset(), font: efe.font.current(), accent: efe.accent.current() }"
+           @efe-theme-changed.window="preset = $event.detail.preset; font = $event.detail.font; accent = $event.detail.accent">
+
+        {# Theme: mode + colour tone #}
+        <div class="mb-5">
+          <div class="p-3 bg-ef-raised rounded-md">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/monitor.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Theme' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">Açık, koyu ya da macOS'a uyan tema; altında renkli tonlar.</p>
+            <div class="efe-pref-body">
+            <div role="radiogroup" aria-label="{% trans 'Theme' %}" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {% trans "System" as t_name %}{% trans "Follows macOS" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="system" name=t_name sub=t_sub split=True accent="#6366f1" bar="#8b93a1" %}
+              {% trans "Light" as t_name %}{% trans "Classic" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="light" name=t_name sub=t_sub side="#ffffff" body="#f3f4f7" accent="#6366f1" bar="#cdd3db" %}
+              {% trans "Dark" as t_name %}
+              {% include "efe/components/theme_card.html" with id="dark" name=t_name sub=t_sub side="#1a1d20" body="#212529" accent="#6366f1" bar="#4b5563" %}
+            </div>
+            <p class="text-xs font-medium uppercase tracking-wide text-gray-500 mt-4 mb-2">{% trans "Dark tones" %}</p>
+            <div role="radiogroup" aria-label="{% trans 'Dark tones' %}" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {% trans "Ember" as t_name %}{% trans "Dark · red" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="dark-red" name=t_name sub=t_sub side="#1a1214" body="#1f1517" accent="#f43f5e" bar="#5e464c" %}
+              {% trans "Amethyst" as t_name %}{% trans "Dark · purple" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="dark-purple" name=t_name sub=t_sub side="#16121e" body="#1b1625" accent="#a855f7" bar="#5b4f75" %}
+              {% trans "Deep Sea" as t_name %}{% trans "Dark · blue" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="dark-blue" name=t_name sub=t_sub side="#0e1522" body="#121a2a" accent="#3b82f6" bar="#4b5f7e" %}
+              {# efeTrack: true black for OLED phone screens #}
+              {% include "efe/components/theme_card.html" with id="dark-oled" name="Gece" sub="Koyu · tam siyah (OLED)" side="#000000" body="#000000" accent="#6366f1" bar="#34343c" %}
+            </div>
+            <p class="text-xs font-medium uppercase tracking-wide text-gray-500 mt-4 mb-2">{% trans "Light tones" %}</p>
+            <div role="radiogroup" aria-label="{% trans 'Light tones' %}" class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {% trans "Rose" as t_name %}{% trans "Light · red" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="light-red" name=t_name sub=t_sub side="#ffffff" body="#fbf3f4" accent="#e11d48" bar="#dfc0c7" %}
+              {% trans "Lavender" as t_name %}{% trans "Light · purple" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="light-purple" name=t_name sub=t_sub side="#ffffff" body="#f6f3fc" accent="#9333ea" bar="#cabde3" %}
+              {% trans "Sky" as t_name %}{% trans "Light · blue" as t_sub %}
+              {% include "efe/components/theme_card.html" with id="light-blue" name=t_name sub=t_sub side="#ffffff" body="#f0f5fc" accent="#2563eb" bar="#bbcce3" %}
+            </div>
+            </div>
+          </div>
+        </div>
+
+        {# Accent colour #}
+        <div class="mb-5">
+          <div class="p-3 bg-ef-raised rounded-md">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/sparkles.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Accent colour' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans 'Buttons, icons and highlights. “Theme” follows the selected theme.' %}</p>
+            <div role="radiogroup" aria-label="{% trans 'Accent colour' %}" class="efe-pref-body flex flex-wrap items-center gap-3">
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: conic-gradient(#6366f1,#ec4899,#f59e0b,#10b981,#3b82f6,#6366f1); --efe-dot: #6366f1" title="Temaya göre" aria-label="Temaya göre"
+                      :aria-checked="accent === 'auto' ? 'true' : 'false'" @click="efe.accent.set('auto')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #6366f1; --efe-dot: #6366f1" title="Çivit" aria-label="Çivit"
+                      :aria-checked="accent === 'indigo' ? 'true' : 'false'" @click="efe.accent.set('indigo')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #3b82f6; --efe-dot: #3b82f6" title="Mavi" aria-label="Mavi"
+                      :aria-checked="accent === 'blue' ? 'true' : 'false'" @click="efe.accent.set('blue')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #a855f7; --efe-dot: #a855f7" title="Mor" aria-label="Mor"
+                      :aria-checked="accent === 'purple' ? 'true' : 'false'" @click="efe.accent.set('purple')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #ec4899; --efe-dot: #ec4899" title="Pembe" aria-label="Pembe"
+                      :aria-checked="accent === 'pink' ? 'true' : 'false'" @click="efe.accent.set('pink')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #f43f5e; --efe-dot: #f43f5e" title="Kırmızı" aria-label="Kırmızı"
+                      :aria-checked="accent === 'red' ? 'true' : 'false'" @click="efe.accent.set('red')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #f97316; --efe-dot: #f97316" title="Turuncu" aria-label="Turuncu"
+                      :aria-checked="accent === 'orange' ? 'true' : 'false'" @click="efe.accent.set('orange')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #f59e0b; --efe-dot: #f59e0b" title="Kehribar" aria-label="Kehribar"
+                      :aria-checked="accent === 'amber' ? 'true' : 'false'" @click="efe.accent.set('amber')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #10b981; --efe-dot: #10b981" title="Yeşil" aria-label="Yeşil"
+                      :aria-checked="accent === 'green' ? 'true' : 'false'" @click="efe.accent.set('green')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #14b8a6; --efe-dot: #14b8a6" title="Turkuaz" aria-label="Turkuaz"
+                      :aria-checked="accent === 'teal' ? 'true' : 'false'" @click="efe.accent.set('teal')"></button>
+              <button type="button" role="radio" class="efe-accent-dot" data-efe-silent
+                      style="background: #6b7280; --efe-dot: #6b7280" title="Grafit" aria-label="Grafit"
+                      :aria-checked="accent === 'graphite' ? 'true' : 'false'" @click="efe.accent.set('graphite')"></button>
+            </div>
+          </div>
+        </div>
+
+        {# Font #}
+        <div class="mb-5">
+          <div class="p-3 bg-ef-raised rounded-md">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/book-open.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Font' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">Bütün sayfalardaki yazıların harf biçimi.</p>
+            <div role="radiogroup" aria-label="{% trans 'Font' %}" class="efe-pref-body grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {% for key, label in efe_fonts %}
+                <button type="button"
+                        role="radio"
+                        class="efe-font-card efe-font-{{ key }}"
+                        :aria-checked="font === '{{ key }}' ? 'true' : 'false'"
+                        @click="efe.font.set('{{ key }}')"
+                        data-efe-silent>
+                  <span class="block text-2xl leading-tight text-ef-fg">Aa Ğğ Şş İı</span>
+                  <span class="block text-sm font-medium text-gray-200 mt-1">{{ label }}</span>
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {# Cinema mode: one big pick on the home page (per device) #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md"
+             x-data="{ on: document.documentElement.dataset.cinema === '1' }"
+             @efe-cinema-changed.window="on = $event.detail.on">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/tv-screen.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">Sinema modu</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">Ana sayfada yalnız tek dev afiş ve “Şimdi bunu izle” düğmesi: kaldığın dizi ya da planladığın bir yapım. Gerisi gizlenir, istediğinde “Ana sayfanın tamamı” ile açılır. Bu cihazda saklanır.</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4" data-efe-silent>
+            <input class="sr-only peer" type="checkbox" :checked="on" aria-label="Sinema modu"
+                   @change="on = $event.target.checked; efe.cinema.set(on)">
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+              </div>
+          </label>
+        </div>
+      </div>
+
+      {# efeTrack: ambient effects — snow and the others, any combination, per device (CSS only, light on the system) #}
+      <div class="mb-5">
+        <div class="p-3 bg-ef-raised rounded-md"
+             x-data="{ on: Object.fromEntries(efe.fx.names.map((name) => [name, efe.fx.on(name)])) }"
+             @efe-fx-changed.window="on[$event.detail.name] = $event.detail.on">
+          <div class="flex items-center text-gray-200 mb-1">
+            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M4.93 4.93l14.14 14.14M2 12h20M4.93 19.07 19.07 4.93M9 3.5l3 2.5 3-2.5M9 20.5l3-2.5 3 2.5M3.5 9l2.5 3-2.5 3M20.5 9l-2.5 3 2.5 3"/></svg>
+            <span class="text-sm font-medium">Ortam efektleri</span>
+          </div>
+          <p class="text-xs text-gray-400 ml-7">İstediğini aç, birkaçını birlikte de kullanabilirsin. Bu cihazda saklanır; sistemi yormaz, “Hareketi azalt” açıksa durağan kalır.</p>
+          <div role="group" aria-label="Ortam efektleri" class="efe-pref-body grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.snow ? 'true' : 'false'" aria-label="Kar"
+                    @click="on.snow = !on.snow; efe.fx.set('snow', on.snow); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">❄️</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Kar</span>
+                <span class="block text-xs text-gray-400">1 Ara – 6 Oca kendiliğinden</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.rain ? 'true' : 'false'" aria-label="Yağmur"
+                    @click="on.rain = !on.rain; efe.fx.set('rain', on.rain); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">🌧️</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Yağmur</span>
+                <span class="block text-xs text-gray-400">İnce, eğik çizgiler</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.stars ? 'true' : 'false'" aria-label="Yıldızlar"
+                    @click="on.stars = !on.stars; efe.fx.set('stars', on.stars); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">✨</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Yıldızlar</span>
+                <span class="block text-xs text-gray-400">Hafif parıltı</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.fireflies ? 'true' : 'false'" aria-label="Ateş böcekleri"
+                    @click="on.fireflies = !on.fireflies; efe.fx.set('fireflies', on.fireflies); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">🌟</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Ateş böcekleri</span>
+                <span class="block text-xs text-gray-400">Yükselen sıcak ışıklar</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.aurora ? 'true' : 'false'" aria-label="Kuzey ışıkları"
+                    @click="on.aurora = !on.aurora; efe.fx.set('aurora', on.aurora); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">🌌</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Kuzey ışıkları</span>
+                <span class="block text-xs text-gray-400">Üstte renkli ışık</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.grain ? 'true' : 'false'" aria-label="Film greni"
+                    @click="on.grain = !on.grain; efe.fx.set('grain', on.grain); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">🎞️</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Film greni</span>
+                <span class="block text-xs text-gray-400">Perde dokusu</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+          </div>
+          <div class="flex items-center text-gray-200 mt-4 mb-1">
+            <span class="text-sm font-medium">Mevsim efektleri</span>
+          </div>
+          <p class="text-xs text-gray-400 mb-2">Mevsiminde kendiliğinden açılır. Kapatırsan o yılın mevsimi boyunca kapalı kalır; açarsan yıl boyu açık.</p>
+          <div role="group" aria-label="Mevsim efektleri" class="efe-pref-body grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.leaves ? 'true' : 'false'" aria-label="Sonbahar yaprakları"
+                    @click="on.leaves = !on.leaves; efe.fx.set('leaves', on.leaves); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">🍂</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Sonbahar yaprakları</span>
+                <span class="block text-xs text-gray-400">22 Eyl – 30 Kas kendiliğinden</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.blossoms ? 'true' : 'false'" aria-label="Bahar çiçekleri"
+                    @click="on.blossoms = !on.blossoms; efe.fx.set('blossoms', on.blossoms); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">🌸</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Bahar çiçekleri</span>
+                <span class="block text-xs text-gray-400">20 Mar – 31 May kendiliğinden</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+            <button type="button" role="switch" class="efe-fx-card" data-efe-silent
+                    :aria-checked="on.bats ? 'true' : 'false'" aria-label="Cadılar Bayramı yarasaları"
+                    @click="on.bats = !on.bats; efe.fx.set('bats', on.bats); efe.sound.play('switch')">
+              <span class="efe-fx-emoji" aria-hidden="true">🦇</span>
+              <span class="min-w-0">
+                <span class="block text-sm font-medium text-ef-fg">Cadılar Bayramı yarasaları</span>
+                <span class="block text-xs text-gray-400">24 Eki – 1 Kas kendiliğinden</span>
+              </span>
+              <span class="efe-fx-dot" aria-hidden="true"><svg viewBox="0 0 16 16" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {# Sidebar #}
+      <div class="mb-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-ef-raised rounded-md"
+             x-data="{ collapsed: efe.sidebar ? efe.sidebar.collapsed() : false }"
+             @efe-sidebar-changed.window="collapsed = $event.detail.collapsed">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/sidebar.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Sidebar' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans 'Show only icons in the sidebar. Drag items in the sidebar to reorder them.' %}</p>
+          </div>
+          <div class="flex items-center gap-3 ml-7 sm:ml-4">
+            <button type="button"
+                    data-efe-silent
+                    @click="efe.sidebar.resetOrder()"
+                    class="px-2.5 py-1 text-xs rounded-md bg-ef-hover hover:bg-indigo-600 hover:text-white transition-colors cursor-pointer">
+              {% trans "Reset order" %}
+            </button>
+            <label class="relative inline-flex items-center cursor-pointer" data-efe-silent>
+              <input class="sr-only peer" type="checkbox" :checked="collapsed" @change="efe.sidebar.set($event.target.checked)"
+                     aria-label="{% trans 'Collapse sidebar' %}">
+              <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-600 my-5"></div>
+
+      <div class="flex items-center mb-1">
+        {% include "app/icons/volume.svg" with classes="w-5 h-5 text-indigo-400 mr-2" %}
+        <h3 class="text-lg font-semibold">Sesler</h3>
+      </div>
+      <p class="text-gray-400 mb-4 text-sm">Takip, tamamlama, bildirim ve tıklama sesleri.</p>
+
+      {# Sound effects #}
+      <div class="mb-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-ef-raised rounded-md"
+             x-data="{ enabled: {% if user.sound_effects_enabled %}true{% else %}false{% endif %}, volume: {{ user.sound_volume }} }">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/volume.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Sound effects' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans 'Play short sounds when you track media, complete something, pick at random or get a notification.' %}</p>
+          </div>
+          <div class="flex items-center gap-3 ml-7 sm:ml-4">
+            <input type="range"
+                   name="sound_volume"
+                   min="0"
+                   max="100"
+                   step="5"
+                   x-model.number="volume"
+                   @change="document.documentElement.dataset.volume = volume; efe.sound.play('success')"
+                   :disabled="!enabled"
+                   aria-label="{% trans 'Volume' %}"
+                   class="w-28 accent-indigo-500 disabled:opacity-40">
+            <span class="text-xs text-gray-400 w-9 text-right" x-text="volume + '%'"></span>
+            <button type="button"
+                    data-efe-silent
+                    @click="efe.sound.play('complete')"
+                    :disabled="!enabled"
+                    class="px-2.5 py-1 text-xs rounded-md bg-ef-hover hover:bg-indigo-600 hover:text-white transition-colors disabled:opacity-40 cursor-pointer">
+              {% trans "Test" %}
+            </button>
+            <label class="relative inline-flex items-center cursor-pointer" data-efe-silent>
+              <input class="sr-only peer"
+                     type="checkbox"
+                     name="sound_effects_enabled"
+                     x-model="enabled"
+                     @change="document.documentElement.dataset.sound = enabled ? '1' : '0'; if (enabled) efe.sound.play('success')">
+              <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {# Sound pack #}
+      <div class="mb-5">
+        <div class="p-3 bg-ef-raised rounded-md"
+             x-data="{ pack: efe.sound.pack(), clickVolume: efe.sound.clickVolume() }"
+             @efe-sound-changed.window="pack = efe.sound.pack()">
+          <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/repeat.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Sound pack' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">Arayüzdeki tıklama ve geçiş seslerinin karakteri. “Dinle” ile seçmeden dene.</p>
+          <div role="radiogroup" aria-label="{% trans 'Sound pack' %}" class="efe-pref-body grid grid-cols-1 sm:grid-cols-3 gap-2">
+            {% for key, label, desc in efe_sound_packs %}
+              <div class="efe-font-card flex items-center justify-between gap-2"
+                   role="radio"
+                   tabindex="0"
+                   :aria-checked="pack === '{{ key }}' ? 'true' : 'false'"
+                   @click="efe.sound.setPack('{{ key }}')"
+                   @keydown.enter.prevent="efe.sound.setPack('{{ key }}')"
+                   data-efe-silent>
+                <span>
+                  <span class="block text-sm font-medium text-ef-fg">{{ label }}</span>
+                  <span class="block text-xs text-gray-400">{{ desc }}</span>
+                </span>
+                <button type="button"
+                        data-efe-silent
+                        @click.stop="efe.sound.preview('{{ key }}')"
+                        class="px-2.5 py-1 text-xs rounded-md bg-ef-hover hover:bg-indigo-600 hover:text-white transition-colors cursor-pointer">
+                  {% trans "Listen" %}
+                </button>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      {# Click sounds volume #}
+      <div class="mb-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-ef-raised rounded-md"
+             x-data="{ clickVolume: efe.sound.clickVolume() }">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/volume-off.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Click sounds volume' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans 'Separate from the volume above, which is used for tracking, completion and notification sounds.' %}</p>
+          </div>
+          <div class="flex items-center gap-3 ml-7 sm:ml-4">
+            <input type="range"
+                   min="0"
+                   max="100"
+                   step="5"
+                   x-model.number="clickVolume"
+                   @change="efe.sound.setClickVolume(clickVolume)"
+                   aria-label="{% trans 'Click sounds volume' %}"
+                   class="w-28 accent-indigo-500">
+            <span class="text-xs text-gray-400 w-9 text-right" x-text="clickVolume + '%'"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-600 my-5"></div>
+
+      <div class="flex items-center mb-1">
+        {% include "app/icons/bell.svg" with classes="w-5 h-5 text-indigo-400 mr-2" %}
+        <h3 class="text-lg font-semibold">Bildirimler ve uygulama</h3>
+      </div>
+      <p class="text-gray-400 mb-4 text-sm">Bildirim merkezi ve Mac uygulamasına özel ayarlar.</p>
+
+      {# Notification center range #}
+      <div class="mb-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/bell.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans 'Notification center' %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans 'How far ahead the notification center shows upcoming episodes and releases.' %}</p>
+          </div>
+          <select name="notification_center_days"
+                  class="ml-7 sm:ml-4 p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            {% for days in notification_center_day_choices %}
+              <option value="{{ days }}" {% if user.notification_center_days == days %}selected{% endif %}>
+                {% blocktrans count count=days %}{{ count }} day{% plural %}{{ count }} days{% endblocktrans %}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {# Mac app only: hide the Dock icon (shown only inside the efeTrack Mac app) #}
+      <div class="mb-5"
+           x-data="{ desktop: !!window.efeDesktop, hidden: window.efeDesktop ? window.efeDesktop.dockHidden : false }"
+           x-show="desktop"
+           x-cloak>
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/monitor.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">Dock'ta gizle</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">Uygulama Dock'ta görünmez; menü çubuğundaki efeTrack simgesinden açılır. Açıkken menü çubuğu simgesi her zaman gösterilir.</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4" data-efe-silent>
+            <input class="sr-only peer" type="checkbox" :checked="hidden"
+                   @change="hidden = $event.target.checked; window.efeDesktop.setDockHidden(hidden)"
+                   aria-label="Dock'ta gizle">
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+              </div>
+          </label>
+        </div>
+      </div>
+
+      {# Mac app only: global shortcut to show or hide the window #}
+      <div class="mb-5"
+           x-data="{ desktop: !!window.efeDesktop, on: window.efeDesktop ? window.efeDesktop.hotKey !== false : false }"
+           @efe-hotkey-failed.window="on = false"
+           x-show="desktop"
+           x-cloak>
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/key.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">Her yerden aç (⌥⌘E)</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">Başka bir uygulamadayken de ⌥⌘E ile efeTrack penceresini aç; pencere öndeyken aynı kısayol gizler.</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4" data-efe-silent>
+            <input class="sr-only peer" type="checkbox" :checked="on"
+                   @change="on = $event.target.checked; window.efeDesktop.setHotKey(on)"
+                   aria-label="Her yerden aç">
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+              </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-600 my-5"></div>
+
+      <div class="flex items-center mb-1">
+        {% include "app/icons/horizontal-sliders.svg" with classes="w-5 h-5 text-indigo-400 mr-2" %}
+        <h3 class="text-lg font-semibold">Genel</h3>
+      </div>
+      <p class="text-gray-400 mb-4 text-sm">Kartlar, bölümler, tarihler ve dil.</p>
+
+      {# Media Card Overlay #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/image.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Hide Hover Overlay on Touch Devices" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">
+              {% trans "Hide the media card hover overlay with action buttons on touch devices for a cleaner mobile experience. On desktop, the overlay will still appear when you hover your mouse over media cards." %}
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4">
+            <input class="sr-only peer"
+                   type="checkbox"
+                   name="clickable_media_cards"
+                   {% if user.clickable_media_cards %}checked{% endif %}>
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {# Obfuscate Unseen Episodes #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/eye.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Obfuscate Unseen Episodes" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">
+              {% trans "When enabled, unseen episode images and descriptions will be blurred." %}
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4">
+            <input class="sr-only peer"
+                   type="checkbox"
+                   name="obfuscate_unseen_episodes"
+                   {% if user.obfuscate_unseen_episodes %}checked{% endif %}>
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {# Quick Watch Date #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/clock.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Bulk Completion Date" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">
+              {% trans "When marking a TV show or season as completed, its episodes will be marked as completed with this date." %}
+            </p>
+          </div>
+          <select name="quick_watch_date"
+                  class="ml-4 p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            {% for choice in quick_watch_date_choices %}
+              <option value="{{ choice.0 }}"
+                      {% if user.quick_watch_date == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {# Progress bar #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/minus.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Show progress bar on media items" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">
+              {% trans "Display a progress bar on media items. Items which don't have max progress will be using a dotted line." %}
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4">
+            <input class="sr-only peer"
+                   type="checkbox"
+                   name="progress_bar"
+                   {% if user.progress_bar %}checked{% endif %}>
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {# Hide Completed Recommendations #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/circle-check.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Hide completed media in recommendations" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">
+              {% trans "Hide media you've already completed from the recommendations section on detail pages." %}
+            </p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4">
+            <input class="sr-only peer"
+                   type="checkbox"
+                   name="hide_completed_recommendations"
+                   {% if user.hide_completed_recommendations %}checked{% endif %}>
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {# Hide Zero Ratings #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/star.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Hide zero ratings" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans "Hide the rating badge from media cards when the rating is zero." %}</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4">
+            <input class="sr-only peer"
+                   type="checkbox"
+                   name="hide_zero_rating"
+                   {% if user.hide_zero_rating %}checked{% endif %}>
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+            </div>
+          </label>
+        </div>
+      </div>
+
+      {# Date Format #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/calendar.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Date Format" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans "Choose how dates are displayed throughout the application." %}</p>
+          </div>
+          <select name="date_format"
+                  class="ml-4 p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            {% for choice in date_format_choices %}
+              <option value="{{ choice.0 }}"
+                      {% if user.date_format == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {# Time Format #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/clock.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Time Format" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans "Choose between 12-hour or 24-hour clock display." %}</p>
+          </div>
+          <select name="time_format"
+                  class="ml-4 p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            {% for choice in time_format_choices %}
+              <option value="{{ choice.0 }}"
+                      {% if user.time_format == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {# Week Start Day #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/week.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Week Start Day" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans "Choose which day the week starts on for calendars and statistics." %}</p>
+          </div>
+          <select name="week_start_day"
+                  class="ml-4 p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            {% for choice in week_start_day_choices %}
+              <option value="{{ choice.0 }}"
+                      {% if user.week_start_day == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {# Watch Provider Region #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/globe.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Watch Provider Region" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">
+              {% trans "Choose the region to show watch providers for. Setting this to disabled will hide the box from the media page." %}
+            </p>
+          </div>
+          <select name="watch_provider_region"
+                  class="ml-4 p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            {% for choice in watch_provider_choices %}
+              <option value="{{ choice.0 }}"
+                      {% if user.watch_provider_region == choice.0 %}selected{% endif %}>{{ choice.1|ef_term }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {# Language Switcher #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/language.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Language" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans "Select your preferred language for the application interface." %}</p>
+          </div>
+          {% get_available_languages as AVAILABLE_LANGUAGES %}
+          <select name="language"
+                  class="ml-4 p-2 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:outline-none focus:ring-2 focus:ring-indigo-400">
+            {% for code, name in AVAILABLE_LANGUAGES %}
+              <option value="{{ code }}" {% if code == user.language %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      {# Show adult titles #}
+      <div class="mb-5">
+        <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+          <div class="flex-1">
+            <div class="flex items-center text-gray-200 mb-1">
+              {% include "app/icons/shield-alert.svg" with classes="w-5 h-5 mr-2" %}
+              <span class="text-sm font-medium">{% trans "Show adult titles" %}</span>
+            </div>
+            <p class="text-xs text-gray-400 ml-7">{% trans "Show adult titles in searches. Depends on them being enabled by the server." %}</p>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer ml-4">
+            <input class="sr-only peer"
+                   type="checkbox"
+                   name="show_adult_titles"
+                   {% if user.show_adult_titles %}checked{% endif %}>
+            <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-600 my-5"></div>
+
+      {# Media Types Settings #}
+      <div class="mb-5">
+        <div class="flex items-center mb-4">
+          {% include "app/icons/four-square.svg" with classes="w-5 h-5 text-indigo-400 mr-2" %}
+          <h3 class="text-lg font-semibold">{% trans "Media Types" %}</h3>
+        </div>
+        <p class="text-gray-400 mb-4 text-sm">
+          {% trans "Control which media types are visible throughout the app (sidebar, search, calendar, notifications)." %}
+        </p>
+
+        <div class="grid gap-3 md:grid-cols-3">
+          {% for media_type in media_types %}
+            <div class="flex items-center justify-between p-3 bg-ef-raised rounded-md">
+              <div class="flex items-center text-gray-400">
+                {% icon media_type is_active=False %}
+                <span class="text-gray-200 text-sm ml-2">{{ media_type|media_type_readable_plural }}</span>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                {% with enabled_field=media_type|add:"_enabled" %}
+                  <input class="sr-only peer"
+                         type="checkbox"
+                         name="media_types_checkboxes"
+                         value="{{ media_type }}"
+                         {% if user|get_attr:enabled_field %}checked{% endif %}>
+                {% endwith %}
+                <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+                </div>
+              </label>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="mt-5 pt-4 border-gray-600">
+        <button type="submit"
+                class="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm cursor-pointer">
+          {% include "app/icons/save.svg" with classes="w-4 h-4 mr-2" %}
+          {% trans "Save Preferences" %}
+        </button>
+      </div>
+    </form>
+  </div>
+{% endblock settings_content %}

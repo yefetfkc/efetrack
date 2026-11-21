@@ -1,0 +1,41 @@
+{% load app_tags %}
+{% load events_tags %}
+{% load i18n %}
+
+<div class="space-y-6">
+  {% for day, releases in release_dict.items %}
+    <div {% if day == list_anchor_day %}id="today" {% endif %}class="bg-ef-panel rounded-lg overflow-hidden {% if day == list_anchor_day %}scroll-mt-20{% endif %}">
+      <div class="px-4 py-3 font-medium flex items-center justify-between {% if day == today_day %}bg-indigo-600{% else %}bg-gray-600{% endif %}">
+        <span>{% calendar_day_label day month year user %}</span>
+        {% if day == today_day %}
+          <span class="text-sm bg-white text-indigo-600 px-2 py-0.5 rounded-full">{% trans "Today" %}</span>
+        {% endif %}
+      </div>
+
+      <div class="p-4 space-y-3">
+        {% for release in releases %}
+          <a href="{{ release.item|media_url }}" class="block">
+            <div class="flex items-center gap-3 p-2 rounded-md hover:bg-ef-hover transition-colors">
+              <img alt="{{ release }}"
+                   class="w-10 h-10 object-cover rounded-md shrink-0"
+                   src="{{ release.item.image }}">
+              <div class="flex-1 min-w-0">
+                <h4 class="font-medium text-sm line-clamp-1">{{ release.item }}</h4>
+                <div class="flex items-center">
+                  <span class="text-xs text-gray-400 me-2">{{ release.item.media_type|media_type_readable }}</span>
+                  {% if release.readable_content_number %}
+                    <span class="text-xs text-indigo-400">
+                      {% blocktrans trimmed with number=release.readable_content_number time=release.datetime|time_format:user %}
+                        {{ number }} at {{ time }}
+                      {% endblocktrans %}
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>

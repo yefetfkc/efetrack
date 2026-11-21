@@ -1,0 +1,98 @@
+{# efeTrack: cinema mode picture. Needs: picks (efe.cinema.picks) — None on an error #}
+{% load efe_tags %}
+{% if picks is None %}
+  {# Something went wrong: show the usual home page instead of an empty screen #}
+  <div x-init="efe.cinema.peek(true)"></div>
+{% elif not picks %}
+  <section class="efe-cinema is-empty" aria-label="Sinema modu">
+    <div class="efe-cinema-inner">
+      <div class="efe-cinema-text">
+        <span class="efe-cinema-label">Sinema modu</span>
+        <h2 class="efe-cinema-title">Şu an önerecek bir şey yok</h2>
+        <p class="efe-cinema-synopsis">Devam ettiğin bir dizi ya da planladığın bir yapım olunca burada dev afişiyle görünür.</p>
+        <div class="efe-cinema-actions">
+          <button type="button" class="efe-cinema-btn" @click="efe.cinema.peek(true)">Ana sayfanın tamamı</button>
+          <button type="button" class="efe-cinema-btn is-ghost" @click="efe.cinema.set(false)">Sinema modunu kapat</button>
+        </div>
+      </div>
+    </div>
+  </section>
+{% else %}
+  <section class="efe-cinema" aria-label="Sinema modu: şimdi ne izlesem?"
+           x-data="{
+             i: 0, n: {{ picks|length }},
+             {# ← → only while the picture is shown and nothing else has the keyboard; preventDefault stops the macOS beep #}
+             active(event) {
+               const root = document.documentElement;
+               return root.dataset.cinema === '1' && !root.dataset.cinemaPeek && this.n > 1 && !event.metaKey && !event.altKey
+                 && !event.ctrlKey && !event.target.closest('input,textarea,select,[contenteditable],[role=dialog]')
+                 && ![...document.querySelectorAll('[role=dialog],[aria-modal=true]')].some((d) => d.getClientRects().length);
+             },
+             go(step) { this.i = (this.i + step + this.n) % this.n; efe.sound.play('slide'); },
+             show(index) { if (index !== this.i) { this.i = index; efe.sound.play('slide'); } },
+           }"
+           @keydown.right.window="if (active($event)) { $event.preventDefault(); go(1); }"
+           @keydown.left.window="if (active($event)) { $event.preventDefault(); go(-1); }">
+    {% for pick in picks %}
+      <div class="efe-cinema-slide" x-show="i === {{ forloop.counter0 }}"{% if not forloop.first %} x-cloak{% endif %}
+           x-transition:enter="efe-cinema-fade" x-transition:enter-start="efe-cinema-fade-from">
+        <div class="efe-cinema-bg{% if not pick.backdrop %} is-poster{% endif %}" aria-hidden="true"
+             {% if pick.backdrop or pick.poster %}style="background-image: url('{{ pick.backdrop|default:pick.poster }}')"{% endif %}></div>
+        <div class="efe-cinema-shade" aria-hidden="true"></div>
+        <div class="efe-cinema-inner">
+          {% if pick.poster %}
+            <a href="{{ pick.url }}" class="efe-cinema-poster" tabindex="-1" aria-hidden="true">
+              <img src="{{ pick.poster }}" alt="" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}">
+            </a>
+          {% endif %}
+          <div class="efe-cinema-text">
+            <span class="efe-cinema-label">
+              {% if pick.kind == "continue" %}
+                {% include "app/icons/tv-screen.svg" with classes="w-3.5 h-3.5" %}
+              {% else %}
+                {% include "app/icons/dice.svg" with classes="w-3.5 h-3.5" %}
+              {% endif %}
+              {{ pick.label }}
+            </span>
+            <h2 class="efe-cinema-title">{{ pick.title }}</h2>
+            <p class="efe-cinema-line">{{ pick.line }}</p>
+            <div class="efe-cinema-meta">
+              {% if pick.runtime %}<span>{% include "app/icons/clock.svg" with classes="w-4 h-4" %}{{ pick.runtime }}</span>{% endif %}
+              {% if pick.score %}<span>{% include "app/icons/star.svg" with classes="w-4 h-4 text-yellow-400 fill-yellow-400" %}{{ pick.score }}</span>{% endif %}
+              {% if pick.country %}<span>{{ pick.country }}</span>{% endif %}
+              {% for genre in pick.genres %}<span>{{ genre|ef_term }}</span>{% endfor %}
+            </div>
+            {% if pick.synopsis %}<p class="efe-cinema-synopsis">{{ pick.synopsis|ef_term }}</p>{% endif %}
+            <div class="efe-cinema-actions">
+              <a href="{{ pick.url }}" class="efe-cinema-btn is-primary" data-efe-sound="tap">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72a1 1 0 0 0 1.52.85l10.9-6.86a1 1 0 0 0 0-1.7L9.52 4.29A1 1 0 0 0 8 5.14Z"/></svg>
+                Şimdi bunu izle
+              </a>
+              {% if picks|length > 1 %}
+                <button type="button" class="efe-cinema-btn" data-efe-silent @click="go(1)">
+                  {% include "app/icons/repeat.svg" with classes="w-4 h-4" %}
+                  Başka öner
+                </button>
+              {% endif %}
+              <button type="button" class="efe-cinema-btn is-ghost" @click="efe.cinema.peek(true)">Ana sayfanın tamamı</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    <div class="efe-cinema-top">
+      {% if picks|length > 1 %}
+        <div class="efe-cinema-dots" role="tablist" aria-label="Öneriler">
+          {% for pick in picks %}
+            <button type="button" role="tab" :aria-selected="i === {{ forloop.counter0 }} ? 'true' : 'false'"
+                    aria-label="{{ forloop.counter }}. öneri: {{ pick.title }}" data-efe-silent @click="show({{ forloop.counter0 }})"></button>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <button type="button" class="efe-cinema-close" title="Sinema modunu kapat" aria-label="Sinema modunu kapat"
+              @click="efe.cinema.set(false)">
+        {% include "app/icons/x.svg" with classes="w-4 h-4" %}
+      </button>
+    </div>
+  </section>
+{% endif %}

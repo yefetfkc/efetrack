@@ -1,0 +1,86 @@
+{% load app_tags %}
+{% load i18n %}
+
+<div id="series-list" class="space-y-6"
+     {% if scanning %}hx-get="{% url 'efe_series' %}?filter={{ status_filter }}" hx-trigger="every 4s" hx-swap="outerHTML" hx-select="#series-list"{% endif %}>
+  {% if scanning or unchecked_count %}
+    <div class="bg-indigo-500/10 border border-indigo-500/30 rounded-xl px-5 py-3 flex items-center gap-3 text-sm">
+      {% include "app/icons/circle-spinning-clockwise.svg" with classes="w-5 h-5 animate-spin text-indigo-400 shrink-0" %}
+      <span>
+        {% blocktrans trimmed count count=unchecked_count %}
+          Looking for the series of {{ count }} movie in your library...
+        {% plural %}
+          Looking for the series of {{ count }} movies in your library...
+        {% endblocktrans %}
+      </span>
+    </div>
+  {% endif %}
+
+  {% for series in series_list %}
+    <section class="bg-ef-card rounded-xl overflow-hidden" x-data="{ open: {% if forloop.counter <= 6 %}true{% else %}false{% endif %} }">
+      <button type="button"
+              @click="open = !open; efe.sound.play('tap')"
+              class="w-full px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between text-left hover:bg-ef-hover/40 transition-colors cursor-pointer">
+        <div class="flex items-center gap-4 min-w-0">
+          <img alt="{{ series.name }}" src="{{ series.image }}" loading="lazy" class="w-12 h-[4.5rem] object-cover rounded-md shrink-0 bg-ef-raised">
+          <div class="min-w-0">
+            <h2 class="text-lg font-bold truncate">{{ series.name }}</h2>
+            <p class="text-sm text-gray-400">
+              {% blocktrans trimmed count total=series.parts|length %}
+                {{ total }} movie
+              {% plural %}
+                {{ total }} movies
+              {% endblocktrans %}
+              {% if series.next_part %}
+                · <span class="text-amber-400">{% blocktrans with title=series.next_part.title %}Next: {{ title }}{% endblocktrans %}</span>
+              {% endif %}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-4 shrink-0">
+          <div class="text-right">
+            <p class="text-sm font-semibold {% if series.is_complete %}text-emerald-400{% endif %}">
+              {% if series.is_complete %}
+                {% trans "Completed" %}
+              {% else %}
+                {% blocktrans trimmed with done=series.completed_count total=series.total %}
+                  {{ done }} / {{ total }} watched
+                {% endblocktrans %}
+              {% endif %}
+            </p>
+            <div class="w-40 h-2 rounded-full bg-ef-raised overflow-hidden mt-1">
+              <div class="h-full rounded-full {% if series.is_complete %}bg-emerald-500{% else %}bg-indigo-500{% endif %}" style="width: {{ series.percent }}%"></div>
+            </div>
+          </div>
+          <span class="text-gray-400 transition-transform" :class="open ? 'rotate-180' : ''">{% include "app/icons/chevron-down.svg" with classes="w-5 h-5" %}</span>
+        </div>
+      </button>
+      <div x-show="open" class="border-t border-ef-line">
+        <div class="p-5 flex gap-4 overflow-x-auto snap-x scrollbar-hide">
+          {% for part in series.parts %}
+            {% include "efe/components/series_part.html" with part=part %}
+            {% if not forloop.last %}
+              <div class="self-center shrink-0 text-gray-600 -mx-1 pb-10">{% include "app/icons/chevron-right.svg" with classes="w-5 h-5" %}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% empty %}
+    {% if not scanning %}
+      <div class="bg-ef-card rounded-xl p-12 text-center">
+        <div class="mx-auto mb-4 w-16 h-16 rounded-full bg-ef-raised flex items-center justify-center text-gray-400">
+          {% include "app/icons/film-stack.svg" with classes="w-8 h-8" %}
+        </div>
+        <h2 class="text-xl font-semibold mb-2">
+          {% if status_filter == "all" %}
+            {% trans "No film series yet" %}
+          {% else %}
+            {% trans "No series match this filter" %}
+          {% endif %}
+        </h2>
+        <p class="text-gray-400 max-w-lg mx-auto">{% trans "When a movie you track belongs to a series (like trilogies or franchises), the whole series appears here in watching order." %}</p>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>

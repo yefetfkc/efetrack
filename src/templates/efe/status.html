@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}Durum Paneli - efeTrack{% endblock title %}
+
+{% block content %}
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold mb-2">Durum Paneli</h1>
+    <p class="text-gray-400 text-sm">Arka plandaki işler, yedekler ve hatalar tek yerde. Bir şey ters giderse önce buraya bak.</p>
+  </div>
+
+  {% if status.problems %}
+    <div class="mb-6 rounded-lg p-4 border" style="border-color: #dc2626; background: rgba(220,38,38,.08);">
+      <h2 class="font-semibold mb-2" style="color: #f87171;">Dikkat edilmesi gerekenler</h2>
+      <ul class="text-sm text-gray-300 space-y-1">
+        {% for problem in status.problems %}<li>• {{ problem }}</li>{% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <div class="mb-6 rounded-lg p-4 border" style="border-color: #16a34a; background: rgba(22,163,74,.08);">
+      <p class="text-sm" style="color: #4ade80;">✓ Her şey yolunda görünüyor.</p>
+    </div>
+  {% endif %}
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1rem;" class="mb-6">
+    <div class="bg-ef-card rounded-lg p-4">
+      <div class="text-xs text-gray-400 mb-1">Son takvim güncellemesi</div>
+      <div class="text-lg font-semibold">{% if status.calendar_last %}{{ status.calendar_last|naturaltime }}{% else %}Henüz yok{% endif %}</div>
+      {% if status.calendar_last %}<div class="text-xs text-gray-400">{{ status.calendar_last|date:"j F Y H:i" }}</div>{% endif %}
+    </div>
+    <div class="bg-ef-card rounded-lg p-4">
+      <div class="text-xs text-gray-400 mb-1">Son yedek</div>
+      {% if status.backups %}
+        <div class="text-lg font-semibold">{% if status.backups.newest %}{{ status.backups.newest|naturaltime }}{% else %}Henüz yok{% endif %}</div>
+        <div class="text-xs text-gray-400">{{ status.backups.count }} yedek · {{ status.backups.size|filesizeformat }}</div>
+        <div class="text-xs text-gray-500 mt-1" style="word-break: break-all;">{{ status.backups.path }}</div>
+      {% else %}
+        <div class="text-sm text-gray-400">Yalnız Mac uygulamasında</div>
+      {% endif %}
+    </div>
+    <div class="bg-ef-card rounded-lg p-4">
+      <div class="text-xs text-gray-400 mb-1">Çevrimdışı kopya</div>
+      {% if status.offline %}
+        <div class="text-lg font-semibold">{{ status.offline.count }} sayfa bilgisi</div>
+        <div class="text-xs text-gray-400">{{ status.offline.size|filesizeformat }}{% if status.offline.newest %} · son kayıt {{ status.offline.newest|naturaltime }}{% endif %}</div>
+      {% else %}
+        <div class="text-sm text-gray-400">Kapalı (yalnız Mac uygulamasında)</div>
+      {% endif %}
+    </div>
+    <div class="bg-ef-card rounded-lg p-4">
+      <div class="text-xs text-gray-400 mb-1">İnternet / TMDB</div>
+      <div class="text-lg font-semibold">
+        {% if status.tmdb_ok %}<span style="color: #4ade80;">Erişilebilir</span>{% elif status.tmdb_ok is False %}<span style="color: #f87171;">Erişilemiyor</span>{% else %}Denetlenmedi{% endif %}
+      </div>
+      <div class="text-xs text-gray-400">Veritabanı: {% if status.database_size %}{{ status.database_size|filesizeformat }}{% else %}–{% endif %}</div>
+    </div>
+  </div>
+
+  <section class="bg-ef-card rounded-lg p-4 mb-6">
+    <h2 class="text-lg font-semibold mb-3">Arka plan görevleri</h2>
+    <div class="space-y-2">
+      {% for row in status.tasks %}
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 p-3 bg-ef-raised rounded-md">
+          <div>
+            <div class="text-sm font-medium">
+              {% if row.ok is False %}<span style="color: #f87171;">✕</span>{% elif row.late %}<span style="color: #fbbf24;">!</span>{% elif row.off and not row.last_run %}<span class="text-gray-500">–</span>{% else %}<span style="color: #4ade80;">✓</span>{% endif %}
+              {{ row.name }}
+            </div>
+            {% if row.detail %}<div class="text-xs text-gray-400 mt-1" style="word-break: break-word;">{{ row.detail }}</div>{% endif %}
+          </div>
+          <div class="text-xs text-gray-400">
+            {% if row.running %}şu an çalışıyor · {% endif %}{% if row.off %}{{ row.off }}{% if row.last_run %} · son çalışma {{ row.last_run|naturaltime }}{% endif %}{% else %}{% if row.last_run %}son çalışma {{ row.last_run|naturaltime }}{% else %}hiç çalışmadı{% endif %}{% if row.late %} · gecikti{% endif %}{% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% if status.running %}
+      <h3 class="text-sm font-semibold mt-4 mb-2">Şu an çalışanlar</h3>
+      <ul class="text-xs text-gray-300 space-y-1">
+        {% for name, started in status.running %}<li>• {{ name }} — {{ started|naturaltime }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  </section>
+
+  <section class="bg-ef-card rounded-lg p-4">
+    <h2 class="text-lg font-semibold mb-1">Son hatalar</h2>
+    {% if status.log_dir %}<p class="text-xs text-gray-500 mb-3" style="word-break: break-all;">Kayıt klasörü: {{ status.log_dir }}</p>{% endif %}
+    {% if status.errors %}
+      <div class="space-y-1">
+        {% for source, line in status.errors %}
+          <div class="text-xs bg-ef-raised rounded-md p-2" style="font-family: ui-monospace, Menlo, monospace; word-break: break-word;"><span class="text-gray-400">[{{ source }}]</span> {{ line }}</div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-400">Son kayıtlarda hata yok.</p>
+    {% endif %}
+  </section>
+{% endblock content %}

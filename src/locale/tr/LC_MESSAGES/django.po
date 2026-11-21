@@ -1,0 +1,5489 @@
+# Turkish translations for efeTrack.
+# Copyright (C) 2026 efeTrack
+# This file is distributed under the same license as the efeTrack project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: efeTrack 1.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-11-06 21:52+0000\n"
+"PO-Revision-Date: 2026-11-06 21:52+0000\n"
+"Last-Translator: efeTrack\n"
+"Language: tr\n"
+"Language-Team: Türkçe\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: users/helpers.py:20
+msgid "Unexpected error occurred while processing the task."
+msgstr "Görev işlenirken beklenmeyen bir hata oluştu."
+
+#: users/helpers.py:23
+msgid "This task is currently running."
+msgstr "Bu görev şu anda çalışıyor."
+
+#: users/helpers.py:40
+msgid "This task has been queued and is waiting to run."
+msgstr "Bu görev sıraya alındı ve çalışmayı bekliyor."
+
+#: users/helpers.py:57
+msgid "Only New Items"
+msgstr "Yalnızca yeni öğeler"
+
+#: users/helpers.py:57
+msgid "Overwrite Existing"
+msgstr "Mevcutların üzerine yaz"
+
+#: templates/users/import_data.html:39 users/helpers.py:73
+msgid "Every Day"
+msgstr "Her gün"
+
+#: users/helpers.py:75
+msgid "Every 2 days"
+msgstr "İki günde bir"
+
+#: users/helpers.py:77
+#, python-format
+msgid "Cron: %(expr)s"
+msgstr "Cron: %(expr)s"
+
+#: users/models.py:50
+msgid "Dark"
+msgstr "Karanlık"
+
+#: users/models.py:51
+msgid "Light"
+msgstr "Aydınlık"
+
+#: users/models.py:52
+msgid "System"
+msgstr "Sistem"
+
+#: efe/models.py:51 users/models.py:58
+msgid "Upcoming"
+msgstr "Yaklaşan"
+
+#: users/models.py:59
+msgid "Recent"
+msgstr "Son eklenenler"
+
+#: users/models.py:60
+msgid "Completion"
+msgstr "Tamamlanma"
+
+#: users/models.py:61
+msgid "Episodes Left"
+msgstr "Kalan bölüm"
+
+#: app/forms.py:134 templates/app/create_entry.html:134
+#: templates/app/media_list.html:150 templates/lists/list_detail.html:16
+#: users/models.py:62 users/models.py:69 users/models.py:113
+msgid "Title"
+msgstr "Başlık"
+
+#: users/models.py:68
+msgid "Rating"
+msgstr "Puan"
+
+#: app/forms.py:234 templates/app/create_entry.html:10
+#: templates/app/media_details.html:274 templates/app/media_list.html:153
+#: users/models.py:70
+msgid "Progress"
+msgstr "İlerleme"
+
+#: templates/app/create_entry.html:329 templates/app/journal.html:63
+#: templates/app/media_list.html:159 templates/app/statistics.html:62
+#: users/models.py:71
+msgid "Start Date"
+msgstr "Başlangıç tarihi"
+
+#: templates/app/create_entry.html:338 templates/app/journal.html:70
+#: templates/app/media_list.html:160 templates/app/statistics.html:69
+#: users/models.py:72
+msgid "End Date"
+msgstr "Bitiş tarihi"
+
+#: efe/views.py:173 templates/lists/list_detail.html:171 users/models.py:78
+msgid "All"
+msgstr "Tümü"
+
+#: users/models.py:89 users/models.py:96
+msgid "Grid"
+msgstr "Izgara"
+
+#: users/models.py:90
+msgid "Table"
+msgstr "Tablo"
+
+#: users/models.py:97
+msgid "List"
+msgstr "Liste"
+
+#: templates/lists/custom_lists.html:59 users/models.py:103
+msgid "Last Item Added"
+msgstr "Son eklenen öğe"
+
+#: lists/forms.py:23 templates/lists/custom_lists.html:60 users/models.py:104
+msgid "Name"
+msgstr "Ad"
+
+#: templates/lists/custom_lists.html:62 users/models.py:105
+msgid "Items Count"
+msgstr "Öğe sayısı"
+
+#: templates/lists/custom_lists.html:61 users/models.py:106
+msgid "Newest First"
+msgstr "Önce en yeni"
+
+#: templates/lists/list_detail.html:15 users/models.py:112
+msgid "Date Added"
+msgstr "Eklenme tarihi"
+
+#: app/forms.py:133 templates/app/create_entry.html:118
+#: templates/lists/list_detail.html:17 users/models.py:114
+msgid "Media Type"
+msgstr "Medya türü"
+
+#: users/models.py:120
+msgid "Current Date"
+msgstr "Bugünün tarihi"
+
+#: users/models.py:121
+msgid "Release Date"
+msgstr "Yayın tarihi"
+
+#: users/models.py:122
+msgid "No Date"
+msgstr "Tarih yok"
+
+#: users/models.py:128
+msgid "2026-01-18 (ISO)"
+msgstr "2026-01-18 (ISO)"
+
+#: users/models.py:129
+msgid "18/01/2026 (EU)"
+msgstr "18/01/2026 (AB)"
+
+#: users/models.py:130
+msgid "01/18/2026 (US)"
+msgstr "01/18/2026 (ABD)"
+
+#: users/models.py:131
+msgid "Jan 18, 2026"
+msgstr "Oca 18, 2026"
+
+#: users/models.py:132
+msgid "18 Jan, 2026"
+msgstr "18 Oca, 2026"
+
+#: users/models.py:133
+msgid "18.01.2026 (TR)"
+msgstr "18.01.2026 (TR)"
+
+#: users/models.py:134
+msgid "18 January 2026"
+msgstr "18 Ocak 2026"
+
+#: users/models.py:140
+msgid "14:30 (24-hour)"
+msgstr "14:30 (24 saat)"
+
+#: users/models.py:141
+msgid "2:30 PM (12-hour)"
+msgstr "2:30 ÖS (12 saat)"
+
+#: users/models.py:147
+msgid "Monday"
+msgstr "Pazartesi"
+
+#: users/models.py:148
+msgid "Sunday"
+msgstr "Pazar"
+
+#: users/models.py:157
+msgid "Toggle profile visibility to anonymous users"
+msgstr "Profilin anonim kullanıcılara görünürlüğünü aç/kapat"
+
+#: users/models.py:173
+msgid "Hide unreleased media from the home page"
+msgstr "Henüz yayınlanmamış medyayı ana sayfada gizle"
+
+#: users/models.py:341
+msgid "Hide hover overlay on touch devices"
+msgstr "Dokunmatik cihazlarda üzerine gelme katmanını gizle"
+
+#: users/models.py:346
+msgid "Blur unseen episode images and descriptions"
+msgstr "İzlenmemiş bölüm görsellerini ve açıklamalarını bulanıklaştır"
+
+#: users/models.py:354
+msgid "Date to use when bulk-marking media as completed"
+msgstr "Medyayı toplu olarak tamamlandı işaretlerken kullanılacak tarih"
+
+#: users/models.py:361
+msgid "Preferred date display format"
+msgstr "Tercih edilen tarih biçimi"
+
+#: users/models.py:367
+msgid "Preferred time display format"
+msgstr "Tercih edilen saat biçimi"
+
+#: users/models.py:374
+msgid "First day of the week"
+msgstr "Haftanın ilk günü"
+
+#: users/models.py:380
+msgid "Preferred interface language"
+msgstr "Tercih edilen arayüz dili"
+
+#: users/models.py:388
+msgid "Interface color theme"
+msgstr "Arayüz renk teması"
+
+#: users/models.py:392
+msgid "Play sound effects"
+msgstr "Ses efektlerini çal"
+
+#: users/models.py:396
+msgid "Sound effects volume (0-100)"
+msgstr "Ses efektleri seviyesi (0-100)"
+
+#: users/models.py:403
+msgid "Last time the notification center was opened"
+msgstr "Bildirim merkezinin son açıldığı zaman"
+
+#: users/models.py:407
+msgid "How many days ahead the notification center looks"
+msgstr "Bildirim merkezinin kaç gün ilerisini gösterdiği"
+
+#: users/models.py:413
+msgid "Show progress bar"
+msgstr "İlerleme çubuğunu göster"
+
+#: templates/users/preferences.html:216 users/models.py:419
+msgid "Hide completed media in recommendations"
+msgstr "Tamamlanan medyayı önerilerde gizle"
+
+#: users/models.py:425
+msgid "Hide zero ratings from media cards"
+msgstr "Sıfır puanları medya kartlarında gizle"
+
+#: users/models.py:431
+msgid "Show adult titles in search results"
+msgstr "Arama sonuçlarında yetişkin içerikleri göster"
+
+#: users/models.py:438
+msgid "Region to show watch providers for"
+msgstr "Yayın platformlarının gösterileceği bölge"
+
+#: users/models.py:468
+msgid "Apprise URLs for notifications"
+msgstr "Bildirimler için Apprise URL'leri"
+
+#: users/models.py:474
+msgid "Items excluded from notifications"
+msgstr "Bildirimlerden hariç tutulan öğeler"
+
+#: templates/users/notifications.html:104 users/models.py:478
+msgid "Receive notifications for recently released media"
+msgstr "Yeni yayınlanan medya için bildirim al"
+
+#: users/models.py:482
+msgid "Receive a daily digest of upcoming releases"
+msgstr "Yaklaşan yayınların günlük özetini al"
+
+#: users/models.py:490
+msgid "Token for external integrations"
+msgstr "Harici entegrasyonlar için anahtar (token)"
+
+#: users/models.py:494
+msgid "Comma-separated list of Plex usernames for webhook matching"
+msgstr "Webhook eşleştirmesi için virgülle ayrılmış Plex kullanıcı adları"
+
+#: users/models.py:498
+msgid "Process Jellyfin MarkPlayed webhook events"
+msgstr "Jellyfin MarkPlayed webhook olaylarını işle"
+
+#: users/models.py:502
+msgid "Process Jellyfin MarkUnplayed webhook events"
+msgstr "Jellyfin MarkUnplayed webhook olaylarını işle"
+
+#: users/forms.py:18
+msgid "Enter your username"
+msgstr "Kullanıcı adını gir"
+
+#: users/forms.py:20
+msgid "Enter your password"
+msgstr "Şifreni gir"
+
+#: users/forms.py:33
+msgid "Confirm Password"
+msgstr "Şifreyi onayla"
+
+#: users/forms.py:35
+msgid "Confirm your password"
+msgstr "Şifreni onayla"
+
+#: users/forms.py:46
+msgid "Changing the username is not allowed for the demo account."
+msgstr "Demo hesabında kullanıcı adı değiştirilemez."
+
+#: users/forms.py:69
+msgid "Changing the password is not allowed for the demo account."
+msgstr "Demo hesabında şifre değiştirilemez."
+
+#: users/forms.py:117
+#, python-format
+msgid "'%(url)s' is not a valid Apprise URL."
+msgstr "'%(url)s' geçerli bir Apprise URL'si değil."
+
+#: users/views.py:48
+msgid "Your profile has been updated!"
+msgstr "Profilin güncellendi!"
+
+#: users/views.py:73
+msgid "Your password has been updated!"
+msgstr "Şifren güncellendi!"
+
+#: users/views.py:100
+msgid "Notification settings updated successfully!"
+msgstr "Bildirim ayarları başarıyla güncellendi!"
+
+#: users/views.py:199
+msgid "No notification URLs configured."
+msgstr "Yapılandırılmış bildirim URL'si yok."
+
+#: users/views.py:207
+msgid "efeTrack Test Notification"
+msgstr "efeTrack Test Bildirimi"
+
+#: users/views.py:209
+msgid "This is a test notification from efeTrack. If you're seeing this, your notifications are working correctly!"
+msgstr "Bu, efeTrack'ten gönderilen bir test bildirimidir. Bunu görüyorsan bildirimlerin doğru çalışıyor!"
+
+#: users/views.py:215
+msgid "Test notification sent successfully!"
+msgstr "Test bildirimi başarıyla gönderildi!"
+
+#: users/views.py:217
+msgid "Failed to send test notification."
+msgstr "Test bildirimi gönderilemedi."
+
+#: app/providers/tmdb.py:967 users/views.py:234
+msgid "Disabled"
+msgstr "Kapalı"
+
+#: users/views.py:288
+msgid "This section is view-only for demo accounts."
+msgstr "Bu bölüm demo hesapları için yalnızca görüntülemeye açıktır."
+
+#: users/views.py:341
+msgid "Settings updated."
+msgstr "Ayarlar güncellendi."
+
+#: users/views.py:387
+msgid "Import schedule deleted."
+msgstr "İçe aktarma zamanlaması silindi."
+
+#: users/views.py:389
+msgid "Import schedule not found."
+msgstr "İçe aktarma zamanlaması bulunamadı."
+
+#: users/views.py:399
+msgid "Token regenerated successfully."
+msgstr "Anahtar başarıyla yeniden oluşturuldu."
+
+#: users/views.py:424
+msgid "Plex usernames updated successfully"
+msgstr "Plex kullanıcı adları başarıyla güncellendi"
+
+#: users/views.py:444
+msgid "Jellyfin webhook settings updated successfully"
+msgstr "Jellyfin webhook ayarları başarıyla güncellendi"
+
+#: users/views.py:457
+#, python-format
+msgid "Successfully cleared %(count)d search entry"
+msgid_plural "Successfully cleared %(count)d search entries"
+msgstr[0] "%(count)d arama kaydı başarıyla temizlendi"
+msgstr[1] "%(count)d arama kaydı başarıyla temizlendi"
+
+#: app/config.py:86
+msgctxt "tv tracking verb present"
+msgid "watch"
+msgstr "izle"
+
+#: app/config.py:87
+msgctxt "tv tracking verb past"
+msgid "watched"
+msgstr "izlediğin"
+
+#: app/config.py:101
+msgctxt "season tracking verb present"
+msgid "watch"
+msgstr "izle"
+
+#: app/config.py:102
+msgctxt "season tracking verb past"
+msgid "watched"
+msgstr "izlediğin"
+
+#. Translators: Short label for the episode progress unit.
+#: app/config.py:114
+msgctxt "season progress unit short"
+msgid "E"
+msgstr "B"
+
+#: app/config.py:115
+msgctxt "season progress unit singular"
+msgid "Episode"
+msgstr "Bölüm"
+
+#: app/config.py:116
+msgctxt "season progress unit plural"
+msgid "Episodes"
+msgstr "Bölüm"
+
+#: app/config.py:124
+msgctxt "episode tracking verb present"
+msgid "watch"
+msgstr "izle"
+
+#: app/config.py:125
+msgctxt "episode tracking verb past"
+msgid "watched"
+msgstr "izlediğin"
+
+#: app/config.py:138
+msgctxt "movie tracking verb present"
+msgid "watch"
+msgstr "izle"
+
+#: app/config.py:139
+msgctxt "movie tracking verb past"
+msgid "watched"
+msgstr "izlediğin"
+
+#: app/config.py:161
+msgctxt "anime tracking verb present"
+msgid "watch"
+msgstr "izle"
+
+#: app/config.py:162
+msgctxt "anime tracking verb past"
+msgid "watched"
+msgstr "izlediğin"
+
+#. Translators: Short label for the episode progress unit.
+#: app/config.py:172
+msgctxt "anime progress unit short"
+msgid "E"
+msgstr "B"
+
+#: app/config.py:173
+msgctxt "anime progress unit singular"
+msgid "Episode"
+msgstr "Bölüm"
+
+#: app/config.py:174
+msgctxt "anime progress unit plural"
+msgid "Episodes"
+msgstr "Bölüm"
+
+#: app/config.py:184
+msgctxt "manga tracking verb present"
+msgid "read"
+msgstr "oku"
+
+#: app/config.py:185
+msgctxt "manga tracking verb past"
+msgid "read"
+msgstr "okuduğun"
+
+#. Translators: Short label for the chapter progress unit.
+#: app/config.py:200
+msgctxt "manga progress unit short"
+msgid "#"
+msgstr "#"
+
+#: app/config.py:201
+msgctxt "manga progress unit singular"
+msgid "Chapter"
+msgstr "Bölüm"
+
+#: app/config.py:202
+msgctxt "manga progress unit plural"
+msgid "Chapters"
+msgstr "Bölüm"
+
+#: app/config.py:211
+msgctxt "game tracking verb present"
+msgid "play"
+msgstr "oyna"
+
+#: app/config.py:212
+msgctxt "game tracking verb past"
+msgid "played"
+msgstr "oynadığın"
+
+#: app/config.py:237
+msgctxt "book tracking verb present"
+msgid "read"
+msgstr "oku"
+
+#: app/config.py:238
+msgctxt "book tracking verb past"
+msgid "read"
+msgstr "okuduğun"
+
+#. Translators: Short label for the page progress unit.
+#: app/config.py:249
+msgctxt "book progress unit short"
+msgid "P"
+msgstr "S"
+
+#: app/config.py:250
+msgctxt "book progress unit singular"
+msgid "Page"
+msgstr "Sayfa"
+
+#: app/config.py:251
+msgctxt "book progress unit plural"
+msgid "Pages"
+msgstr "Sayfa"
+
+#: app/config.py:260
+msgctxt "comic tracking verb present"
+msgid "read"
+msgstr "oku"
+
+#: app/config.py:261
+msgctxt "comic tracking verb past"
+msgid "read"
+msgstr "okuduğun"
+
+#. Translators: Short label for the comic issue progress unit.
+#: app/config.py:273
+msgctxt "comic progress unit short"
+msgid "#"
+msgstr "#"
+
+#: app/config.py:274
+msgctxt "comic progress unit singular"
+msgid "Issue"
+msgstr "Sayı"
+
+#: app/config.py:275
+msgctxt "comic progress unit plural"
+msgid "Issues"
+msgstr "Sayı"
+
+#: app/config.py:284
+msgctxt "board game tracking verb present"
+msgid "play"
+msgstr "oyna"
+
+#: app/config.py:285
+msgctxt "board game tracking verb past"
+msgid "played"
+msgstr "oynadığın"
+
+#. Translators: Short label for the board game play progress unit.
+#: app/config.py:298
+msgctxt "board game progress unit short"
+msgid "#"
+msgstr "#"
+
+#: app/config.py:299
+msgctxt "board game progress unit singular"
+msgid "Play"
+msgstr "Oyun"
+
+#: app/config.py:300
+msgctxt "board game progress unit plural"
+msgid "Plays"
+msgstr "Oyun"
+
+#: app/statistics.py:404
+msgctxt "consumption statistic"
+msgid "TV episode watched"
+msgid_plural "TV episodes watched"
+msgstr[0] "izlenen dizi bölümü"
+msgstr[1] "izlenen dizi bölümü"
+
+#: app/statistics.py:407
+msgctxt "consumption statistic"
+msgid "Episode watched"
+msgid_plural "Episodes watched"
+msgstr[0] "izlenen bölüm"
+msgstr[1] "izlenen bölüm"
+
+#: app/statistics.py:410
+msgctxt "consumption statistic"
+msgid "Movie watched"
+msgid_plural "Movies watched"
+msgstr[0] "izlenen film"
+msgstr[1] "izlenen film"
+
+#: app/statistics.py:413
+msgctxt "consumption statistic"
+msgid "Anime episode watched"
+msgid_plural "Anime episodes watched"
+msgstr[0] "izlenen anime bölümü"
+msgstr[1] "izlenen anime bölümü"
+
+#: app/statistics.py:416
+msgctxt "consumption statistic"
+msgid "Manga chapter read"
+msgid_plural "Manga chapters read"
+msgstr[0] "okunan manga bölümü"
+msgstr[1] "okunan manga bölümü"
+
+#: app/statistics.py:419
+msgctxt "consumption statistic"
+msgid "Game hour played"
+msgid_plural "Game hours played"
+msgstr[0] "oynanan oyun saati"
+msgstr[1] "oynanan oyun saati"
+
+#: app/statistics.py:422
+msgctxt "consumption statistic"
+msgid "Book page read"
+msgid_plural "Book pages read"
+msgstr[0] "okunan kitap sayfası"
+msgstr[1] "okunan kitap sayfası"
+
+#: app/statistics.py:425
+msgctxt "consumption statistic"
+msgid "Comic issue read"
+msgid_plural "Comic issues read"
+msgstr[0] "okunan çizgi roman sayısı"
+msgstr[1] "okunan çizgi roman sayısı"
+
+#: app/statistics.py:428
+msgctxt "consumption statistic"
+msgid "Boardgame play"
+msgid_plural "Boardgame plays"
+msgstr[0] "kutu oyunu oynanışı"
+msgstr[1] "kutu oyunu oynanışı"
+
+#: app/history_processor.py:18
+msgctxt "history"
+msgid "Marked as currently watching"
+msgstr "İzleniyor olarak işaretlendi"
+
+#: app/history_processor.py:19
+msgctxt "history"
+msgid "Marked as currently reading"
+msgstr "Okunuyor olarak işaretlendi"
+
+#: app/history_processor.py:20
+msgctxt "history"
+msgid "Marked as currently playing"
+msgstr "Oynanıyor olarak işaretlendi"
+
+#: app/history_processor.py:23
+msgctxt "history"
+msgid "Marked as finished watching"
+msgstr "İzlenip bitirildi olarak işaretlendi"
+
+#: app/history_processor.py:24
+msgctxt "history"
+msgid "Marked as finished reading"
+msgstr "Okunup bitirildi olarak işaretlendi"
+
+#: app/history_processor.py:25
+msgctxt "history"
+msgid "Marked as finished playing"
+msgstr "Oynanıp bitirildi olarak işaretlendi"
+
+#: app/history_processor.py:28
+msgctxt "history"
+msgid "Added to watching list"
+msgstr "İzlenecekler listesine eklendi"
+
+#: app/history_processor.py:29
+msgctxt "history"
+msgid "Added to reading list"
+msgstr "Okunacaklar listesine eklendi"
+
+#: app/history_processor.py:30
+msgctxt "history"
+msgid "Added to playing list"
+msgstr "Oynanacaklar listesine eklendi"
+
+#: app/history_processor.py:33
+msgctxt "history"
+msgid "Marked as paused watching"
+msgstr "İzlemeye ara verildi olarak işaretlendi"
+
+#: app/history_processor.py:34
+msgctxt "history"
+msgid "Marked as paused reading"
+msgstr "Okumaya ara verildi olarak işaretlendi"
+
+#: app/history_processor.py:35
+msgctxt "history"
+msgid "Marked as paused playing"
+msgstr "Oynamaya ara verildi olarak işaretlendi"
+
+#: app/history_processor.py:41
+msgctxt "history"
+msgid "Currently watching"
+msgstr "Şu an izleniyor"
+
+#: app/history_processor.py:42
+msgctxt "history"
+msgid "Currently reading"
+msgstr "Şu an okunuyor"
+
+#: app/history_processor.py:43
+msgctxt "history"
+msgid "Currently playing"
+msgstr "Şu an oynanıyor"
+
+#: app/history_processor.py:46
+msgctxt "history"
+msgid "Finished watching"
+msgstr "İzleme bitti"
+
+#: app/history_processor.py:47
+msgctxt "history"
+msgid "Finished reading"
+msgstr "Okuma bitti"
+
+#: app/history_processor.py:48
+msgctxt "history"
+msgid "Finished playing"
+msgstr "Oynama bitti"
+
+#: app/history_processor.py:51
+msgctxt "history"
+msgid "Paused watching"
+msgstr "İzlemeye ara verildi"
+
+#: app/history_processor.py:52
+msgctxt "history"
+msgid "Paused reading"
+msgstr "Okumaya ara verildi"
+
+#: app/history_processor.py:53
+msgctxt "history"
+msgid "Paused playing"
+msgstr "Oynamaya ara verildi"
+
+#: app/history_processor.py:56
+msgctxt "history"
+msgid "Resumed watching"
+msgstr "İzlemeye devam edildi"
+
+#: app/history_processor.py:57
+msgctxt "history"
+msgid "Resumed reading"
+msgstr "Okumaya devam edildi"
+
+#: app/history_processor.py:58
+msgctxt "history"
+msgid "Resumed playing"
+msgstr "Oynamaya devam edildi"
+
+#: app/history_processor.py:61
+msgctxt "history"
+msgid "Stopped watching"
+msgstr "İzleme bırakıldı"
+
+#: app/history_processor.py:62
+msgctxt "history"
+msgid "Stopped reading"
+msgstr "Okuma bırakıldı"
+
+#: app/history_processor.py:63
+msgctxt "history"
+msgid "Stopped playing"
+msgstr "Oynama bırakıldı"
+
+#. Translators: %(unit)s is a progress unit such as "episode".
+#: app/history_processor.py:69
+#, python-format
+msgctxt "history"
+msgid "Watched up to %(unit)s %(number)s"
+msgstr "Son izlenen: %(unit)s %(number)s"
+
+#. Translators: %(unit)s is a progress unit such as "chapter" or "page".
+#: app/history_processor.py:71
+#, python-format
+msgctxt "history"
+msgid "Read up to %(unit)s %(number)s"
+msgstr "Son okunan: %(unit)s %(number)s"
+
+#. Translators: %(unit)s is a progress unit such as "play".
+#: app/history_processor.py:73
+#, python-format
+msgctxt "history"
+msgid "Played up to %(unit)s %(number)s"
+msgstr "Son oynanan: %(unit)s %(number)s"
+
+#: app/history_processor.py:173 efe/templatetags/efe_tags.py:39
+#: templates/efe/notifications.html:103 templates/events/calendar.html:33
+#: templates/events/components/calendar_list.html:11
+msgid "Today"
+msgstr "Bugün"
+
+#: app/history_processor.py:175 efe/templatetags/efe_tags.py:43
+msgid "Yesterday"
+msgstr "Dün"
+
+#: app/history_processor.py:524 app/history_processor.py:593
+#: app/history_processor.py:652
+#, python-format
+msgctxt "history"
+msgid "Started on %(date)s"
+msgstr "Başlangıç: %(date)s"
+
+#: app/history_processor.py:536 app/history_processor.py:598
+#, python-format
+msgctxt "history"
+msgid "Finished on %(date)s"
+msgstr "Bitiş: %(date)s"
+
+#: app/history_processor.py:574
+msgctxt "history"
+msgid "Marked as dropped"
+msgstr "Bırakıldı olarak işaretlendi"
+
+#: app/history_processor.py:579 app/history_processor.py:622
+#, python-format
+msgctxt "history"
+msgid "Rated %(score)s/10"
+msgstr "%(score)s/10 puan verildi"
+
+#: app/history_processor.py:583
+#, python-format
+msgctxt "history"
+msgid "Played for %(time)s"
+msgstr "%(time)s oynandı"
+
+#: app/history_processor.py:594
+msgctxt "history"
+msgid "Started without date"
+msgstr "Tarihsiz başlandı"
+
+#: app/history_processor.py:599
+msgctxt "history"
+msgid "Finished without date"
+msgstr "Tarihsiz bitirildi"
+
+#: app/history_processor.py:602 app/history_processor.py:668
+msgctxt "history"
+msgid "Added notes"
+msgstr "Not eklendi"
+
+#. Translators: %(field)s is the name of a tracked field, e.g. "repeats".
+#: app/history_processor.py:605
+#, python-format
+msgctxt "history"
+msgid "Set %(field)s to %(value)s"
+msgstr "%(field)s, %(value)s olarak ayarlandı"
+
+#: app/history_processor.py:615
+#, python-format
+msgctxt "history"
+msgid "Changed status from %(old)s to %(new)s"
+msgstr "Durum %(old)s → %(new)s olarak değişti"
+
+#: app/history_processor.py:623
+#, python-format
+msgctxt "history"
+msgid "Changed rating from %(old)s to %(new)s"
+msgstr "Puan %(old)s → %(new)s olarak değişti"
+
+#: app/history_processor.py:634
+#, python-format
+msgctxt "history"
+msgid "Added %(time)s of playtime"
+msgstr "%(time)s oyun süresi eklendi"
+
+#: app/history_processor.py:637
+#, python-format
+msgctxt "history"
+msgid "Removed %(time)s of playtime"
+msgstr "%(time)s oyun süresi çıkarıldı"
+
+#. Translators: %(unit)s is a progress unit such as "episodes" or "pages".
+#: app/history_processor.py:643
+#, python-format
+msgctxt "history"
+msgid "Progress set to %(number)s %(unit)s"
+msgstr "İlerleme %(number)s %(unit)s olarak ayarlandı"
+
+#: app/history_processor.py:650
+msgctxt "history"
+msgid "Removed start date"
+msgstr "Başlangıç tarihi kaldırıldı"
+
+#: app/history_processor.py:653
+#, python-format
+msgctxt "history"
+msgid "Start date changed to %(date)s"
+msgstr "Başlangıç tarihi %(date)s olarak değişti"
+
+#: app/history_processor.py:659
+msgctxt "history"
+msgid "Removed end date"
+msgstr "Bitiş tarihi kaldırıldı"
+
+#: app/history_processor.py:661
+#, python-format
+msgctxt "history"
+msgid "Ended on %(date)s"
+msgstr "Bitiş: %(date)s"
+
+#: app/history_processor.py:662
+#, python-format
+msgctxt "history"
+msgid "End date changed to %(date)s"
+msgstr "Bitiş tarihi %(date)s olarak değişti"
+
+#: app/history_processor.py:670
+msgctxt "history"
+msgid "Removed notes"
+msgstr "Notlar kaldırıldı"
+
+#: app/history_processor.py:671
+msgctxt "history"
+msgid "Updated notes"
+msgstr "Notlar güncellendi"
+
+#. Translators: %(field)s is the name of a tracked field, e.g. "repeats".
+#: app/history_processor.py:674
+#, python-format
+msgctxt "history"
+msgid "Updated %(field)s from %(old)s to %(new)s"
+msgstr "%(field)s %(old)s → %(new)s olarak güncellendi"
+
+#: app/models.py:52
+msgid "Manual"
+msgstr "Elle"
+
+#: app/models.py:58
+msgid "TV Show"
+msgstr "Dizi"
+
+#: app/models.py:59
+msgid "TV Season"
+msgstr "Dizi sezonu"
+
+#: app/models.py:60 templates/app/media_details.html:582
+msgid "Episode"
+msgstr "Bölüm"
+
+#: app/models.py:61
+msgid "Movie"
+msgstr "Film"
+
+#: app/models.py:62
+msgid "Anime"
+msgstr "Anime"
+
+#: app/models.py:63
+msgid "Manga"
+msgstr "Manga"
+
+#: app/models.py:64
+msgid "Game"
+msgstr "Oyun"
+
+#: app/models.py:65
+msgid "Book"
+msgstr "Kitap"
+
+#: app/models.py:66
+msgid "Comic"
+msgstr "Çizgi roman"
+
+#: app/models.py:67
+msgid "Boardgame"
+msgstr "Kutu oyunu"
+
+#: app/models.py:777 efe/views.py:175
+#: templates/efe/components/series_list.html:44
+msgid "Completed"
+msgstr "Tamamlandı"
+
+#: app/models.py:778 templates/app/statistics.html:116
+msgid "In Progress"
+msgstr "Devam ediyor"
+
+#: app/models.py:779
+msgid "Planning"
+msgstr "Planlanan"
+
+#: app/models.py:780
+msgid "Paused"
+msgstr "Ara verildi"
+
+#: app/models.py:781
+msgid "Dropped"
+msgstr "Bırakıldı"
+
+#: app/models.py:787 templates/users/import_data.html:502
+msgid "Success"
+msgstr "Başarılı"
+
+#: app/models.py:788
+msgid "Warning"
+msgstr "Uyarı"
+
+#: app/models.py:789
+msgid "Error"
+msgstr "Hata"
+
+#: app/models.py:790
+msgid "Info"
+msgstr "Bilgi"
+
+#: app/models.py:1165 app/models.py:1413
+#, python-format
+msgid "%(title)s had %(count)d released episode marked as watched automatically."
+msgid_plural "%(title)s had %(count)d released episodes marked as watched automatically."
+msgstr[0] "%(title)s için yayınlanmış %(count)d bölüm otomatik olarak izlendi işaretlendi."
+msgstr[1] "%(title)s için yayınlanmış %(count)d bölüm otomatik olarak izlendi işaretlendi."
+
+#: app/models.py:1184
+#, python-format
+msgid "%(title)s was left in progress because unreleased episodes or seasons remain."
+msgstr "%(title)s, yayınlanmamış bölümler veya sezonlar kaldığı için devam ediyor olarak bırakıldı."
+
+#: app/models.py:1294
+#, python-format
+msgid "%(title)s Season %(season_number)s was marked as in progress automatically."
+msgstr "%(title)s %(season_number)s. sezon otomatik olarak devam ediyor işaretlendi."
+
+#: app/models.py:1332
+#, python-format
+msgid "%(title)s remains in progress because another season is still pending or has not aired yet."
+msgstr "%(title)s, başka bir sezon hâlâ beklediği veya henüz yayınlanmadığı için devam ediyor olarak kalıyor."
+
+#: app/models.py:1346 app/models.py:1834
+#, python-format
+msgid "%(title)s was marked as completed automatically."
+msgstr "%(title)s otomatik olarak tamamlandı işaretlendi."
+
+#: app/models.py:1436
+#, python-format
+msgid "%(title)s was left in progress because unreleased episodes remain."
+msgstr "%(title)s, yayınlanmamış bölümler kaldığı için devam ediyor olarak bırakıldı."
+
+#: app/forms.py:72
+msgid "Invalid time format"
+msgstr "Geçersiz saat biçimi"
+
+#: app/forms.py:79
+#, python-format
+msgid "Minutes must be between 0 and %(max_min)s."
+msgstr "Dakika 0 ile %(max_min)s arasında olmalı."
+
+#: app/forms.py:96
+msgid "Invalid time format. Provide duration in hours (e.g., '5', '1.5'), hours and minutes (e.g., '5:30', '5h 30min'), or just minutes (e.g., '30min')."
+msgstr "Geçersiz süre biçimi. Süreyi saat olarak (ör. '5', '1.5'), saat ve dakika olarak (ör. '5:30', '5h 30min') ya da yalnızca dakika olarak (ör. '30min') gir."
+
+#: app/forms.py:110 app/forms.py:117
+msgid "Select"
+msgstr "Seç"
+
+#: app/forms.py:111 templates/app/create_entry.html:144
+msgid "Parent TV Show"
+msgstr "Bağlı olduğu dizi"
+
+#: app/forms.py:118 templates/app/create_entry.html:191
+msgid "Parent Season"
+msgstr "Bağlı olduğu sezon"
+
+#: app/forms.py:135 templates/app/create_entry.html:238
+msgid "Image URL"
+msgstr "Görsel URL'si"
+
+#: app/forms.py:136 templates/app/create_entry.html:166
+msgid "Season Number"
+msgstr "Sezon numarası"
+
+#: app/forms.py:137 templates/app/create_entry.html:213
+msgid "Episode Number"
+msgstr "Bölüm numarası"
+
+#: app/forms.py:174
+msgid "Parent TV show is required for seasons"
+msgstr "Sezonlar için bağlı olduğu dizi gerekli"
+
+#: app/forms.py:184
+msgid "Parent season is required for episodes"
+msgstr "Bölümler için bağlı olduğu sezon gerekli"
+
+#: app/forms.py:194
+msgid "Title is required for this media type"
+msgstr "Bu medya türü için başlık gerekli"
+
+#: app/forms.py:233 templates/app/create_entry.html:259
+#: templates/app/media_list.html:151
+msgid "Score"
+msgstr "Puan"
+
+#: app/forms.py:235 templates/app/create_entry.html:315
+#: templates/app/media_list.html:158
+msgid "Status"
+msgstr "Durum"
+
+#: app/forms.py:236
+msgid "Start date"
+msgstr "Başlangıç tarihi"
+
+#: app/forms.py:237 app/forms.py:407
+msgid "End date"
+msgstr "Bitiş tarihi"
+
+#: app/forms.py:238 app/forms.py:408
+#: templates/app/components/fill_track_episode.html:116
+#: templates/app/create_entry.html:347
+msgid "Notes"
+msgstr "Notlar"
+
+#: app/forms.py:260 templates/app/components/fill_track_episode.html:121
+#: templates/app/create_entry.html:351
+msgid "Add any notes or comments..."
+msgstr "Not veya yorum ekle..."
+
+#: app/forms.py:275 app/forms.py:331 app/forms.py:347 app/forms.py:363
+#, python-brace-format
+msgid "Progress ({unit})"
+msgstr "İlerleme ({unit})"
+
+#: app/forms.py:311 templates/app/create_entry.html:291
+msgid "hh:mm"
+msgstr "ss:dd"
+
+#: app/forms.py:312
+msgid "Progress (Time Played)"
+msgstr "İlerleme (oynama süresi)"
+
+#: app/views.py:502
+msgid "Manual items cannot be synced."
+msgstr "Elle eklenen öğeler senkronize edilemez."
+
+#: app/views.py:518
+msgid "The data was recently synced, please wait a few seconds."
+msgstr "Veriler az önce senkronize edildi, lütfen birkaç saniye bekle."
+
+#: app/views.py:594
+#, python-format
+msgid "%(title)s was synced to %(source)s successfully."
+msgstr "%(title)s, %(source)s ile başarıyla senkronize edildi."
+
+#: app/views.py:762
+msgid "Invalid form data"
+msgstr "Geçersiz form verisi"
+
+#: app/views.py:832
+#, python-format
+msgid "Season %(season_number)s"
+msgstr "%(season_number)s. Sezon"
+
+#: app/views.py:836 templates/app/components/fill_track_episode.html:27
+#, python-format
+msgid "Episode %(episode_number)s"
+msgstr "%(episode_number)s. Bölüm"
+
+#: app/views.py:843
+#, python-format
+msgid "%(media_name)s already exists in the database."
+msgstr "%(media_name)s veritabanında zaten var."
+
+#: app/views.py:876
+#, python-format
+msgid "%(item)s added successfully."
+msgstr "%(item)s başarıyla eklendi."
+
+#: app/views.py:1011
+msgid "Record not found"
+msgstr "Kayıt bulunamadı"
+
+#: app/templatetags/app_tags.py:49
+msgctxt "related section"
+msgid "DLCs"
+msgstr "DLC'ler"
+
+#: app/templatetags/app_tags.py:50
+msgctxt "related section"
+msgid "Expanded Games"
+msgstr "Genişletilmiş oyunlar"
+
+#: app/templatetags/app_tags.py:51
+msgctxt "related section"
+msgid "Expansions"
+msgstr "Genişleme paketleri"
+
+#: app/templatetags/app_tags.py:52
+msgctxt "related section"
+msgid "Other Editions"
+msgstr "Diğer sürümler"
+
+#: app/templatetags/app_tags.py:53
+msgctxt "related section"
+msgid "Parent Game"
+msgstr "Ana oyun"
+
+#: app/templatetags/app_tags.py:54
+msgctxt "related section"
+msgid "Recommendations"
+msgstr "Öneriler"
+
+#: app/templatetags/app_tags.py:55
+msgctxt "related section"
+msgid "Related Anime"
+msgstr "İlgili animeler"
+
+#: app/templatetags/app_tags.py:56
+msgctxt "related section"
+msgid "Related Manga"
+msgstr "İlgili mangalar"
+
+#: app/templatetags/app_tags.py:57
+msgctxt "related section"
+msgid "Remakes"
+msgstr "Yeniden yapımlar"
+
+#: app/templatetags/app_tags.py:58
+msgctxt "related section"
+msgid "Remasters"
+msgstr "Remaster sürümler"
+
+#: app/templatetags/app_tags.py:59
+msgctxt "related section"
+msgid "Seasons"
+msgstr "Sezonlar"
+
+#: app/templatetags/app_tags.py:61
+msgctxt "related section"
+msgid "Standalone Expansions"
+msgstr "Bağımsız genişleme paketleri"
+
+#: app/templatetags/app_tags.py:75
+msgctxt "media detail"
+msgid "Author"
+msgstr "Yazar"
+
+#: app/templatetags/app_tags.py:76
+msgctxt "media detail"
+msgid "Authors"
+msgstr "Yazarlar"
+
+#: app/templatetags/app_tags.py:77
+msgctxt "media detail"
+msgid "Broadcast"
+msgstr "Yayın zamanı"
+
+#: app/templatetags/app_tags.py:78
+msgctxt "media detail"
+msgid "Companies"
+msgstr "Şirketler"
+
+#: app/templatetags/app_tags.py:79
+msgctxt "media detail"
+msgid "Country"
+msgstr "Ülke"
+
+#: app/templatetags/app_tags.py:80
+msgctxt "media detail"
+msgid "Designers"
+msgstr "Tasarımcılar"
+
+#: app/templatetags/app_tags.py:81
+msgctxt "media detail"
+msgid "End date"
+msgstr "Bitiş tarihi"
+
+#: app/templatetags/app_tags.py:82
+msgctxt "media detail"
+msgid "Episodes"
+msgstr "Bölümler"
+
+#: app/templatetags/app_tags.py:83
+msgctxt "media detail"
+msgid "First air date"
+msgstr "İlk yayın tarihi"
+
+#: app/templatetags/app_tags.py:84
+msgctxt "media detail"
+msgid "Format"
+msgstr "Format"
+
+#: app/templatetags/app_tags.py:85
+msgctxt "media detail"
+msgid "ISBN"
+msgstr "ISBN"
+
+#: app/templatetags/app_tags.py:86
+msgctxt "media detail"
+msgid "Issues"
+msgstr "Sayılar"
+
+#: app/templatetags/app_tags.py:87
+msgctxt "media detail"
+msgid "Languages"
+msgstr "Diller"
+
+#: app/templatetags/app_tags.py:88
+msgctxt "media detail"
+msgid "Last air date"
+msgstr "Son yayın tarihi"
+
+#: app/templatetags/app_tags.py:89
+msgctxt "media detail"
+msgid "Last issue name"
+msgstr "Son sayının adı"
+
+#: app/templatetags/app_tags.py:90
+msgctxt "media detail"
+msgid "Last issue number"
+msgstr "Son sayı numarası"
+
+#: app/templatetags/app_tags.py:91
+msgctxt "media detail"
+msgid "Last updated"
+msgstr "Son güncelleme"
+
+#: app/templatetags/app_tags.py:93
+msgctxt "media detail"
+msgid "Latest chapter translated"
+msgstr "Son çevrilen bölüm"
+
+#: app/templatetags/app_tags.py:95
+msgctxt "media detail"
+msgid "Minimum age"
+msgstr "Yaş sınırı"
+
+#: app/templatetags/app_tags.py:96
+msgctxt "media detail"
+msgid "Chapters"
+msgstr "Bölümler"
+
+#: app/templatetags/app_tags.py:97
+msgctxt "media detail"
+msgid "Pages"
+msgstr "Sayfa"
+
+#: app/templatetags/app_tags.py:98
+msgctxt "media detail"
+msgid "People"
+msgstr "Kişiler"
+
+#: app/templatetags/app_tags.py:99
+msgctxt "media detail"
+msgid "Physical format"
+msgstr "Fiziksel format"
+
+#: app/templatetags/app_tags.py:100
+msgctxt "media detail"
+msgid "Platforms"
+msgstr "Platformlar"
+
+#: app/templatetags/app_tags.py:101
+msgctxt "media detail"
+msgid "Players"
+msgstr "Oyuncu sayısı"
+
+#: app/templatetags/app_tags.py:102
+msgctxt "media detail"
+msgid "Playtime"
+msgstr "Oynama süresi"
+
+#: app/templatetags/app_tags.py:103
+msgctxt "media detail"
+msgid "Publish date"
+msgstr "Yayımlanma tarihi"
+
+#: app/templatetags/app_tags.py:104
+msgctxt "media detail"
+msgid "Publisher"
+msgstr "Yayınevi"
+
+#: app/templatetags/app_tags.py:105
+msgctxt "media detail"
+msgid "Publishers"
+msgstr "Yayınevleri"
+
+#: app/templatetags/app_tags.py:106
+msgctxt "media detail"
+msgid "Release date"
+msgstr "Çıkış tarihi"
+
+#: app/templatetags/app_tags.py:107
+msgctxt "media detail"
+msgid "Runtime"
+msgstr "Süre"
+
+#. Translators: the anime's season of the year, e.g. "Spring 2024"
+#: app/templatetags/app_tags.py:109
+msgctxt "media detail"
+msgid "Season"
+msgstr "Sezon"
+
+#: app/templatetags/app_tags.py:110
+msgctxt "media detail"
+msgid "Seasons"
+msgstr "Sezonlar"
+
+#. Translators: the original material an anime is adapted from
+#: app/templatetags/app_tags.py:112
+msgctxt "media detail"
+msgid "Source"
+msgstr "Kaynak"
+
+#: app/templatetags/app_tags.py:113
+msgctxt "media detail"
+msgid "Start date"
+msgstr "Başlangıç tarihi"
+
+#: app/templatetags/app_tags.py:114
+msgctxt "media detail"
+msgid "Status"
+msgstr "Durum"
+
+#: app/templatetags/app_tags.py:116
+msgctxt "media detail"
+msgid "Status in country of origin"
+msgstr "Yapım ülkesindeki durumu"
+
+#: app/templatetags/app_tags.py:118
+msgctxt "media detail"
+msgid "Studios"
+msgstr "Stüdyolar"
+
+#: app/templatetags/app_tags.py:119
+msgctxt "media detail"
+msgid "Themes"
+msgstr "Temalar"
+
+#: app/templatetags/app_tags.py:120
+msgctxt "media detail"
+msgid "Total runtime"
+msgstr "Toplam süre"
+
+#: app/templatetags/app_tags.py:121
+msgctxt "media detail"
+msgid "Year"
+msgstr "Yıl"
+
+#: app/templatetags/app_tags.py:254
+msgctxt "media type plural label"
+msgid "TV Shows"
+msgstr "Diziler"
+
+#: app/templatetags/app_tags.py:256
+msgctxt "media type plural label"
+msgid "TV Seasons"
+msgstr "Dizi sezonları"
+
+#: app/templatetags/app_tags.py:259
+msgctxt "media type plural label"
+msgid "Episodes"
+msgstr "Bölümler"
+
+#: app/templatetags/app_tags.py:261
+msgctxt "media type plural label"
+msgid "Movies"
+msgstr "Filmler"
+
+#: app/templatetags/app_tags.py:262
+msgctxt "media type plural label"
+msgid "Anime"
+msgstr "Anime"
+
+#: app/templatetags/app_tags.py:263
+msgctxt "media type plural label"
+msgid "Manga"
+msgstr "Manga"
+
+#: app/templatetags/app_tags.py:264
+msgctxt "media type plural label"
+msgid "Games"
+msgstr "Oyunlar"
+
+#: app/templatetags/app_tags.py:265
+msgctxt "media type plural label"
+msgid "Books"
+msgstr "Kitaplar"
+
+#: app/templatetags/app_tags.py:266
+msgctxt "media type plural label"
+msgid "Comics"
+msgstr "Çizgi romanlar"
+
+#: app/templatetags/app_tags.py:268
+msgctxt "media type plural label"
+msgid "Boardgames"
+msgstr "Kutu oyunları"
+
+#: app/templatetags/app_tags.py:411
+#, python-format
+msgctxt "natural day"
+msgid "Today %(time)s"
+msgstr "Bugün %(time)s"
+
+#: app/templatetags/app_tags.py:413
+#, python-format
+msgctxt "natural day"
+msgid "Tomorrow %(time)s"
+msgstr "Yarın %(time)s"
+
+#: app/templatetags/app_tags.py:663 efe/vocabulary.py:252
+#, python-format
+msgctxt "duration"
+msgid "%(hours)sh"
+msgstr "%(hours)s sa"
+
+#: app/templatetags/app_tags.py:666 efe/vocabulary.py:254
+#, python-format
+msgctxt "duration"
+msgid "%(minutes)sm"
+msgstr "%(minutes)s dk"
+
+#: app/providers/services.py:108
+#, python-format
+msgid "There was an error contacting the %(provider)s API (network error): %(details)s. Check the logs for more details."
+msgstr "%(provider)s API'sine bağlanırken bir hata oluştu (ağ hatası): %(details)s. Ayrıntılar için kayıtlara bak."
+
+#: app/providers/services.py:113
+#, python-format
+msgid "There was an error contacting the %(provider)s API (network error). Check the logs for more details."
+msgstr "%(provider)s API'sine bağlanırken bir hata oluştu (ağ hatası). Ayrıntılar için kayıtlara bak."
+
+#: app/providers/services.py:118
+#, python-format
+msgid "There was an error contacting the %(provider)s API (HTTP %(status_code)s): %(details)s. Check the logs for more details."
+msgstr "%(provider)s API'sine bağlanırken bir hata oluştu (HTTP %(status_code)s): %(details)s. Ayrıntılar için kayıtlara bak."
+
+#: app/providers/services.py:124
+#, python-format
+msgid "There was an error contacting the %(provider)s API (HTTP %(status_code)s). Check the logs for more details."
+msgstr "%(provider)s API'sine bağlanırken bir hata oluştu (HTTP %(status_code)s). Ayrıntılar için kayıtlara bak."
+
+#: app/providers/services.py:153
+#, python-format
+msgid "No result found with ID %(media_id)s"
+msgstr "%(media_id)s kimliğiyle sonuç bulunamadı"
+
+#: app/providers/tmdb.py:343
+#, python-format
+msgid "Season %(season_number)s not found for %(provider)s with ID %(media_id)s"
+msgstr "%(provider)s üzerinde %(media_id)s kimlikli içerik için %(season_number)s. sezon bulunamadı"
+
+#: app/providers/tmdb.py:916
+#, python-format
+msgid "Episode %(episode_number)s not found in season %(season_number)s for %(provider)s with ID %(media_id)s"
+msgstr "%(provider)s üzerinde %(media_id)s kimlikli içeriğin %(season_number)s. sezonunda %(episode_number)s. bölüm bulunamadı"
+
+#: app/providers/bgg.py:31
+msgid "BGG API requires authorization"
+msgstr "BGG API'si yetkilendirme gerektiriyor"
+
+#: templates/500.html:6
+msgid "Server Error"
+msgstr "Sunucu hatası"
+
+#: templates/500.html:14
+msgid "Something Went Wrong"
+msgstr "Bir şeyler ters gitti"
+
+#: templates/500.html:19
+msgid "We're sorry, but there was an error processing your request."
+msgstr "Üzgünüz, isteğin işlenirken bir hata oluştu."
+
+#: templates/403.html:20 templates/404.html:17 templates/500.html:23
+msgid "If you believe this was a bug, please"
+msgstr "Bunun bir hata olduğunu düşünüyorsan lütfen"
+
+#. Translators: In "If you believe this was a bug, please report the issue.",
+#. this is the linked text.
+#: templates/400.html:21 templates/403.html:21 templates/403_csrf.html:34
+#: templates/404.html:18 templates/500.html:24
+msgid "report the issue."
+msgstr "sorunu bildir."
+
+#: templates/500.html:31
+msgid "Try Again"
+msgstr "Tekrar dene"
+
+#: templates/400.html:34 templates/403.html:33 templates/403_csrf.html:52
+#: templates/404.html:25 templates/500.html:36
+#: templates/socialaccount/connections.html:95
+msgid "Back to Home"
+msgstr "Ana sayfaya dön"
+
+#: templates/404.html:6
+msgid "Page not found"
+msgstr "Sayfa bulunamadı"
+
+#: templates/404.html:14
+msgid "Page Not Found"
+msgstr "Sayfa bulunamadı"
+
+#: templates/404.html:15
+msgid "The page you are looking for doesn't exist or has been moved."
+msgstr "Aradığın sayfa yok ya da taşınmış."
+
+#: templates/400.html:7 templates/400.html:15
+msgid "Bad Request"
+msgstr "Hatalı istek"
+
+#: templates/400.html:17
+msgid "The server could not understand the request due to invalid syntax or missing parameters."
+msgstr "Sunucu, geçersiz söz dizimi veya eksik parametreler nedeniyle isteği anlayamadı."
+
+#: templates/400.html:24 templates/403_csrf.html:37
+#, python-format
+msgid "If you believe this was a bug, please %(issue_link)s"
+msgstr "Bunun bir hata olduğunu düşünüyorsan lütfen %(issue_link)s"
+
+#: templates/403.html:6 templates/403_csrf.html:7
+msgid "Forbidden"
+msgstr "Erişim engellendi"
+
+#: templates/403.html:14 templates/403_csrf.html:15
+msgid "Access Forbidden"
+msgstr "Erişim engellendi"
+
+#: templates/403.html:16 templates/403_csrf.html:17
+msgid "You don't have permission to access this resource. Please log in or contact an administrator."
+msgstr "Bu kaynağa erişim iznin yok. Lütfen giriş yap veya bir yöneticiyle iletişime geç."
+
+#: templates/403.html:28 templates/403_csrf.html:47
+msgid "Log In"
+msgstr "Giriş yap"
+
+#: templates/403_csrf.html:20
+msgid "Using a Reverse Proxy?"
+msgstr "Ters vekil sunucu (reverse proxy) mu kullanıyorsun?"
+
+#: templates/403_csrf.html:23
+#, python-format
+msgid "If you're accessing efeTrack through a reverse proxy, you need to set the %(urls_code)s environment variable to your application URL."
+msgstr "efeTrack'e bir ters vekil sunucu üzerinden erişiyorsan %(urls_code)s ortam değişkenini uygulamanın adresine ayarlaman gerekir."
+
+#: templates/403_csrf.html:29
+msgid "For example "
+msgstr "Örneğin"
+
+#: templates/app/home.html:7 templates/app/home.html:13 templates/base.html:111
+msgid "Home"
+msgstr "Ana Sayfa"
+
+#: templates/base.html:153
+msgid "Create Custom"
+msgstr "Özel Ekle"
+
+#: templates/app/statistics.html:7 templates/app/statistics.html:12
+#: templates/base.html:168
+msgid "Statistics"
+msgstr "İstatistikler"
+
+#: templates/app/journal.html:7 templates/app/journal.html:12
+#: templates/base.html:183
+msgid "Journal"
+msgstr "Günlük"
+
+#: templates/base.html:198 templates/lists/components/fill_lists.html:5
+#: templates/lists/custom_lists.html:10 templates/lists/custom_lists.html:17
+msgid "Lists"
+msgstr "Listeler"
+
+#: templates/base.html:213 templates/events/calendar.html:6
+#: templates/events/calendar.html:11
+msgid "Calendar"
+msgstr "Takvim"
+
+#: templates/base.html:226 templates/efe/components/home_upcoming.html:16
+#: templates/efe/components/topbar_actions.html:21
+#: templates/efe/components/topbar_actions.html:22
+#: templates/efe/notifications.html:7 templates/efe/notifications.html:15
+msgid "Notification Center"
+msgstr "Bildirim Merkezi"
+
+#: templates/base.html:241 templates/efe/components/home_upcoming.html:14
+#: templates/efe/components/topbar_actions.html:8
+#: templates/efe/components/topbar_actions.html:9 templates/efe/random.html:7
+#: templates/efe/random.html:14
+msgid "Random Pick"
+msgstr "Rastgele Öneri"
+
+#: templates/app/components/media_section_tabs.html:16 templates/base.html:255
+#: templates/efe/series.html:5 templates/efe/series.html:13
+msgid "Film Series"
+msgstr "Film Serileri"
+
+#: templates/base.html:282 templates/users/base.html:8
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: templates/base.html:291
+msgid "Logout"
+msgstr "Çıkış yap"
+
+#. Translators: {media} is replaced with the media type being searched, e.g.
+#. "TV shows".
+#: templates/base.html:323
+#, python-brace-format
+msgid "Search {media}..."
+msgstr "Ara: {media}..."
+
+#: templates/users/about.html:8 templates/users/base.html:68
+msgid "About"
+msgstr "Hakkında"
+
+#: templates/users/about.html:13
+msgid "About efeTrack"
+msgstr "efeTrack Hakkında"
+
+#: lists/forms.py:24 templates/users/about.html:19
+msgid "Description"
+msgstr "Açıklama"
+
+#: templates/users/about.html:22
+msgid "efeTrack is an open-source media tracker that helps you organize and track your media."
+msgstr "efeTrack, medyanı düzenlemene ve takip etmene yardımcı olan açık kaynaklı bir medya takipçisidir."
+
+#: templates/app/media_details.html:403 templates/users/about.html:29
+msgid "Links"
+msgstr "Bağlantılar"
+
+#: templates/users/about.html:37
+msgid "Source Code"
+msgstr "Kaynak kodu"
+
+#: templates/users/about.html:46
+msgid "Documentation"
+msgstr "Belgeler"
+
+#: templates/users/about.html:55
+msgid "Bug Reports"
+msgstr "Hata bildirimleri"
+
+#: templates/users/about.html:64
+msgid "License"
+msgstr "Lisans"
+
+#: templates/users/about.html:67
+msgid "efeTrack is licensed under the"
+msgstr "efeTrack şu lisansla dağıtılır:"
+
+#: templates/users/about.html:79
+msgid "Attribution"
+msgstr "Kaynak gösterimi"
+
+#: templates/users/about.html:82
+msgid "Movie and TV streaming providers from"
+msgstr "Film ve dizi yayın platformu verileri:"
+
+#: templates/users/about.html:87
+msgid "JustWatch"
+msgstr "JustWatch"
+
+#: templates/users/about.html:95
+msgid "Version"
+msgstr "Sürüm"
+
+#: templates/users/base.html:26 templates/users/preferences.html:8
+#: templates/users/preferences.html:15
+msgid "Preferences"
+msgstr "Tercihler"
+
+#: templates/users/preferences.html:17
+msgid "Customize the look and behavior of the application."
+msgstr "Uygulamanın görünümünü ve davranışını özelleştir."
+
+#: templates/users/preferences.html:26
+msgid "Appearance and sounds"
+msgstr "Görünüm ve sesler"
+
+#: templates/users/preferences.html:31
+msgid "Theme"
+msgstr "Tema"
+
+#: templates/users/preferences.html:65
+msgid "Sound effects"
+msgstr "Ses efektleri"
+
+#: templates/users/preferences.html:67
+msgid "Play short sounds when you track media, complete something, pick at random or get a notification."
+msgstr "Medya takip ettiğinde, bir şeyi tamamladığında, rastgele seçim yaptığında veya bildirim geldiğinde kısa sesler çal."
+
+#: templates/users/preferences.html:78
+msgid "Volume"
+msgstr "Ses seviyesi"
+
+#: templates/users/preferences.html:85
+msgid "Test"
+msgstr "Dene"
+
+#: templates/users/preferences.html:104
+msgid "Notification center"
+msgstr "Bildirim merkezi"
+
+#: templates/users/preferences.html:106
+msgid "How far ahead the notification center shows upcoming episodes and releases."
+msgstr "Bildirim merkezinin yaklaşan bölüm ve yayınları kaç gün öncesinden göstereceği."
+
+#: templates/users/preferences.html:112
+#, python-format
+msgid "%(count)s day"
+msgid_plural "%(count)s days"
+msgstr[0] "%(count)s gün"
+msgstr[1] "%(count)s gün"
+
+#: templates/users/preferences.html:125
+msgid "Hide Hover Overlay on Touch Devices"
+msgstr "Dokunmatik cihazlarda üzerine gelme katmanını gizle"
+
+#: templates/users/preferences.html:128
+msgid "Hide the media card hover overlay with action buttons on touch devices for a cleaner mobile experience. On desktop, the overlay will still appear when you hover your mouse over media cards."
+msgstr "Daha sade bir mobil deneyim için dokunmatik cihazlarda medya kartlarındaki işlem düğmeli katmanı gizler. Masaüstünde fareyle kartın üzerine geldiğinde katman yine görünür."
+
+#: templates/users/preferences.html:148
+msgid "Obfuscate Unseen Episodes"
+msgstr "İzlenmemiş bölümleri gizle"
+
+#: templates/users/preferences.html:151
+msgid "When enabled, unseen episode images and descriptions will be blurred."
+msgstr "Açıkken izlenmemiş bölümlerin görselleri ve açıklamaları bulanıklaştırılır."
+
+#: templates/users/preferences.html:171
+msgid "Bulk Completion Date"
+msgstr "Toplu tamamlama tarihi"
+
+#: templates/users/preferences.html:174
+msgid "When marking a TV show or season as completed, its episodes will be marked as completed with this date."
+msgstr "Bir dizi veya sezonu tamamlandı olarak işaretlediğinde bölümleri bu tarihle tamamlandı işaretlenir."
+
+#: templates/users/preferences.html:193
+msgid "Show progress bar on media items"
+msgstr "Medya öğelerinde ilerleme çubuğunu göster"
+
+#: templates/users/preferences.html:196
+msgid "Display a progress bar on media items. Items which don't have max progress will be using a dotted line."
+msgstr "Medya öğelerinde ilerleme çubuğu gösterir. En fazla ilerlemesi bilinmeyen öğelerde kesikli çizgi kullanılır."
+
+#: templates/users/preferences.html:219
+msgid "Hide media you've already completed from the recommendations section on detail pages."
+msgstr "Tamamladığın medyayı detay sayfalarındaki öneriler bölümünde gizle."
+
+#: templates/users/preferences.html:239
+msgid "Hide zero ratings"
+msgstr "Sıfır puanları gizle"
+
+#: templates/users/preferences.html:241
+msgid "Hide the rating badge from media cards when the rating is zero."
+msgstr "Puan sıfır olduğunda medya kartlarındaki puan rozetini gizle."
+
+#: templates/users/preferences.html:260
+msgid "Date Format"
+msgstr "Tarih biçimi"
+
+#: templates/users/preferences.html:262
+msgid "Choose how dates are displayed throughout the application."
+msgstr "Tarihlerin uygulama genelinde nasıl gösterileceğini seç."
+
+#: templates/users/preferences.html:280
+msgid "Time Format"
+msgstr "Saat biçimi"
+
+#: templates/users/preferences.html:282
+msgid "Choose between 12-hour or 24-hour clock display."
+msgstr "12 saatlik veya 24 saatlik saat gösterimini seç."
+
+#: templates/users/preferences.html:300
+msgid "Week Start Day"
+msgstr "Haftanın başlangıç günü"
+
+#: templates/users/preferences.html:302
+msgid "Choose which day the week starts on for calendars and statistics."
+msgstr "Takvimlerde ve istatistiklerde haftanın hangi gün başlayacağını seç."
+
+#: templates/users/preferences.html:320
+msgid "Watch Provider Region"
+msgstr "Yayın platformu bölgesi"
+
+#: templates/users/preferences.html:323
+msgid "Choose the region to show watch providers for. Setting this to disabled will hide the box from the media page."
+msgstr "Yayın platformlarının hangi bölge için gösterileceğini seç. Kapalı seçersen bu kutu medya sayfasında gizlenir."
+
+#: templates/users/preferences.html:342
+msgid "Language"
+msgstr "Dil"
+
+#: templates/users/preferences.html:344
+msgid "Select your preferred language for the application interface."
+msgstr "Uygulama arayüzü için tercih ettiğin dili seç."
+
+#: templates/users/preferences.html:362
+msgid "Show adult titles"
+msgstr "Yetişkin içerikleri göster"
+
+#: templates/users/preferences.html:364
+msgid "Show adult titles in searches. Depends on them being enabled by the server."
+msgstr "Aramalarda yetişkin içerikleri göster. Sunucuda etkinleştirilmiş olmaları gerekir."
+
+#: templates/users/preferences.html:383
+msgid "Media Types"
+msgstr "Medya türleri"
+
+#: templates/users/preferences.html:386
+msgid "Control which media types are visible throughout the app (sidebar, search, calendar, notifications)."
+msgstr "Uygulama genelinde (kenar çubuğu, arama, takvim, bildirimler) hangi medya türlerinin görüneceğini belirle."
+
+#: templates/users/preferences.html:416
+msgid "Save Preferences"
+msgstr "Tercihleri kaydet"
+
+#: templates/users/advanced.html:8 templates/users/advanced.html:17
+#: templates/users/base.html:61
+msgid "Advanced"
+msgstr "Gelişmiş"
+
+#: templates/users/advanced.html:23 templates/users/advanced.html:39
+msgid "Clear Search Cache"
+msgstr "Arama önbelleğini temizle"
+
+#: templates/users/advanced.html:26
+msgid "efeTrack stores your search results in a cache to speed up performance and reduce API calls."
+msgstr "efeTrack, performansı artırmak ve API çağrılarını azaltmak için arama sonuçlarını önbellekte tutar."
+
+#: templates/users/advanced.html:28
+msgid "Normally, these cached results expire automatically after 24 hours."
+msgstr "Önbellekteki sonuçlar normalde 24 saat sonra kendiliğinden silinir."
+
+#: templates/users/advanced.html:29
+msgid "If your search results appear outdated, you can clear the cache manually."
+msgstr "Arama sonuçların eski görünüyorsa önbelleği elle temizleyebilirsin."
+
+#: templates/users/advanced.html:31
+msgid "Your next search may be slightly slower as fresh data is retrieved."
+msgstr "Güncel veriler alınacağı için bir sonraki araman biraz yavaş olabilir."
+
+#: templates/users/import_data.html:7 templates/users/import_data.html:119
+#: templates/users/import_data.html:196 templates/users/import_data.html:234
+#: templates/users/import_data.html:282 templates/users/import_data.html:377
+msgid "Import"
+msgstr "İçe aktar"
+
+#: templates/users/import_data.html:11
+msgid "Hide failed items"
+msgstr "Başarısız öğeleri gizle"
+
+#: templates/users/import_data.html:12 templates/users/import_data.html:526
+msgid "Show failed items"
+msgstr "Başarısız öğeleri göster"
+
+#: templates/users/import_data.html:13
+msgid "Hide traceback"
+msgstr "Hata ayrıntısını gizle"
+
+#: templates/users/import_data.html:14 templates/users/import_data.html:531
+msgid "Show traceback"
+msgstr "Hata ayrıntısını göster"
+
+#: templates/users/import_data.html:15
+msgid "Import from Yamtrack / efeTrack backup"
+msgstr "Yamtrack / efeTrack yedeğinden içe aktar"
+
+#: templates/users/import_data.html:16
+msgid "Import games"
+msgstr "Oyunları içe aktar"
+
+#: templates/users/import_data.html:17
+msgid "Import movies and TV shows from your ratings"
+msgstr "Puanlarından film ve dizileri içe aktar"
+
+#: templates/users/import_data.html:18
+msgid "Import from GoodReads backup"
+msgstr "GoodReads yedeğinden içe aktar"
+
+#: templates/users/import_data.html:19
+msgid "Import TV shows and movies"
+msgstr "Dizi ve filmleri içe aktar"
+
+#: templates/users/import_data.html:20
+msgid "File uploads are not available for periodic imports"
+msgstr "Dosya yükleme, periyodik içe aktarmalarda kullanılamaz"
+
+#: templates/users/import_data.html:28
+msgid "Import Settings"
+msgstr "İçe aktarma ayarları"
+
+#: templates/users/import_data.html:30
+msgid "Configure your import preferences."
+msgstr "İçe aktarma tercihlerini yapılandır."
+
+#: templates/users/import_data.html:34
+msgid "Import Frequency"
+msgstr "İçe aktarma sıklığı"
+
+#: templates/users/import_data.html:38
+msgid "One Time Import"
+msgstr "Tek seferlik içe aktarma"
+
+#: templates/users/import_data.html:40
+msgid "Every 2 Days"
+msgstr "İki günde bir"
+
+#: templates/users/import_data.html:45
+msgid "Import Time"
+msgstr "İçe aktarma saati"
+
+#: templates/users/import_data.html:52
+msgid "Import Mode"
+msgstr "İçe aktarma modu"
+
+#: templates/users/import_data.html:56
+msgid "Only Sync New Items"
+msgstr "Yalnızca yeni öğeleri eşitle"
+
+#: templates/users/import_data.html:57
+msgid "Sync New Items and Overwrite Existing"
+msgstr "Yeni öğeleri eşitle ve mevcutların üzerine yaz"
+
+#: templates/users/import_data.html:70
+msgid "Import Sources"
+msgstr "İçe aktarma kaynakları"
+
+#. Translators: In "Some of these require additional configuration, check the
+#. import configuration guide.", this is the linked text.
+#: templates/users/import_data.html:74
+msgid "import configuration guide"
+msgstr "içe aktarma yapılandırma rehberine"
+
+#: templates/users/import_data.html:77
+#, python-format
+msgid "Some of these require additional configuration, check the %(import_guide_link)s."
+msgstr "Bunlardan bazıları ek yapılandırma gerektirir, %(import_guide_link)s göz at."
+
+#: templates/users/import_data.html:93
+msgid "Import method"
+msgstr "İçe aktarma yöntemi"
+
+#: templates/users/import_data.html:96
+msgid "Public"
+msgstr "Herkese açık"
+
+#: templates/users/import_data.html:97
+msgid "Private (requires authentication)"
+msgstr "Gizli (kimlik doğrulama gerekir)"
+
+#: templates/users/import_data.html:98
+msgid "Export (requires ZIP file)"
+msgstr "Dışa aktarma dosyası (ZIP gerekir)"
+
+#: templates/users/import_data.html:112
+msgid "Public Trakt username"
+msgstr "Herkese açık Trakt kullanıcı adı"
+
+#: templates/users/import_data.html:135
+msgid "Connect with Trakt & Import"
+msgstr "Trakt ile bağlan ve içe aktar"
+
+#: templates/users/import_data.html:157
+msgid "Select ZIP File"
+msgstr "ZIP dosyası seç"
+
+#: templates/users/import_data.html:165
+msgid "Import TV shows, movies and anime"
+msgstr "Dizi, film ve animeleri içe aktar"
+
+#: templates/users/import_data.html:173
+msgid "Connect with Simkl & Import"
+msgstr "Simkl ile bağlan ve içe aktar"
+
+#: templates/users/import_data.html:181 templates/users/import_data.html:206
+#: templates/users/import_data.html:258
+msgid "Import anime and manga"
+msgstr "Anime ve mangaları içe aktar"
+
+#: templates/users/import_data.html:190
+msgid "MAL username"
+msgstr "MAL kullanıcı adı"
+
+#: templates/users/import_data.html:213
+msgid "Import private profile (requires authentication)"
+msgstr "Gizli profili içe aktar (kimlik doğrulama gerekir)"
+
+#: templates/users/import_data.html:227
+msgid "Public AniList username"
+msgstr "Herkese açık AniList kullanıcı adı"
+
+#: templates/users/import_data.html:250
+msgid "Connect with AniList & Import"
+msgstr "AniList ile bağlan ve içe aktar"
+
+#: templates/users/import_data.html:267
+msgid "Kitsu user ID"
+msgstr "Kitsu kullanıcı kimliği"
+
+#: templates/users/import_data.html:274
+msgid "Find it on your Kitsu profile URL:"
+msgstr "Kitsu profil adresinde bulabilirsin:"
+
+#: templates/users/import_data.html:294
+msgid "View CSV format documentation"
+msgstr "CSV biçimi belgelerini görüntüle"
+
+#: templates/users/import_data.html:317 templates/users/import_data.html:344
+#: templates/users/import_data.html:406 templates/users/import_data.html:433
+msgid "Select CSV File"
+msgstr "CSV dosyası seç"
+
+#: templates/users/import_data.html:352
+msgid "Import games from your Steam library"
+msgstr "Steam kütüphanendeki oyunları içe aktar"
+
+#: templates/users/import_data.html:361
+msgid "Steam 64-bit ID"
+msgstr "Steam 64-bit kimliği"
+
+#: templates/users/import_data.html:368
+msgid "Find it on your Steam account details page under your username."
+msgstr "Steam hesap ayrıntıları sayfasında, kullanıcı adının altında bulabilirsin."
+
+#: templates/users/import_data.html:371
+msgid "Your profile must be public if the API key you are using is not linked to the steamid you are requesting."
+msgstr "Kullandığın API anahtarı istediğin steamid'ye bağlı değilse profilin herkese açık olmalıdır."
+
+#: templates/users/import_data.html:445
+msgid "Active Periodic Imports"
+msgstr "Etkin periyodik içe aktarmalar"
+
+#: templates/users/import_data.html:448
+msgid "Automated imports that run on a schedule. These will continue to sync your media until disabled."
+msgstr "Belirli bir zamanlamayla çalışan otomatik içe aktarmalar. Devre dışı bırakılana kadar medyanı eşitlemeye devam eder."
+
+#: templates/users/account.html:29 templates/users/import_data.html:469
+msgid "Username"
+msgstr "Kullanıcı adı"
+
+#: templates/users/import_data.html:470
+msgid "Mode"
+msgstr "Mod"
+
+#: templates/users/import_data.html:471
+msgid "Last Import"
+msgstr "Son içe aktarma"
+
+#: templates/users/import_data.html:472
+msgid "Next Import"
+msgstr "Sonraki içe aktarma"
+
+#: templates/users/import_data.html:477
+msgid "No periodic imports configured"
+msgstr "Yapılandırılmış periyodik içe aktarma yok"
+
+#: templates/users/import_data.html:478
+msgid "Set up an import with a daily or 2-day frequency to see it here"
+msgstr "Burada görmek için günlük veya iki günlük sıklıkla bir içe aktarma ayarla"
+
+#: templates/users/import_data.html:488
+msgid "Import History"
+msgstr "İçe aktarma geçmişi"
+
+#: templates/users/import_data.html:491
+msgid "Showing import activity from the last 7 days."
+msgstr "Son 7 günün içe aktarma etkinliği gösteriliyor."
+
+#: templates/app/media_details.html:530 templates/users/import_data.html:500
+msgid "Finished"
+msgstr "Bitti"
+
+#: templates/app/media_details.html:260 templates/app/media_details.html:528
+#: templates/users/import_data.html:506
+msgid "Started"
+msgstr "Başladı"
+
+#: templates/users/import_data.html:508
+msgid "Failed"
+msgstr "Başarısız"
+
+#: templates/users/import_data.html:510
+msgid "Pending"
+msgstr "Beklemede"
+
+#: templates/users/import_data.html:546
+msgid "No imports in the last 7 days"
+msgstr "Son 7 günde içe aktarma yok"
+
+#: templates/users/import_data.html:547
+msgid "Import your media from any source to see the history here"
+msgstr "Geçmişi burada görmek için medyanı herhangi bir kaynaktan içe aktar"
+
+#: templates/efe/components/notifications_menu.html:5
+#: templates/users/base.html:33 templates/users/notifications.html:8
+#: templates/users/notifications.html:17
+msgid "Notifications"
+msgstr "Bildirimler"
+
+#: templates/users/notifications.html:20
+msgid "Configure how you want to receive notifications about your media."
+msgstr "Medyanla ilgili bildirimleri nasıl almak istediğini yapılandır."
+
+#: templates/users/notifications.html:28
+msgid "Apprise URLs"
+msgstr "Apprise URL'leri"
+
+#. Translators: In "Apprise is a notification service that supports many
+#. platforms including:", this is the linked product name.
+#: templates/users/notifications.html:38
+msgid "Apprise"
+msgstr "Apprise"
+
+#. Translators: In "Apprise is a notification service that supports many
+#. platforms including:", this is the linked phrase.
+#: templates/users/notifications.html:40
+msgid "many platforms"
+msgstr "birçok platformu"
+
+#: templates/users/notifications.html:44
+#, python-format
+msgid "%(apprise_link)s is a notification service that supports %(platforms_link)s including:"
+msgstr "%(apprise_link)s, şunlar dahil %(platforms_link)s destekleyen bir bildirim hizmetidir:"
+
+#: templates/users/notifications.html:50
+msgid "Discord"
+msgstr "Discord"
+
+#: templates/users/notifications.html:51
+msgid "Telegram"
+msgstr "Telegram"
+
+#: templates/users/notifications.html:52
+msgid "Slack"
+msgstr "Slack"
+
+#: templates/users/notifications.html:53
+msgid "Email"
+msgstr "E-posta"
+
+#: templates/users/notifications.html:54
+msgid "Pushover"
+msgstr "Pushover"
+
+#: templates/users/notifications.html:55
+msgid "ntfy"
+msgstr "ntfy"
+
+#: templates/users/notifications.html:56
+msgid "And many more..."
+msgstr "Ve daha fazlası..."
+
+#: templates/users/notifications.html:60
+#, python-format
+msgid "Enter one URL per line. Example: %(webhook_example)s"
+msgstr "Her satıra bir URL gir. Örnek: %(webhook_example)s"
+
+#: templates/users/notifications.html:68
+msgid "Enter each Apprise URL on a separate line to send notifications to multiple services."
+msgstr "Birden fazla hizmete bildirim göndermek için her Apprise URL'sini ayrı bir satıra gir."
+
+#: templates/users/notifications.html:73
+msgid "Notification Settings"
+msgstr "Bildirim ayarları"
+
+#: templates/users/notifications.html:82
+msgid "Enable Daily Digest"
+msgstr "Günlük özeti etkinleştir"
+
+#: templates/users/notifications.html:85
+msgid "Receive a single notification each day with all media scheduled to release that day"
+msgstr "O gün yayınlanacak tüm medyayı içeren günde tek bir bildirim al"
+
+#: templates/users/notifications.html:107
+msgid "Get notified when new episodes, chapters, or other media are released"
+msgstr "Yeni bölüm, manga bölümü veya başka medya yayınlandığında bildirim al"
+
+#: templates/users/notifications.html:128
+msgid "Test Notifications"
+msgstr "Bildirimleri test et"
+
+#: templates/users/notifications.html:133
+msgid "Save Settings"
+msgstr "Ayarları kaydet"
+
+#: templates/users/notifications.html:143
+msgid "Excluded Media Items"
+msgstr "Hariç tutulan medya"
+
+#: templates/users/notifications.html:146
+msgid "Exclude specific media items from notifications:"
+msgstr "Belirli medya öğelerini bildirimlerden hariç tut:"
+
+#: templates/users/notifications.html:149
+msgid "Search for media to exclude..."
+msgstr "Hariç tutulacak medyayı ara..."
+
+#: templates/users/account.html:8 templates/users/base.html:19
+msgid "Account"
+msgstr "Hesap"
+
+#: templates/users/account.html:16
+msgid "Profile Information"
+msgstr "Profil bilgileri"
+
+#: templates/users/account.html:42
+msgid "Profile visibility"
+msgstr "Profil görünürlüğü"
+
+#: templates/users/account.html:47
+msgid "Private profile"
+msgstr "Gizli profil"
+
+#: templates/users/account.html:49
+msgid "Hide your profile and media lists from anonymous visitors."
+msgstr "Profilini ve medya listelerini anonim ziyaretçilerden gizle."
+
+#: templates/users/account.html:68 templates/users/integrations.html:169
+#: templates/users/integrations.html:311
+msgid "Save Changes"
+msgstr "Değişiklikleri kaydet"
+
+#: templates/users/account.html:77
+msgid "Change Password"
+msgstr "Şifreyi değiştir"
+
+#: templates/users/account.html:92
+msgid "Current Password"
+msgstr "Mevcut şifre"
+
+#: templates/users/account.html:116
+msgid "New Password"
+msgstr "Yeni şifre"
+
+#: templates/users/account.html:140
+msgid "Confirm New Password"
+msgstr "Yeni şifreyi onayla"
+
+#: templates/users/account.html:166
+msgid "Update Password"
+msgstr "Şifreyi güncelle"
+
+#: templates/users/account.html:177
+msgid "Third-Party Connections"
+msgstr "Üçüncü taraf bağlantılar"
+
+#: templates/users/account.html:179
+msgid "Manage your connected third-party accounts for easier sign-in."
+msgstr "Daha kolay giriş için bağlı üçüncü taraf hesaplarını yönet."
+
+#: templates/users/account.html:183
+msgid "Manage Account Connections"
+msgstr "Hesap bağlantılarını yönet"
+
+#: templates/users/base.html:9
+msgid "Configure your account and preferences"
+msgstr "Hesabını ve tercihlerini yapılandır"
+
+#: templates/users/base.html:40 templates/users/integrations.html:7
+msgid "Integrations"
+msgstr "Entegrasyonlar"
+
+#: templates/users/base.html:47
+msgid "Import Data"
+msgstr "Veri içe aktar"
+
+#: templates/users/base.html:54 templates/users/export_data.html:13
+msgid "Export Data"
+msgstr "Veri dışa aktar"
+
+#: templates/users/export_data.html:6
+msgid "Export"
+msgstr "Dışa aktar"
+
+#: templates/users/export_data.html:15
+msgid "Back up your data or export it for use with other services."
+msgstr "Verilerini yedekle veya başka hizmetlerde kullanmak için dışa aktar."
+
+#: templates/users/export_data.html:16
+msgid "Your export will include all your media items."
+msgstr "Dışa aktarma tüm medya öğelerini içerecek."
+
+#: templates/users/export_data.html:20
+msgid "Export as CSV"
+msgstr "CSV olarak dışa aktar"
+
+#: templates/users/integrations.html:21
+msgid "Token"
+msgstr "Anahtar (token)"
+
+#: templates/users/integrations.html:24
+msgid "This token is used to authenticate webhook requests from your media servers."
+msgstr "Bu anahtar, medya sunucularından gelen webhook isteklerinin kimliğini doğrulamak için kullanılır."
+
+#: templates/users/integrations.html:36 templates/users/integrations.html:194
+#: templates/users/integrations.html:225 templates/users/integrations.html:263
+#: templates/users/integrations.html:342 templates/users/integrations.html:379
+msgid "Copy"
+msgstr "Kopyala"
+
+#: templates/users/integrations.html:45
+msgid "Regenerating will invalidate the previous token"
+msgstr "Yeniden oluşturmak önceki anahtarı geçersiz kılar"
+
+#: templates/users/integrations.html:53
+msgid "Regenerate"
+msgstr "Yeniden oluştur"
+
+#: templates/users/integrations.html:62
+msgid "Media Servers"
+msgstr "Medya sunucuları"
+
+#: templates/users/integrations.html:65
+msgid "Connect your media servers to automatically track your watching progress."
+msgstr "İzleme ilerlemeni otomatik takip etmek için medya sunucularını bağla."
+
+#: templates/users/integrations.html:72
+msgid "Integration services"
+msgstr "Entegrasyon hizmetleri"
+
+#: templates/users/integrations.html:80 templates/users/integrations.html:105
+msgid "Jellyfin"
+msgstr "Jellyfin"
+
+#: templates/users/integrations.html:89 templates/users/integrations.html:282
+msgid "Plex"
+msgstr "Plex"
+
+#: templates/users/integrations.html:98 templates/users/integrations.html:358
+msgid "Emby"
+msgstr "Emby"
+
+#: templates/users/integrations.html:108
+msgid "Connect Jellyfin to automatically track your watching progress."
+msgstr "İzleme ilerlemeni otomatik takip etmek için Jellyfin'i bağla."
+
+#: templates/users/integrations.html:113
+msgid "Webhook Events"
+msgstr "Webhook olayları"
+
+#: templates/users/integrations.html:115
+msgid "Play and Stop events are always processed. Enable these to sync manual watched changes from the unofficial Webhooks plugin."
+msgstr "Oynatma (Play) ve durdurma (Stop) olayları her zaman işlenir. Resmî olmayan Webhooks eklentisinden gelen elle izlendi değişikliklerini eşitlemek için bunları etkinleştir."
+
+#: templates/users/integrations.html:127
+msgid "Process MarkPlayed events"
+msgstr "MarkPlayed olaylarını işle"
+
+#: templates/users/integrations.html:130
+msgid "Mark media as watched when it is manually marked played in Jellyfin."
+msgstr "Jellyfin'de elle oynatıldı olarak işaretlenen medyayı izlendi olarak işaretle."
+
+#: templates/users/integrations.html:148
+msgid "Process MarkUnplayed events"
+msgstr "MarkUnplayed olaylarını işle"
+
+#: templates/users/integrations.html:151
+msgid "Remove watched progress when it is manually marked unplayed in Jellyfin. This event can delete media from efeTrack."
+msgstr "Jellyfin'de elle oynatılmadı olarak işaretlendiğinde izleme ilerlemesini kaldır. Bu olay efeTrack'ten medya silebilir."
+
+#: templates/users/integrations.html:175
+msgid "Official Webhook Plugin"
+msgstr "Resmî Webhook eklentisi"
+
+#: templates/users/integrations.html:177 templates/users/integrations.html:237
+msgid "You will need to have TMDB and TVDB as metadata providers in Jellyfin."
+msgstr "Jellyfin'de meta veri sağlayıcısı olarak TMDB ve TVDB'nin olması gerekir."
+
+#: templates/users/integrations.html:179
+msgid "Install the Webhook plugin from the 'Jellyfin Stable' repo via your server's Plugin Catalog."
+msgstr "Sunucunun eklenti kataloğundan 'Jellyfin Stable' deposundaki Webhook eklentisini kur."
+
+#: templates/users/integrations.html:184 templates/users/integrations.html:257
+msgid "Restart your server, then configure the plugin:"
+msgstr "Sunucunu yeniden başlat, ardından eklentiyi yapılandır:"
+
+#: templates/users/integrations.html:186
+msgid "Click on the \"Add Generic Destination\" button to create a new webhook."
+msgstr "Yeni bir webhook oluşturmak için \"Add Generic Destination\" düğmesine tıkla."
+
+#: templates/users/integrations.html:187
+msgid "Name: efeTrack"
+msgstr "Ad: efeTrack"
+
+#: templates/users/integrations.html:201
+msgid "Notification Type: Playback Start and Playback Stop"
+msgstr "Bildirim türü: Playback Start ve Playback Stop"
+
+#: templates/users/integrations.html:202
+msgid "User Filter: Your Jellyfin User"
+msgstr "Kullanıcı filtresi: Jellyfin kullanıcın"
+
+#: templates/users/integrations.html:203
+msgid "Finally, under the \"Template\" section, paste the following code."
+msgstr "Son olarak \"Template\" bölümüne aşağıdaki kodu yapıştır."
+
+#: templates/users/integrations.html:235
+msgid "Unofficial Webhooks Plugin"
+msgstr "Resmî olmayan Webhooks eklentisi"
+
+#. Translators: In "Add this repository link to your Plugins Catalog in
+#. Jellyfin settings.", this is the linked text.
+#: templates/users/integrations.html:241
+msgid "link"
+msgstr "bağlantı"
+
+#: templates/users/integrations.html:243
+#, python-format
+msgid "Add this repository %(repository_link)s to your \"Plugins Catalog\" in Jellyfin settings."
+msgstr "Bu depoyu (%(repository_link)s) Jellyfin ayarlarındaki \"Plugins Catalog\" bölümüne ekle."
+
+#. Translators: In "From your Plugins Catalog, install the Unofficial Webhooks
+#. plugin.", this is the linked text.
+#: templates/users/integrations.html:249
+msgid "Unofficial Webhooks plugin"
+msgstr "Resmî olmayan Webhooks eklentisini"
+
+#: templates/users/integrations.html:251
+#, python-format
+msgid "From your \"Plugins Catalog\", install the %(plugin_link)s."
+msgstr "\"Plugins Catalog\" bölümünden %(plugin_link)s kur."
+
+#: templates/users/integrations.html:269
+msgid "Payload format:"
+msgstr "Veri biçimi:"
+
+#: templates/users/integrations.html:269
+msgid "Default"
+msgstr "Varsayılan (Default)"
+
+#: templates/users/integrations.html:270
+msgid "Listen to events only for:"
+msgstr "Yalnızca şu kullanıcının olaylarını dinle:"
+
+#: templates/users/integrations.html:270
+msgid "Your Jellyfin User"
+msgstr "Jellyfin kullanıcın"
+
+#: templates/users/integrations.html:271 templates/users/integrations.html:387
+msgid "Events:"
+msgstr "Olaylar:"
+
+#: templates/users/integrations.html:271
+msgid "Play, Stop, MarkPlayed and MarkUnplayed"
+msgstr "Play, Stop, MarkPlayed ve MarkUnplayed"
+
+#: templates/users/integrations.html:285
+msgid "Connect Plex to automatically track your watching progress."
+msgstr "İzleme ilerlemeni otomatik takip etmek için Plex'i bağla."
+
+#: templates/users/integrations.html:290
+msgid "Plex Usernames"
+msgstr "Plex kullanıcı adları"
+
+#: templates/users/integrations.html:297
+msgid "This username (or several, comma separated) will be used to filter which events are sent to your webhook."
+msgstr "Bu kullanıcı adı (veya virgülle ayrılmış birkaçı), webhook'una hangi olayların gönderileceğini filtrelemek için kullanılır."
+
+#: templates/users/integrations.html:317 templates/users/integrations.html:366
+msgid "Setup Instructions"
+msgstr "Kurulum talimatları"
+
+#: templates/users/integrations.html:319
+msgid "You will need to have a PlexPass in order to have webhooks enabled"
+msgstr "Webhook'ların etkin olması için PlexPass'in olması gerekir"
+
+#: templates/users/integrations.html:320
+msgid "Go to Settings > Server > Network and enable Webhooks"
+msgstr "Settings > Server > Network bölümüne git ve Webhooks seçeneğini etkinleştir"
+
+#. Translators: In "In Plex settings, go to Webhooks.", this is the linked
+#. text.
+#: templates/users/integrations.html:323
+msgid "Webhooks"
+msgstr "Webhooks"
+
+#: templates/users/integrations.html:326
+#, python-format
+msgid "In Plex settings, go to %(plex_webhook_link)s."
+msgstr "Plex ayarlarında %(plex_webhook_link)s bölümüne git."
+
+#: templates/users/integrations.html:332
+msgid "In the Webhooks section, click on \"Add Webhook\" and enter the following URL:"
+msgstr "Webhooks bölümünde \"Add Webhook\" düğmesine tıkla ve şu URL'yi gir:"
+
+#: templates/users/integrations.html:361
+msgid "Connect Emby to automatically track your watching progress."
+msgstr "İzleme ilerlemeni otomatik takip etmek için Emby'yi bağla."
+
+#: templates/users/integrations.html:368
+msgid "In Emby, go to Settings > Notifications"
+msgstr "Emby'de Settings > Notifications bölümüne git"
+
+#: templates/users/integrations.html:369
+msgid "In the Notifications section, click on \"Add Notification\""
+msgstr "Notifications bölümünde \"Add Notification\" düğmesine tıkla"
+
+#: templates/users/integrations.html:371
+msgid "In the Notification settings:"
+msgstr "Bildirim ayarlarında:"
+
+#: templates/users/integrations.html:386
+msgid "Request content type:"
+msgstr "İstek içerik türü:"
+
+#: templates/users/integrations.html:387
+msgid "Play and Stop"
+msgstr "Play ve Stop"
+
+#: templates/users/integrations.html:388
+msgid "Limit user events to:"
+msgstr "Kullanıcı olaylarını şununla sınırla:"
+
+#: templates/users/integrations.html:388
+msgid "Your Emby User"
+msgstr "Emby kullanıcın"
+
+#: templates/users/integrations.html:389
+msgid "\"Limit library events to\" and \"Limit devices events to\" are optional"
+msgstr "\"Limit library events to\" ve \"Limit devices events to\" isteğe bağlıdır"
+
+#: templates/users/components/excluded_items.html:4
+msgid "Currently Excluded"
+msgstr "Şu an hariç tutulanlar"
+
+#: templates/users/components/excluded_items.html:30
+msgid "No media items excluded yet"
+msgstr "Henüz hariç tutulan medya yok"
+
+#: templates/users/components/search_results.html:22
+msgid "Exclude"
+msgstr "Hariç tut"
+
+#: templates/users/components/search_results.html:28
+msgid "No matching items found"
+msgstr "Eşleşen öğe bulunamadı"
+
+#: templates/socialaccount/connections.html:7
+#: templates/socialaccount/connections.html:11
+msgid "Account Connections"
+msgstr "Hesap bağlantıları"
+
+#: templates/socialaccount/connections.html:18
+msgid "You can sign in to your account using any of the following third-party accounts"
+msgstr "Aşağıdaki üçüncü taraf hesaplardan herhangi biriyle hesabına giriş yapabilirsin"
+
+#: templates/socialaccount/connections.html:66
+msgid "Remove Selected"
+msgstr "Seçilenleri kaldır"
+
+#: templates/socialaccount/connections.html:75
+msgid "You currently have no third-party accounts connected to this account."
+msgstr "Bu hesaba bağlı herhangi bir üçüncü taraf hesabın yok."
+
+#: templates/socialaccount/connections.html:83
+msgid "Add a Third-Party Account"
+msgstr "Üçüncü taraf hesap ekle"
+
+#: templates/app/home.html:18
+msgid "Hide unreleased"
+msgstr "Yayınlanmamışları gizle"
+
+#: templates/app/statistics.html:13
+msgid "Track your media consumption habits"
+msgstr "Medya tüketim alışkanlıklarını takip et"
+
+#: templates/app/journal.html:37 templates/app/statistics.html:36
+msgid "Predefined Ranges"
+msgstr "Hazır aralıklar"
+
+#: templates/app/journal.html:40 templates/app/statistics.html:39
+msgid "Custom Range"
+msgstr "Özel aralık"
+
+#: templates/app/components/journal_items.html:64 templates/app/journal.html:81
+#: templates/app/statistics.html:80
+msgid "Cancel"
+msgstr "İptal"
+
+#: templates/app/journal.html:86 templates/app/statistics.html:85
+msgid "Apply Range"
+msgstr "Aralığı uygula"
+
+#: templates/app/statistics.html:101
+msgid "Completed Items"
+msgstr "Tamamlanan öğeler"
+
+#: templates/app/statistics.html:129
+msgid "Average Rating"
+msgstr "Ortalama puan"
+
+#: templates/app/statistics.html:144
+#, python-format
+msgid "%% Rated"
+msgstr "Puanlanan %%"
+
+#: templates/app/statistics.html:159
+msgid "Consumption"
+msgstr "Tüketim"
+
+#: templates/app/statistics.html:177
+msgid "Media Type Distribution"
+msgstr "Medya türü dağılımı"
+
+#: templates/app/statistics.html:188
+msgid "No media types to display"
+msgstr "Gösterilecek medya türü yok"
+
+#: templates/app/statistics.html:189
+msgid "Add different types of media to see their distribution."
+msgstr "Dağılımlarını görmek için farklı türlerde medya ekle."
+
+#: templates/app/statistics.html:196
+msgid "Status Distribution"
+msgstr "Durum dağılımı"
+
+#: templates/app/statistics.html:207
+msgid "No status data to display"
+msgstr "Gösterilecek durum verisi yok"
+
+#: templates/app/statistics.html:208
+msgid "Track media items with different statuses to see their distribution."
+msgstr "Dağılımını görmek için medyayı farklı durumlarla takip et."
+
+#: templates/app/statistics.html:215
+msgid "Status Distribution by Media Type"
+msgstr "Medya türüne göre durum dağılımı"
+
+#: templates/app/statistics.html:226
+msgid "No data available"
+msgstr "Veri yok"
+
+#: templates/app/statistics.html:228
+msgid "Add media items with different statuses to see their distribution by type."
+msgstr "Türe göre dağılımlarını görmek için farklı durumlarda medya ekle."
+
+#: templates/app/statistics.html:236
+msgid "Score Distribution by Media Type"
+msgstr "Medya türüne göre puan dağılımı"
+
+#: templates/app/statistics.html:247 templates/app/statistics.html:269
+msgid "No ratings yet"
+msgstr "Henüz puan yok"
+
+#: templates/app/statistics.html:248 templates/app/statistics.html:270
+msgid "Rate your media items to see score distribution statistics."
+msgstr "Puan dağılımı istatistiklerini görmek için medyanı puanla."
+
+#: templates/app/statistics.html:256
+msgid "Top Rated Media"
+msgstr "En yüksek puanlılar"
+
+#: templates/app/search.html:6
+msgid "Search"
+msgstr "Ara"
+
+#: templates/app/search.html:11
+msgid "Search Results"
+msgstr "Arama sonuçları"
+
+#: templates/app/search.html:13
+msgid "Source"
+msgstr "Kaynak"
+
+#: templates/app/media_list.html:110 templates/app/search.html:26
+msgid "Grid View"
+msgstr "Izgara görünümü"
+
+#: templates/app/search.html:29
+msgid "List View"
+msgstr "Liste görünümü"
+
+#: templates/app/search.html:92
+#, python-format
+msgid "Page %(page)s of %(total_pages)s (%(counter)s result)"
+msgid_plural "Page %(page)s of %(total_pages)s (%(counter)s results)"
+msgstr[0] "Sayfa %(page)s / %(total_pages)s (%(counter)s sonuç)"
+msgstr[1] "Sayfa %(page)s / %(total_pages)s (%(counter)s sonuç)"
+
+#: templates/app/search.html:104
+msgid "No results found"
+msgstr "Sonuç bulunamadı"
+
+#: templates/app/search.html:106
+msgid "We couldn't find any matches for"
+msgstr "Şu arama için sonuç bulunamadı:"
+
+#: templates/app/search.html:106
+msgid "Try checking your spelling or using different keywords."
+msgstr "Yazımı kontrol etmeyi veya farklı anahtar kelimeler kullanmayı dene."
+
+#: templates/app/journal.html:13
+msgid "A feed of everything you've done in efeTrack"
+msgstr "efeTrack'te yaptığın her şeyin akışı"
+
+#: templates/app/journal.html:101
+msgid "Tracked Activities"
+msgstr "Kaydedilen etkinlikler"
+
+#: templates/app/journal.html:114
+msgid "Most Active Day"
+msgstr "En aktif gün"
+
+#: templates/app/journal.html:117
+#, python-format
+msgid "%(percentage)s%% of activity"
+msgstr "Etkinlik oranı: %%%(percentage)s"
+
+#: templates/app/journal.html:128
+msgid "Current Streak"
+msgstr "Güncel seri"
+
+#: templates/app/journal.html:131
+#, python-format
+msgid "%(days)s day"
+msgid_plural "%(days)s days"
+msgstr[0] "%(days)s gün"
+msgstr[1] "%(days)s gün"
+
+#: templates/app/journal.html:134
+#, python-format
+msgid "Longest: %(days)s day"
+msgid_plural "Longest: %(days)s days"
+msgstr[0] "En uzun: %(days)s gün"
+msgstr[1] "En uzun: %(days)s gün"
+
+#: templates/app/components/fill_history.html:6 templates/app/journal.html:145
+msgid "Activity History"
+msgstr "Etkinlik geçmişi"
+
+#: templates/app/journal.html:179
+#, python-format
+msgid "%(count)s activity"
+msgid_plural "%(count)s activities"
+msgstr[0] "%(count)s etkinlik"
+msgstr[1] "%(count)s etkinlik"
+
+#: templates/app/journal.html:191
+msgid "Less"
+msgstr "Az"
+
+#: templates/app/journal.html:197
+msgid "More"
+msgstr "Çok"
+
+#: templates/app/journal.html:215
+msgid "No tracking activity in this date range."
+msgstr "Bu tarih aralığında takip etkinliği yok."
+
+#: templates/app/create_entry.html:6
+msgid "Create"
+msgstr "Oluştur"
+
+#: templates/app/create_entry.html:11
+msgid "Progress (Episodes)"
+msgstr "İlerleme (bölüm)"
+
+#: templates/app/create_entry.html:12
+msgid "Progress (Chapters)"
+msgstr "İlerleme (bölüm)"
+
+#: templates/app/create_entry.html:13
+msgid "Progress (Play Time)"
+msgstr "İlerleme (oynama süresi)"
+
+#: templates/app/create_entry.html:14
+msgid "Progress (Pages)"
+msgstr "İlerleme (sayfa)"
+
+#: templates/app/create_entry.html:15
+msgid "Please select a parent TV show from the dropdown"
+msgstr "Lütfen açılır listeden bağlı olduğu diziyi seç"
+
+#: templates/app/create_entry.html:16
+msgid "Please select a parent Season from the dropdown"
+msgstr "Lütfen açılır listeden bağlı olduğu sezonu seç"
+
+#: templates/app/create_entry.html:19
+msgid "Create Custom Entry"
+msgstr "Özel kayıt oluştur"
+
+#: templates/app/create_entry.html:20
+msgid "Add a custom media entry to your collection if it's not available in the database."
+msgstr "Veritabanında bulunmayan bir medyayı koleksiyonuna özel kayıt olarak ekle."
+
+#: templates/app/create_entry.html:136
+msgid "Enter title"
+msgstr "Başlık gir"
+
+#: templates/app/create_entry.html:149
+msgid "Search for a TV show..."
+msgstr "Dizi ara..."
+
+#: templates/app/create_entry.html:196
+msgid "Search for a season..."
+msgstr "Sezon ara..."
+
+#: templates/app/create_entry.html:243
+msgid "Enter image URL"
+msgstr "Görsel URL'si gir"
+
+#: templates/app/create_entry.html:358
+msgid "Create Entry"
+msgstr "Kayıt oluştur"
+
+#: templates/app/media_list.html:30
+#, python-format
+msgid "Search %(media_type_plural)s in %(target_username)s's list..."
+msgstr "%(target_username)s listesinde ara: %(media_type_plural)s..."
+
+#: templates/app/media_list.html:30
+#, python-format
+msgid "Search %(media_type_plural)s in your list..."
+msgstr "Listende ara: %(media_type_plural)s..."
+
+#: templates/app/media_list.html:115
+msgid "Table View"
+msgstr "Tablo görünümü"
+
+#: templates/app/media_list.html:128
+#, python-format
+msgid "No %(media_type_label)s Tracked Yet"
+msgstr "Henüz takip edilen %(media_type_label)s yok"
+
+#: templates/app/media_list.html:131
+#, python-format
+msgid "Start tracking your %(media_type_plural)s to keep a record of what you've %(past_verb)s."
+msgstr "„%(media_type_plural)s“ listen henüz boş. Takip etmeye başla ve %(past_verb)s her şeyin kaydını tut."
+
+#: templates/app/media_list.html:137
+#, python-format
+msgid "Browse %(media_type)s"
+msgstr "Keşfet: %(media_type)s"
+
+#: templates/app/media_list.html:156
+msgid "Last Watched"
+msgstr "Son izlenen"
+
+#: templates/app/media_list.html:186
+#, python-format
+msgid "%(username)s's Media:"
+msgstr "%(username)s kullanıcısının medyası:"
+
+#: templates/account/login.html:28 templates/app/media_list.html:229
+msgid "Sign In"
+msgstr "Giriş yap"
+
+#: templates/app/media_details.html:14
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
+#: templates/app/media_details.html:15
+msgid "Show less"
+msgstr "Daha az göster"
+
+#: templates/app/media_details.html:16
+msgid "Read more"
+msgstr "Devamını oku"
+
+#: templates/app/components/home_grid.html:40
+#: templates/app/components/media_card.html:73
+#: templates/app/components/media_card_list.html:47
+#: templates/app/media_details.html:39
+msgid "Add to tracker"
+msgstr "Takibe ekle"
+
+#: templates/app/media_details.html:46
+msgid "More tracking options"
+msgstr "Diğer takip seçenekleri"
+
+#: templates/app/media_details.html:67
+msgid "Add new entry"
+msgstr "Yeni kayıt ekle"
+
+#: templates/app/media_details.html:133
+#, python-format
+msgid "%(count)s Episode"
+msgid_plural "%(count)s Episodes"
+msgstr[0] "%(count)s bölüm"
+msgstr[1] "%(count)s bölüm"
+
+#: templates/app/media_details.html:174
+#, python-format
+msgid "%(source)s SCORE"
+msgstr "%(source)s PUANI"
+
+#: templates/app/media_details.html:184
+#, python-format
+msgid "%(votes)s vote"
+msgid_plural "%(votes)s votes"
+msgstr[0] "%(votes)s oy"
+msgstr[1] "%(votes)s oy"
+
+#: templates/app/media_details.html:196
+msgid "YOUR SCORE"
+msgstr "PUANIN"
+
+#: templates/app/media_details.html:209
+msgid "Click to edit"
+msgstr "Düzenlemek için tıkla"
+
+#: templates/app/media_details.html:254
+msgid "Your History"
+msgstr "Geçmişin"
+
+#: templates/app/media_details.html:267
+msgid "Ended"
+msgstr "Bitti"
+
+#: templates/app/media_details.html:290
+msgid "Your notes"
+msgstr "Notların"
+
+#: templates/app/media_details.html:306
+msgid "Actions"
+msgstr "İşlemler"
+
+#: templates/app/components/home_grid.html:48
+#: templates/app/components/media_card.html:83
+#: templates/app/components/media_card_list.html:56
+#: templates/app/media_details.html:311 templates/app/media_details.html:606
+msgid "Add to custom lists"
+msgstr "Özel listelere ekle"
+
+#: templates/app/media_details.html:320
+msgid "Add to lists"
+msgstr "Listelere ekle"
+
+#: templates/app/components/home_grid.html:56
+#: templates/app/components/media_card.html:92
+#: templates/app/components/media_card_list.html:65
+#: templates/app/media_details.html:336 templates/app/media_details.html:628
+msgid "View your activity history"
+msgstr "Etkinlik geçmişini görüntüle"
+
+#: templates/app/media_details.html:345
+msgid "Activity history"
+msgstr "Etkinlik geçmişi"
+
+#: templates/app/media_details.html:360
+msgid "Sync metadata with provider"
+msgstr "Meta verileri sağlayıcıyla eşitle"
+
+#: templates/app/media_details.html:375
+msgid "Sync metadata"
+msgstr "Meta verileri eşitle"
+
+#: templates/app/media_details.html:380
+msgid "Details"
+msgstr "Ayrıntılar"
+
+#: templates/app/media_details.html:396
+msgid "Provider"
+msgstr "Sağlayıcı"
+
+#: templates/app/media_details.html:414
+msgid "No details available"
+msgstr "Ayrıntı yok"
+
+#: templates/app/components/media_section_tabs.html:24
+#: templates/app/media_details.html:430
+msgid "Cast"
+msgstr "Oyuncular"
+
+#: templates/app/media_details.html:442
+msgid "View all"
+msgstr "Tümünü gör"
+
+#: templates/app/media_details.html:443
+#, python-format
+msgid "%(count)s cast members"
+msgstr "%(count)s oyuncu"
+
+#: templates/app/media_details.html:475
+#, python-format
+msgid "Repeats (%(repeats)s)"
+msgstr "Tekrarlar (%(repeats)s)"
+
+#: templates/app/media_details.html:494
+msgid "Edit entry"
+msgstr "Kaydı düzenle"
+
+#: templates/app/media_details.html:560
+msgid "Unknown air date"
+msgstr "Yayın tarihi bilinmiyor"
+
+#: templates/app/components/media_section_tabs.html:52
+#: templates/app/media_details.html:562
+msgid "Episodes"
+msgstr "Bölümler"
+
+#: templates/app/components/fill_track_episode.html:14
+#: templates/app/media_details.html:590
+msgid "Track Episode"
+msgstr "Bölüm takibi"
+
+#: templates/app/media_details.html:655
+msgid "Last watched:"
+msgstr "Son izleme:"
+
+#: templates/app/components/fill_track_episode.html:53
+#: templates/app/media_details.html:659
+msgid "No date provided"
+msgstr "Tarih belirtilmedi"
+
+#: templates/app/components/fill_track_episode.html:32
+#: templates/app/media_details.html:661
+#, python-format
+msgid "Watched %(watch_count)s times"
+msgstr "%(watch_count)s kez izlendi"
+
+#: templates/app/components/media_section_tabs.html:61
+#: templates/app/media_details.html:676
+msgid "Where to watch"
+msgstr "Nerede izlenir?"
+
+#. Translators: In "Watch provider region is not configured. Set a region or
+#. disable this feature in preferences.", this is the linked text.
+#: templates/app/media_details.html:679
+msgid "preferences"
+msgstr "tercihler"
+
+#: templates/app/media_details.html:682
+#, python-format
+msgid "Watch provider region is not configured. Set a region or disable this feature in %(preferences_link)s."
+msgstr "Yayın platformu bölgesi ayarlanmamış. Bir bölge seç veya bu özelliği %(preferences_link)s bölümünden kapat."
+
+#: templates/app/components/media_section_tabs.html:70
+#: templates/app/media_details.html:695
+msgid "Time to Beat"
+msgstr "Bitirme süresi"
+
+#: templates/app/media_details.html:704
+msgid "Main Story"
+msgstr "Ana hikâye"
+
+#: templates/app/media_details.html:715
+msgid "Main + Extra"
+msgstr "Ana hikâye + ekstralar"
+
+#: templates/app/media_details.html:726
+msgid "Completionist"
+msgstr "Tamamen bitirme"
+
+#: templates/app/components/search_parent_tv.html:15
+msgid "No TV shows found matching"
+msgstr "Şununla eşleşen dizi bulunamadı:"
+
+#: templates/app/components/search_parent_season.html:21
+#: templates/app/components/search_parent_tv.html:15
+msgid "Please try a different search term."
+msgstr "Lütfen farklı bir arama terimi dene."
+
+#: templates/app/components/cast_card.html:14
+#, python-format
+msgid "Open TMDB page for %(name)s"
+msgstr "%(name)s için TMDB sayfasını aç"
+
+#: templates/app/components/fill_track.html:75
+msgid "Update"
+msgstr "Güncelle"
+
+#: templates/app/components/fill_track.html:77
+#: templates/lists/components/list_item_button.html:17
+msgid "Add"
+msgstr "Ekle"
+
+#: templates/app/components/fill_track.html:85
+#: templates/app/components/fill_track_episode.html:67
+#: templates/app/components/journal_items.html:73
+#: templates/lists/components/list_form.html:46
+msgid "Delete"
+msgstr "Sil"
+
+#: templates/app/components/home_section.html:25
+#: templates/lists/components/list_grid.html:38
+#: templates/lists/list_detail.html:39
+#, python-format
+msgid "%(item_count)s item"
+msgid_plural "%(item_count)s items"
+msgstr[0] "%(item_count)s öğe"
+msgstr[1] "%(item_count)s öğe"
+
+#: templates/app/components/home_section.html:64
+#, python-format
+msgid "Load all (%(total)s)"
+msgstr "Tümünü yükle (%(total)s)"
+
+#: templates/app/components/home_section.html:91
+msgid "Nothing is actively moving right now"
+msgstr "Şu an devam eden bir şey yok"
+
+#: templates/app/components/home_section.html:93
+msgid "Your planning shelf is still empty"
+msgstr "Planlanan rafın henüz boş"
+
+#: templates/app/components/home_section.html:98
+msgid "Start a title and mark it as in progress to see quick updates and release reminders here."
+msgstr "Hızlı güncellemeleri ve yayın hatırlatmalarını burada görmek için bir içeriğe başla ve devam ediyor olarak işaretle."
+
+#: templates/app/components/home_section.html:100
+msgid "Add a few titles to planning to see them here."
+msgstr "Burada görmek için birkaç içeriği planlananlara ekle."
+
+#: templates/app/components/home_section.html:107
+msgid "Browse media"
+msgstr "Medya keşfet"
+
+#: templates/app/components/media_section_tabs.html:9
+msgid "Overview"
+msgstr "Genel bakış"
+
+#: templates/app/components/media_section_tabs.html:44
+msgid "Repeats"
+msgstr "Tekrarlar"
+
+#: templates/app/components/fill_track_episode.html:30
+msgid "Watched once"
+msgstr "Bir kez izlendi"
+
+#: templates/app/components/fill_track_episode.html:35
+msgid "Not watched yet"
+msgstr "Henüz izlenmedi"
+
+#: templates/app/components/fill_track_episode.html:44
+msgid "Previous Watches"
+msgstr "Önceki izlemeler"
+
+#: templates/app/components/fill_track_episode.html:101
+msgid "Watch Date"
+msgstr "İzleme tarihi"
+
+#: templates/app/components/fill_track_episode.html:132
+msgid "Add watched entry with current settings"
+msgstr "Mevcut ayarlarla izleme kaydı ekle"
+
+#: templates/app/components/fill_track_episode.html:132
+msgid "Add watch"
+msgstr "İzleme ekle"
+
+#: templates/app/components/fill_track_episode.html:158
+msgid "Fills in the current date and time"
+msgstr "Şu anki tarih ve saati doldurur"
+
+#: templates/app/components/fill_track_episode.html:158
+msgid "Fill in current time"
+msgstr "Şu anki saati doldur"
+
+#: templates/app/components/fill_track_episode.html:165
+msgid "Fills in the date and time the episode will be finished if started now"
+msgstr "Şimdi başlasaydın bölümün biteceği tarih ve saati doldurur"
+
+#: templates/app/components/fill_track_episode.html:166
+msgid "Fill in end time"
+msgstr "Bitiş saatini doldur"
+
+#: templates/app/components/fill_track_episode.html:175
+msgid "Fills in the air date of the episode, if available"
+msgstr "Varsa bölümün yayın tarihini doldurur"
+
+#: templates/app/components/fill_track_episode.html:175
+msgid "Fill in air date"
+msgstr "Yayın tarihini doldur"
+
+#: templates/app/components/fill_track_episode.html:182
+msgid "Clears the watch date and time"
+msgstr "İzleme tarihini ve saatini temizler"
+
+#: templates/app/components/fill_track_episode.html:182
+msgid "Fill in no date"
+msgstr "Tarihsiz bırak"
+
+#: templates/app/components/journal_items.html:30
+msgid "Delete activity"
+msgstr "Etkinliği sil"
+
+#: templates/app/components/journal_items.html:51
+msgid "Delete activity?"
+msgstr "Etkinlik silinsin mi?"
+
+#: templates/app/components/journal_items.html:53
+msgid "This removes"
+msgstr "Şu kayıt"
+
+#: templates/app/components/journal_items.html:58
+#, python-format
+msgid "for %(item)s from your history. This can't be undone."
+msgstr "(%(item)s) geçmişinden kalıcı olarak silinecek. Bu işlem geri alınamaz."
+
+#: templates/app/components/fill_history.html:16
+msgid "Instance"
+msgstr "Kayıt"
+
+#: templates/app/components/fill_history.html:29
+msgid "You haven't started tracking it yet."
+msgstr "Henüz takip etmeye başlamadın."
+
+#: templates/app/components/search_parent_season.html:7
+#, python-format
+msgid "Season %(season_number)s of %(title)s"
+msgstr "%(title)s %(season_number)s. Sezon"
+
+#: templates/app/components/search_parent_season.html:13
+#, python-format
+msgid "%(title)s - Season %(season_number)s"
+msgstr "%(title)s - %(season_number)s. Sezon"
+
+#: templates/app/components/search_parent_season.html:21
+msgid "No seasons found matching"
+msgstr "Şununla eşleşen sezon bulunamadı:"
+
+#: templates/account/login.html:7
+msgid "Login"
+msgstr "Giriş"
+
+#: templates/account/login.html:11
+msgid "Sign in to your account"
+msgstr "Hesabına giriş yap"
+
+#: templates/account/login.html:41
+msgid "Need an account?"
+msgstr "Hesabın yok mu?"
+
+#: templates/account/login.html:43
+msgid "Register now"
+msgstr "Hemen kaydol"
+
+#: templates/account/signup.html:6
+msgid "Register"
+msgstr "Kaydol"
+
+#: templates/account/signup.html:10
+msgid "Create your account"
+msgstr "Hesabını oluştur"
+
+#: templates/account/signup.html:26
+msgid "Create Account"
+msgstr "Hesap oluştur"
+
+#: templates/account/signup.html:38
+msgid "Already have an account?"
+msgstr "Zaten hesabın var mı?"
+
+#: templates/account/signup.html:40
+msgid "Sign in"
+msgstr "Giriş yap"
+
+#: templates/allauth/elements/hr.html:5
+msgid "Or continue with"
+msgstr "Veya şununla devam et"
+
+#: templates/events/calendar.html:12
+msgid "Track upcoming releases from your list."
+msgstr "Listendeki yaklaşan yayınları takip et."
+
+#: templates/efe/notifications.html:51 templates/events/calendar.html:39
+msgid "Fetch New Releases"
+msgstr "Yeni yayınları getir"
+
+#: templates/events/calendar.html:71
+msgid "Export link"
+msgstr "Dışa aktarma bağlantısı"
+
+#: templates/events/calendar.html:74
+msgid "This link can be used to integrate your calendar into any of your calendar applications."
+msgstr "Bu bağlantıyla takvimini dilediğin takvim uygulamasına ekleyebilirsin."
+
+#: templates/events/components/calendar_list.html:28
+#, python-format
+msgid "%(number)s at %(time)s"
+msgstr "%(number)s · %(time)s"
+
+#: templates/lists/custom_lists.html:18
+msgid "Organize and share your media lists"
+msgstr "Medya listelerini düzenle ve paylaş"
+
+#: templates/lists/custom_lists.html:23
+msgid "New List"
+msgstr "Yeni liste"
+
+#: templates/lists/custom_lists.html:37
+msgid "Search lists..."
+msgstr "Listelerde ara..."
+
+#: templates/lists/custom_lists.html:103
+msgid "No Lists Created Yet"
+msgstr "Henüz liste oluşturulmadı"
+
+#: templates/lists/custom_lists.html:104
+msgid "Create custom lists to organize your media collection and share with friends."
+msgstr "Medya koleksiyonunu düzenlemek ve arkadaşlarınla paylaşmak için özel listeler oluştur."
+
+#: templates/lists/custom_lists.html:107
+msgid "Create Your First List"
+msgstr "İlk listeni oluştur"
+
+#: templates/lists/list_detail.html:33
+#, python-format
+msgid "%(counter)s collaborator"
+msgid_plural "%(counter)s collaborators"
+msgstr[0] "%(counter)s ortak çalışan"
+msgstr[1] "%(counter)s ortak çalışan"
+
+#: templates/lists/components/list_form.html:12
+#: templates/lists/components/list_grid.html:18
+#: templates/lists/list_detail.html:51
+msgid "Edit List"
+msgstr "Listeyi düzenle"
+
+#: templates/lists/list_detail.html:56
+msgid "All Types"
+msgstr "Tüm türler"
+
+#: templates/lists/list_detail.html:71
+msgid "Search in collection..."
+msgstr "Koleksiyonda ara..."
+
+#: templates/lists/list_detail.html:228
+msgid "No items in this list yet"
+msgstr "Bu listede henüz öğe yok"
+
+#: templates/lists/list_detail.html:229
+msgid "Start adding your favorite media to build your collection"
+msgstr "Koleksiyonunu oluşturmak için sevdiğin medyaları eklemeye başla"
+
+#: templates/lists/list_detail.html:232
+msgid "Browse Media"
+msgstr "Medya keşfet"
+
+#: templates/lists/components/list_item_button.html:9
+msgid "Remove"
+msgstr "Kaldır"
+
+#: templates/lists/components/fill_lists.html:16
+msgid "You haven't created any lists yet."
+msgstr "Henüz hiç liste oluşturmadın."
+
+#: templates/lists/components/list_form.html:14
+msgid "Create New List"
+msgstr "Yeni liste oluştur"
+
+#: templates/lists/components/list_form.html:41
+msgid "Save"
+msgstr "Kaydet"
+
+#: templates/lists/components/list_form.html:53
+msgid "Create List"
+msgstr "Liste oluştur"
+
+#: templates/efe/series.html:15
+msgid "The series of the movies you plan or watched, in watching order."
+msgstr "Planladığın veya izlediğin filmlerin serileri, izleme sırasına göre."
+
+#: templates/efe/series.html:26
+msgid "Look for new series"
+msgstr "Yeni serileri ara"
+
+#: templates/efe/random.html:16
+msgid "Can't decide? Let efeTrack pick something from your planning list."
+msgstr "Karar veremiyor musun? efeTrack planladıklarından senin için bir şey seçsin."
+
+#: templates/efe/random.html:24
+msgid "Your planning list is empty"
+msgstr "Planlanan listen boş"
+
+#: templates/efe/random.html:26
+msgid "Add movies, TV shows, anime, books or games with the Planning status and come back for a suggestion."
+msgstr "Planlanan durumunda film, dizi, anime, kitap veya oyun ekle, sonra öneri için geri gel."
+
+#: templates/efe/random.html:40
+msgid "What are you in the mood for?"
+msgstr "Canın ne çekiyor?"
+
+#: templates/efe/random.html:65
+msgid "Only from a list"
+msgstr "Yalnızca bir listeden"
+
+#: templates/efe/random.html:69
+msgid "All my planning list"
+msgstr "Tüm planlananlarım"
+
+#: templates/efe/random.html:83
+msgid "Pick for me!"
+msgstr "Benim için seç!"
+
+#: templates/efe/random.html:86
+#, python-format
+msgid "%(count)s planned title to choose from"
+msgid_plural "%(count)s planned titles to choose from"
+msgstr[0] "Seçilebilecek %(count)s planlanan içerik"
+msgstr[1] "Seçilebilecek %(count)s planlanan içerik"
+
+#: templates/efe/random.html:100
+msgid "Ready when you are"
+msgstr "Hazır olduğunda başla"
+
+#: templates/efe/random.html:101
+msgid "Choose what you feel like and press the button."
+msgstr "Canının çektiği türleri seç ve düğmeye bas."
+
+#: templates/efe/notifications.html:18
+#, python-format
+msgid "New episodes and releases of what you track, for the next %(days)s day."
+msgid_plural "New episodes and releases of what you track, for the next %(days)s days."
+msgstr[0] "Takip ettiğin içeriklerin önümüzdeki %(days)s gündeki yeni bölümleri ve yayınları."
+msgstr[1] "Takip ettiğin içeriklerin önümüzdeki %(days)s gündeki yeni bölümleri ve yayınları."
+
+#: templates/efe/notifications.html:33
+msgid "Enable browser notifications"
+msgstr "Tarayıcı bildirimlerini aç"
+
+#: templates/efe/notifications.html:41
+msgid "Turn off browser notifications"
+msgstr "Tarayıcı bildirimlerini kapat"
+
+#: templates/efe/notifications.html:45
+msgid "Browser notifications are blocked in your browser settings."
+msgstr "Tarayıcı bildirimleri tarayıcı ayarlarında engellenmiş."
+
+#: templates/efe/notifications.html:57
+msgid "Notification settings"
+msgstr "Bildirim ayarları"
+
+#: templates/efe/notifications.html:68
+msgid "New notifications"
+msgstr "Yeni bildirim"
+
+#: templates/efe/notifications.html:75
+msgid "Releasing today"
+msgstr "Bugün yayınlanacak"
+
+#: templates/efe/notifications.html:82 templates/efe/notifications.html:134
+msgid "Coming soon"
+msgstr "Yakında"
+
+#: templates/efe/components/notifications_menu.html:32
+#: templates/efe/notifications.html:92
+msgid "You're all caught up"
+msgstr "Hepsini gördün"
+
+#: templates/efe/notifications.html:94
+msgid "There are no upcoming releases for the media you track. Add TV shows, anime or movies to your list and their new episodes will show up here."
+msgstr "Takip ettiğin medya için yaklaşan yayın yok. Listene dizi, anime veya film ekle; yeni bölümleri burada görünsün."
+
+#: templates/efe/notifications.html:110
+msgid "Nothing releases today."
+msgstr "Bugün yayınlanan bir şey yok."
+
+#: templates/efe/notifications.html:118
+msgid "Recently released"
+msgstr "Yeni çıkanlar"
+
+#: templates/efe/notifications.html:119
+msgid "Last 7 days"
+msgstr "Son 7 gün"
+
+#: templates/efe/notifications.html:125
+msgid "Nothing was released in the last 7 days."
+msgstr "Son 7 günde yayınlanan bir şey yok."
+
+#: templates/efe/notifications.html:135
+msgid "Open calendar"
+msgstr "Takvimi aç"
+
+#: templates/efe/notifications.html:151
+msgid "No upcoming releases yet."
+msgstr "Henüz yaklaşan yayın yok."
+
+#: templates/efe/components/notifications_menu.html:8
+#, python-format
+msgid "%(count)s new"
+msgid_plural "%(count)s new"
+msgstr[0] "%(count)s yeni"
+msgstr[1] "%(count)s yeni"
+
+#: templates/efe/components/notifications_menu.html:19
+msgid "Mark all as read"
+msgstr "Tümünü okundu say"
+
+#: templates/efe/components/notifications_menu.html:33
+msgid "New episodes and releases of what you track will appear here."
+msgstr "Takip ettiklerinin yeni bölümleri ve yayınları burada görünecek."
+
+#: templates/efe/components/notifications_menu.html:40
+msgid "Open the notification center"
+msgstr "Bildirim merkezini aç"
+
+#: templates/efe/components/series_list.html:10
+#, python-format
+msgid "Looking for the series of %(count)s movie in your library..."
+msgid_plural "Looking for the series of %(count)s movies in your library..."
+msgstr[0] "Kütüphanendeki %(count)s filmin serisi aranıyor..."
+msgstr[1] "Kütüphanendeki %(count)s filmin serisi aranıyor..."
+
+#: templates/efe/components/series_list.html:29
+#, python-format
+msgid "%(total)s movie"
+msgid_plural "%(total)s movies"
+msgstr[0] "%(total)s film"
+msgstr[1] "%(total)s film"
+
+#: templates/efe/components/series_list.html:35
+#, python-format
+msgid "Next: %(title)s"
+msgstr "Sıradaki: %(title)s"
+
+#: templates/efe/components/series_list.html:46
+#: templates/efe/components/series_panel.html:24
+#, python-format
+msgid "%(done)s / %(total)s watched"
+msgstr "%(done)s / %(total)s izlendi"
+
+#: templates/efe/components/series_list.html:77
+msgid "No film series yet"
+msgstr "Henüz film serisi yok"
+
+#: templates/efe/components/series_list.html:79
+msgid "No series match this filter"
+msgstr "Bu filtreye uyan seri yok"
+
+#: templates/efe/components/series_list.html:82
+msgid "When a movie you track belongs to a series (like trilogies or franchises), the whole series appears here in watching order."
+msgstr "Takip ettiğin bir film bir seriye (üçleme veya devam filmleri gibi) aitse serinin tamamı burada izleme sırasıyla görünür."
+
+#: templates/efe/components/series_part.html:17
+msgid "Not released"
+msgstr "Yayınlanmadı"
+
+#: templates/efe/components/series_part.html:20
+msgid "Next"
+msgstr "Sıradaki"
+
+#: templates/efe/components/series_part.html:22
+msgid "You are here"
+msgstr "Buradasın"
+
+#: templates/efe/components/series_part.html:26
+msgid "TBA"
+msgstr "Belli değil"
+
+#: templates/efe/components/random_result.html:10
+msgid "Nothing to pick from"
+msgstr "Seçilecek bir şey yok"
+
+#: templates/efe/components/random_result.html:11
+msgid "There is nothing planned with these filters. Try other media types or another list."
+msgstr "Bu filtrelere uyan planlanan içerik yok. Başka medya türleri veya başka bir liste dene."
+
+#: templates/efe/components/random_result.html:43
+msgid "Tonight's pick"
+msgstr "Bu akşamın seçimi"
+
+#: templates/efe/components/random_result.html:59
+#, python-format
+msgid "Added to your list on %(date)s · picked from %(count)s title"
+msgid_plural "Added to your list on %(date)s · picked from %(count)s titles"
+msgstr[0] "%(date)s tarihinde listene eklendi · %(count)s içerik arasından seçildi"
+msgstr[1] "%(date)s tarihinde listene eklendi · %(count)s içerik arasından seçildi"
+
+#: templates/efe/components/random_result.html:70
+msgid "Let's go!"
+msgstr "Hadi başlayalım!"
+
+#: templates/efe/components/random_result.html:76
+msgid "Pick another one"
+msgstr "Başka bir tane seç"
+
+#: templates/efe/components/topbar_actions.html:54
+msgid "Theme: dark"
+msgstr "Tema: karanlık"
+
+#: templates/efe/components/topbar_actions.html:54
+msgid "Theme: light"
+msgstr "Tema: aydınlık"
+
+#: templates/efe/components/topbar_actions.html:54
+msgid "Theme: system"
+msgstr "Tema: sistem"
+
+#: templates/efe/components/topbar_actions.html:55
+msgid "Change theme"
+msgstr "Temayı değiştir"
+
+#: templates/efe/components/home_upcoming.html:9
+msgid "Coming up"
+msgstr "Yaklaşanlar"
+
+#: templates/efe/components/home_upcoming.html:31
+#: templates/efe/components/notification_entry.html:14
+msgid "New"
+msgstr "Yeni"
+
+#: templates/efe/components/series_panel.html:13
+#, python-format
+msgid "Watching order · %(total)s movie"
+msgid_plural "Watching order · %(total)s movies"
+msgstr[0] "İzleme sırası · %(total)s film"
+msgstr[1] "İzleme sırası · %(total)s film"
+
+#: templates/efe/components/series_panel.html:32
+msgid "All series"
+msgstr "Tüm seriler"
+
+#: templates/efe/components/series_panel.html:39
+#, python-format
+msgid "Next in order: <strong>%(order)s. %(title)s</strong>"
+msgstr "Sıradaki: <strong>%(order)s. %(title)s</strong>"
+
+#: templates/efe/components/series_panel.html:47
+msgid "You watched the whole series. Congratulations!"
+msgstr "Serinin tamamını izledin. Tebrikler!"
+
+#: templates/efe/components/notification_entry.html:25
+#, python-format
+msgid "Season %(season)s, episode %(episode)s"
+msgstr "%(season)s. sezon, %(episode)s. bölüm"
+
+#: efe/templatetags/efe_tags.py:59
+#: templates/efe/components/notification_entry.html:37
+msgid "Out now"
+msgstr "Yayında"
+
+#: templates/efe/components/watch_offers.html:9
+msgid "Where to watch in Turkey"
+msgstr "Türkiye'de nerede izlenir?"
+
+#: templates/efe/components/watch_offers.html:11
+#, python-format
+msgid "Where to watch (%(region)s)"
+msgstr "Nerede izlenir? (%(region)s)"
+
+#: templates/efe/components/watch_offers.html:17
+msgid "All offers"
+msgstr "Tüm seçenekler"
+
+#: templates/efe/components/watch_offers.html:42
+#, python-format
+msgid "Search on %(name)s"
+msgstr "%(name)s üzerinde ara"
+
+#: templates/efe/components/watch_offers.html:42
+#, python-format
+msgid "Open %(name)s"
+msgstr "%(name)s aç"
+
+#: templates/efe/components/watch_offers.html:53
+msgid "Streaming data provided by JustWatch through TMDB. Availability may change."
+msgstr "Yayın verileri TMDB aracılığıyla JustWatch'tan alınır. Erişilebilirlik değişebilir."
+
+#: templates/efe/components/watch_offers.html:60
+msgid "Not available on any platform in Turkey right now."
+msgstr "Şu an Türkiye'de hiçbir platformda yayında değil."
+
+#: templates/efe/components/watch_offers.html:62
+msgid "Not available on any platform in your region right now."
+msgstr "Şu an bölgende hiçbir platformda yayında değil."
+
+#: templates/efe/components/watch_offers.html:65
+msgid "You can check JustWatch for the latest availability."
+msgstr "En güncel durum için JustWatch'a bakabilirsin."
+
+#: templates/efe/components/watch_offers.html:69
+msgid "Search on JustWatch"
+msgstr "JustWatch'ta ara"
+
+#: events/views.py:126
+msgid "The task to refresh upcoming releases has been queued."
+msgstr "Yaklaşan yayınları yenileme görevi sıraya alındı."
+
+#: events/notifications.py:35
+msgid "No users with release notifications enabled"
+msgstr "Yayın bildirimleri açık kullanıcı yok"
+
+#: events/notifications.py:52
+msgid "🔔 efeTrack: New Releases Available! 🔔"
+msgstr "🔔 Yeni yayın var"
+
+#: events/notifications.py:107
+msgid "📆 efeTrack: Today's Releases 📆"
+msgstr "📺 Bugünün yayınları"
+
+#: events/notifications.py:457
+msgid "Enjoy your media!"
+msgstr "İyi seyirler, keyifli okumalar!"
+
+#: events/notifications.py
+msgid "Nothing you follow is released today."
+msgstr "Bugün takip ettiklerinden yeni bir şey yayınlanmıyor."
+
+#: events/calendar/main.py:20
+msgid "Manual sources are not processed"
+msgstr "Elle eklenen kaynaklar işlenmez"
+
+#: events/calendar/main.py:24
+msgid "No items to process"
+msgstr "İşlenecek öğe yok"
+
+#: integrations/views.py:65
+msgid "Invalid or expired Trakt authorization request."
+msgstr "Geçersiz veya süresi dolmuş Trakt yetkilendirme isteği."
+
+#: integrations/views.py:69
+msgid "Trakt authorization failed."
+msgstr "Trakt yetkilendirmesi başarısız oldu."
+
+#: integrations/views.py:92 integrations/views.py:127
+msgid "The task to import media from Trakt has been queued."
+msgstr "Trakt'tan medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:113
+msgid "Trakt username is required."
+msgstr "Trakt kullanıcı adı gerekli."
+
+#: integrations/views.py:147
+msgid "Trakt export zip file is required."
+msgstr "Trakt dışa aktarma ZIP dosyası gerekli."
+
+#: integrations/views.py:158
+msgid "The task to import media from Trakt export file has been queued."
+msgstr "Trakt dışa aktarma dosyasından medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:208
+msgid "The task to import media from Simkl has been queued."
+msgstr "Simkl'den medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:229
+msgid "MyAnimeList username is required."
+msgstr "MyAnimeList kullanıcı adı gerekli."
+
+#: integrations/views.py:239
+msgid "The task to import media from MyAnimeList has been queued."
+msgstr "MyAnimeList'ten medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:294 integrations/views.py:327
+msgid "AniList username is required."
+msgstr "AniList kullanıcı adı gerekli."
+
+#: integrations/views.py:308 integrations/views.py:340
+msgid "AniList import queued."
+msgstr "AniList içe aktarması sıraya alındı."
+
+#: integrations/views.py:358
+msgid "Kitsu user ID is required."
+msgstr "Kitsu kullanıcı kimliği gerekli."
+
+#: integrations/views.py:367
+msgid "The task to import media from Kitsu has been queued."
+msgstr "Kitsu'dan medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:388
+msgid "Yamtrack CSV file is required."
+msgstr "Yamtrack/efeTrack CSV dosyası gerekli."
+
+#: integrations/views.py:399
+msgid "The task to import media from Yamtrack CSV file has been queued."
+msgstr "Yamtrack/efeTrack CSV dosyasından medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:410
+msgid "HowLongToBeat CSV file is required."
+msgstr "HowLongToBeat CSV dosyası gerekli."
+
+#: integrations/views.py:421
+msgid "The task to import media from HowLongToBeat CSV file has been queued."
+msgstr "HowLongToBeat CSV dosyasından medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:431
+msgid "Steam ID is required."
+msgstr "Steam kimliği gerekli."
+
+#: integrations/views.py:440
+msgid "The task to import media from Steam has been queued."
+msgstr "Steam'den medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:460
+msgid "IMDB CSV file is required."
+msgstr "IMDB CSV dosyası gerekli."
+
+#: integrations/views.py:471
+msgid "The task to import media from IMDB CSV file has been queued."
+msgstr "IMDB CSV dosyasından medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:482
+msgid "GoodReads CSV file is required."
+msgstr "GoodReads CSV dosyası gerekli."
+
+#: integrations/views.py:493
+msgid "The task to import media from GoodReads CSV file has been queued."
+msgstr "GoodReads CSV dosyasından medya içe aktarma görevi sıraya alındı."
+
+#: integrations/views.py:563 integrations/views.py:594
+msgid "Missing payload"
+msgstr "Veri eksik"
+
+#: integrations/tasks.py:48
+msgid "No media was imported."
+msgstr "Hiç medya içe aktarılmadı."
+
+#: integrations/tasks.py:50
+#, python-format
+msgid "Imported %(media_list)s."
+msgstr "İçe aktarılanlar: %(media_list)s."
+
+#: integrations/imports/trakt.py:79 integrations/imports/trakt.py:109
+#: integrations/imports/trakt.py:144
+msgid "Invalid Trakt secret key."
+msgstr "Geçersiz Trakt gizli anahtarı."
+
+#: integrations/imports/trakt.py:304
+#, python-format
+msgid "User slug %(username)s not found. User slug can be found in your Trakt profile URL."
+msgstr "%(username)s kullanıcı kısa adı bulunamadı. Kullanıcı kısa adını Trakt profil adresinde bulabilirsin."
+
+#: integrations/imports/trakt.py:310
+msgid "This account is set to private, use OAuth import instead."
+msgstr "Bu hesap gizli, bunun yerine OAuth ile içe aktarmayı kullan."
+
+#: integrations/imports/trakt.py:363
+#, python-format
+msgid "Error processing history entry: %(entry)s"
+msgstr "Geçmiş kaydı işlenirken hata oluştu: %(entry)s"
+
+#: integrations/imports/trakt.py:380
+#, python-format
+msgid "%(title)s: No %(source)s ID found."
+msgstr "%(title)s: %(source)s kimliği bulunamadı."
+
+#: integrations/imports/simkl.py:519 integrations/imports/trakt.py:469
+#, python-format
+msgid "%(title)s: not found in %(source)s with ID %(tmdb_id)s."
+msgstr "%(title)s: %(source)s üzerinde %(tmdb_id)s kimliğiyle bulunamadı."
+
+#: integrations/imports/trakt.py:614
+#, python-format
+msgid "%(item_identifier)s: not found in %(source)s with ID %(tmdb_id)s."
+msgstr "%(item_identifier)s: %(source)s üzerinde %(tmdb_id)s kimliğiyle bulunamadı."
+
+#: integrations/imports/trakt.py:799
+#, python-format
+msgid "Error processing watchlist entry: %(entry)s"
+msgstr "İzleme listesi kaydı işlenirken hata oluştu: %(entry)s"
+
+#: integrations/imports/trakt.py:818
+#, python-format
+msgid "Error processing rating entry: %(entry)s"
+msgstr "Puan kaydı işlenirken hata oluştu: %(entry)s"
+
+#: integrations/imports/trakt.py:835
+#, python-format
+msgid "Error processing comment entry: %(entry)s"
+msgstr "Yorum kaydı işlenirken hata oluştu: %(entry)s"
+
+#: integrations/imports/trakt.py:1071
+msgid "The uploaded file is not a valid Trakt export archive."
+msgstr "Yüklenen dosya geçerli bir Trakt dışa aktarma arşivi değil."
+
+#: integrations/imports/trakt.py:1090
+msgid "The uncompressed Trakt export archive is too large to import."
+msgstr "Açılmış Trakt dışa aktarma arşivi içe aktarmak için çok büyük."
+
+#: integrations/imports/trakt.py:1101
+msgid "The uploaded archive does not contain any Trakt export data. Upload the ZIP file downloaded from the Trakt website."
+msgstr "Yüklenen arşivde Trakt dışa aktarma verisi yok. Trakt web sitesinden indirdiğin ZIP dosyasını yükle."
+
+#: integrations/imports/simkl.py:51 integrations/imports/simkl.py:76
+msgid "Invalid SIMKL secret key."
+msgstr "Geçersiz SIMKL gizli anahtarı."
+
+#: integrations/imports/simkl.py:280 integrations/imports/simkl.py:475
+#, python-format
+msgid "%(title)s: No TMDB ID found"
+msgstr "%(title)s: TMDB kimliği bulunamadı"
+
+#: integrations/imports/simkl.py:286 integrations/imports/simkl.py:481
+#, python-format
+msgid "%(title)s (%(tmdb_id)s) already present in the import list"
+msgstr "%(title)s (%(tmdb_id)s) zaten içe aktarma listesinde"
+
+#: integrations/imports/simkl.py:343
+#, python-format
+msgid "Error processing entry: %(tv)s"
+msgstr "Kayıt işlenirken hata oluştu: %(tv)s"
+
+#: integrations/imports/simkl.py:554
+#, python-format
+msgid "Error processing entry: %(movie)s"
+msgstr "Kayıt işlenirken hata oluştu: %(movie)s"
+
+#: integrations/imports/simkl.py:615
+#, python-format
+msgid "%(title)s: No MyAnimeList ID found"
+msgstr "%(title)s: MyAnimeList kimliği bulunamadı"
+
+#: integrations/imports/simkl.py:621
+#, python-format
+msgid "%(title)s (%(mal_id)s) already present in the import list"
+msgstr "%(title)s (%(mal_id)s) zaten içe aktarma listesinde"
+
+#: integrations/imports/simkl.py:653
+#, python-format
+msgid "%(title)s: not found in %(source)s with ID %(mal_id)s."
+msgstr "%(title)s: %(source)s üzerinde %(mal_id)s kimliğiyle bulunamadı."
+
+#: integrations/imports/anilist.py:243 integrations/imports/kitsu.py:115
+#: integrations/imports/mal.py:108
+#, python-format
+msgid "User %(username)s not found."
+msgstr "%(username)s kullanıcısı bulunamadı."
+
+#: integrations/imports/kitsu.py:119
+#, python-format
+msgid "Multiple users found for %(username)s, please use your user ID. User IDs can be found in the URL when viewing your Kitsu profile."
+msgstr "%(username)s için birden fazla kullanıcı bulundu, lütfen kullanıcı kimliğini kullan. Kullanıcı kimliğini Kitsu profilini görüntülerken adres çubuğunda bulabilirsin."
+
+#: integrations/imports/kitsu.py:152
+#, python-format
+msgid "Error processing entry: %(title)s (%(kitsu_id)s) - %(entry)s"
+msgstr "Kayıt işlenirken hata oluştu: %(title)s (%(kitsu_id)s) - %(entry)s"
+
+#: integrations/imports/kitsu.py:298
+#, python-format
+msgid "Could not import unknown item - missing media data from Kitsu. Relationship: %(relationship)s"
+msgstr "Bilinmeyen öğe içe aktarılamadı - Kitsu'dan gelen medya verisi eksik. İlişki: %(relationship)s"
+
+#: integrations/imports/kitsu.py:365
+#, python-format
+msgid "%(media_title)s: No valid external ID found."
+msgstr "%(media_title)s: Geçerli bir harici kimlik bulunamadı."
+
+#: integrations/imports/mal.py:116
+#, python-format
+msgid "Error processing entry: %(content)s"
+msgstr "Kayıt işlenirken hata oluştu: %(content)s"
+
+#: integrations/imports/helpers.py:496
+msgid "Invalid import time."
+msgstr "Geçersiz içe aktarma saati."
+
+#: integrations/imports/helpers.py:503
+msgid "The same import task is already scheduled."
+msgstr "Aynı içe aktarma görevi zaten zamanlanmış."
+
+#: integrations/imports/helpers.py:532
+#, python-format
+msgid "%(source)s import task scheduled."
+msgstr "%(source)s içe aktarma görevi zamanlandı."
+
+#: integrations/imports/steam.py:45
+msgid "Steam API key not configured in environment variables"
+msgstr "Steam API anahtarı ortam değişkenlerinde yapılandırılmamış"
+
+#: integrations/imports/steam.py:113
+msgid "Invalid response from Steam API"
+msgstr "Steam API'sinden geçersiz yanıt"
+
+#: integrations/imports/steam.py:145
+msgid "Steam API rate limit exceeded. Please try again later."
+msgstr "Steam API istek sınırı aşıldı. Lütfen daha sonra tekrar dene."
+
+#: integrations/imports/steam.py:148
+msgid "Steam profile is private or invalid"
+msgstr "Steam profili gizli veya geçersiz"
+
+#: integrations/imports/steam.py:151
+msgid "Bad request to Steam API. Please check the Steam ID."
+msgstr "Steam API'sine hatalı istek. Lütfen Steam kimliğini kontrol et."
+
+#: integrations/imports/steam.py:154
+msgid "Invalid Steam API key"
+msgstr "Geçersiz Steam API anahtarı"
+
+#: integrations/imports/steam.py:156
+#, python-format
+msgid "Steam API error: %(status_code)s"
+msgstr "Steam API hatası: %(status_code)s"
+
+#: integrations/imports/steam.py:161
+msgid "Steam API request failed after all retries"
+msgstr "Steam API isteği tüm denemelere rağmen başarısız oldu"
+
+#: integrations/imports/steam.py:183 integrations/imports/steam.py:262
+#, python-format
+msgid "%(name)s (%(appid)s): Couldn't find a match in %(source)s"
+msgstr "%(name)s (%(appid)s): %(source)s üzerinde eşleşme bulunamadı"
+
+#: integrations/imports/steam.py:269
+#, python-format
+msgid "Failed to process Steam game %(name)s (%(appid)s): %(error)s"
+msgstr "%(name)s (%(appid)s) Steam oyunu işlenemedi: %(error)s"
+
+#: integrations/imports/goodreads.py:70 integrations/imports/hltb.py:65
+#: integrations/imports/imdb.py:87 integrations/imports/yamtrack.py:96
+msgid "Invalid file format. Please upload a CSV file."
+msgstr "Geçersiz dosya biçimi. Lütfen bir CSV dosyası yükle."
+
+#: integrations/imports/goodreads.py:92 integrations/imports/hltb.py:80
+#: integrations/imports/hltb.py:88 integrations/imports/imdb.py:102
+#: integrations/imports/imdb.py:110 integrations/imports/yamtrack.py:116
+#, python-format
+msgid "Error processing entry: %(row)s"
+msgstr "Kayıt işlenirken hata oluştu: %(row)s"
+
+#: integrations/imports/imdb.py:140
+#, python-format
+msgid "Invalid or missing IMDB ID for title: %(title)s"
+msgstr "Şu içerik için IMDB kimliği geçersiz veya eksik: %(title)s"
+
+#: integrations/imports/imdb.py:149
+#, python-format
+msgid "%(title)s: Unsupported title type '%(title_type)s' - skipped"
+msgstr "%(title)s: Desteklenmeyen içerik türü '%(title_type)s' - atlandı"
+
+#: integrations/imports/imdb.py:154
+#, python-format
+msgid "%(title)s: Unknown title type '%(title_type)s' - skipped"
+msgstr "%(title)s: Bilinmeyen içerik türü '%(title_type)s' - atlandı"
+
+#: integrations/imports/imdb.py:163
+#, python-format
+msgid "Couldn't find a match in %(source)s for title: %(title)s"
+msgstr "%(source)s üzerinde şu içerik için eşleşme bulunamadı: %(title)s"
+
+#: integrations/imports/imdb.py:244
+#, python-format
+msgid "%(title_list)s: They were matched to the same TMDB ID %(media_id)s - none imported"
+msgstr "%(title_list)s: Hepsi aynı TMDB kimliğiyle (%(media_id)s) eşleşti - hiçbiri içe aktarılmadı"
+
+#: integrations/imports/goodreads.py:85
+#, python-format
+msgid "Error processing entry: %(description)s - %(error)s"
+msgstr "Kayıt işlenirken hata oluştu: %(description)s - %(error)s"
+
+#: integrations/imports/goodreads.py:145
+#, python-format
+msgid "%(title)s: Couldn't find this book via Title or ISBN13 in %(source)s"
+msgstr "%(title)s: Bu kitap %(source)s üzerinde başlık veya ISBN13 ile bulunamadı"
+
+#: integrations/imports/hltb.py:115
+#, python-format
+msgid "%(title)s: Couldn't find a game with this title in %(source)s"
+msgstr "%(title)s: %(source)s üzerinde bu başlıkta bir oyun bulunamadı"
+
+#: integrations/imports/hltb.py:176
+#, python-format
+msgid "%(title_list)s: They were matched to the same ID %(media_id)s - none imported"
+msgstr "%(title_list)s: Hepsi aynı kimlikle (%(media_id)s) eşleşti - hiçbiri içe aktarılmadı"
+
+#: integrations/imports/anilist.py:48
+msgid "Invalid Anilist secret key."
+msgstr "Geçersiz AniList gizli anahtarı."
+
+#: integrations/imports/anilist.py:83
+msgid "Invalid AniList access token."
+msgstr "Geçersiz AniList erişim anahtarı."
+
+#: integrations/imports/anilist.py:246
+#, python-format
+msgid "User %(username)s is private."
+msgstr "%(username)s kullanıcısının profili gizli."
+
+#: integrations/imports/yamtrack.py:106
+#, python-format
+msgid "Error processing entry with ID %(media_id)s (%(media_type)s): %(error)s"
+msgstr "%(media_id)s kimlikli kayıt işlenirken hata oluştu (%(media_type)s): %(error)s"
+
+#: integrations/imports/yamtrack.py:221
+#, python-format
+msgid "%(title)s (%(media_type)s): %(errors)s"
+msgstr "%(title)s (%(media_type)s): %(errors)s"
+
+#: integrations/imports/yamtrack.py:394
+#, python-format
+msgid "Missing metadata for: %(row)s"
+msgstr "Şunun için meta veri eksik: %(row)s"
+
+#: lists/forms.py:25
+msgid "Collaborators"
+msgstr "Ortak çalışanlar"
+
+#: lists/forms.py:31
+msgid "Search users to add..."
+msgstr "Eklenecek kullanıcıları ara..."
+
+#: lists/views.py:100
+msgid "List not found"
+msgstr "Liste bulunamadı"
+
+#: lists/views.py:234
+msgid "You do not have permission to edit this list."
+msgstr "Bu listeyi düzenleme iznin yok."
+
+#: lists/views.py:248
+msgid "You do not have permission to delete this list."
+msgstr "Bu listeyi silme iznin yok."
+
+#: efe/vocabulary.py:15
+msgctxt "media data"
+msgid "Action"
+msgstr "Aksiyon"
+
+#: efe/vocabulary.py:16
+msgctxt "media data"
+msgid "Adventure"
+msgstr "Macera"
+
+#: efe/vocabulary.py:17
+msgctxt "media data"
+msgid "Animation"
+msgstr "Animasyon"
+
+#: efe/vocabulary.py:18
+msgctxt "media data"
+msgid "Comedy"
+msgstr "Komedi"
+
+#: efe/vocabulary.py:19
+msgctxt "media data"
+msgid "Crime"
+msgstr "Suç"
+
+#: efe/vocabulary.py:20
+msgctxt "media data"
+msgid "Documentary"
+msgstr "Belgesel"
+
+#: efe/vocabulary.py:21
+msgctxt "media data"
+msgid "Drama"
+msgstr "Dram"
+
+#: efe/vocabulary.py:22
+msgctxt "media data"
+msgid "Family"
+msgstr "Aile"
+
+#: efe/vocabulary.py:23
+msgctxt "media data"
+msgid "Fantasy"
+msgstr "Fantastik"
+
+#: efe/vocabulary.py:24
+msgctxt "media data"
+msgid "History"
+msgstr "Tarih"
+
+#: efe/vocabulary.py:25
+msgctxt "media data"
+msgid "Horror"
+msgstr "Korku"
+
+#: efe/vocabulary.py:26
+msgctxt "media data"
+msgid "Music"
+msgstr "Müzik"
+
+#: efe/vocabulary.py:27
+msgctxt "media data"
+msgid "Mystery"
+msgstr "Gizem"
+
+#: efe/vocabulary.py:28
+msgctxt "media data"
+msgid "Romance"
+msgstr "Romantik"
+
+#: efe/vocabulary.py:29
+msgctxt "media data"
+msgid "Science Fiction"
+msgstr "Bilim Kurgu"
+
+#: efe/vocabulary.py:30
+msgctxt "media data"
+msgid "TV Movie"
+msgstr "TV Filmi"
+
+#: efe/vocabulary.py:31
+msgctxt "media data"
+msgid "Thriller"
+msgstr "Gerilim"
+
+#: efe/vocabulary.py:32
+msgctxt "media data"
+msgid "War"
+msgstr "Savaş"
+
+#: efe/vocabulary.py:33
+msgctxt "media data"
+msgid "Western"
+msgstr "Western"
+
+#: efe/vocabulary.py:34
+msgctxt "media data"
+msgid "Action & Adventure"
+msgstr "Aksiyon ve Macera"
+
+#: efe/vocabulary.py:35
+msgctxt "media data"
+msgid "Kids"
+msgstr "Çocuk"
+
+#: efe/vocabulary.py:36
+msgctxt "media data"
+msgid "News"
+msgstr "Haber"
+
+#: efe/vocabulary.py:37
+msgctxt "media data"
+msgid "Reality"
+msgstr "Reality"
+
+#: efe/vocabulary.py:38
+msgctxt "media data"
+msgid "Sci-Fi & Fantasy"
+msgstr "Bilim Kurgu ve Fantastik"
+
+#: efe/vocabulary.py:39
+msgctxt "media data"
+msgid "Soap"
+msgstr "Pembe Dizi"
+
+#: efe/vocabulary.py:40
+msgctxt "media data"
+msgid "Talk"
+msgstr "Talk Show"
+
+#: efe/vocabulary.py:41
+msgctxt "media data"
+msgid "War & Politics"
+msgstr "Savaş ve Politika"
+
+#: efe/vocabulary.py:43
+msgctxt "media data"
+msgid "Avant Garde"
+msgstr "Avangart"
+
+#: efe/vocabulary.py:44
+msgctxt "media data"
+msgid "Award Winning"
+msgstr "Ödüllü"
+
+#: efe/vocabulary.py:45
+msgctxt "media data"
+msgid "Boys Love"
+msgstr "Boys Love"
+
+#: efe/vocabulary.py:46
+msgctxt "media data"
+msgid "Girls Love"
+msgstr "Girls Love"
+
+#: efe/vocabulary.py:47
+msgctxt "media data"
+msgid "Ecchi"
+msgstr "Ecchi"
+
+#: efe/vocabulary.py:48
+msgctxt "media data"
+msgid "Gourmet"
+msgstr "Gurme"
+
+#: efe/vocabulary.py:49
+msgctxt "media data"
+msgid "Mahou Shoujo"
+msgstr "Büyücü Kız (Mahou Shoujo)"
+
+#: efe/vocabulary.py:50
+msgctxt "media data"
+msgid "Mecha"
+msgstr "Mecha"
+
+#: efe/vocabulary.py:51
+msgctxt "media data"
+msgid "Psychological"
+msgstr "Psikolojik"
+
+#: efe/vocabulary.py:52
+msgctxt "media data"
+msgid "Sci-Fi"
+msgstr "Bilim Kurgu"
+
+#: efe/vocabulary.py:53
+msgctxt "media data"
+msgid "Slice of Life"
+msgstr "Hayattan Kesitler"
+
+#: efe/vocabulary.py:54
+msgctxt "media data"
+msgid "Sports"
+msgstr "Spor"
+
+#: efe/vocabulary.py:55
+msgctxt "media data"
+msgid "Supernatural"
+msgstr "Doğaüstü"
+
+#: efe/vocabulary.py:56
+msgctxt "media data"
+msgid "Suspense"
+msgstr "Gerilim"
+
+#: efe/vocabulary.py:57
+msgctxt "media data"
+msgid "Adult Cast"
+msgstr "Yetişkin Kadro"
+
+#: efe/vocabulary.py:58
+msgctxt "media data"
+msgid "Anthropomorphic"
+msgstr "Antropomorfik"
+
+#: efe/vocabulary.py:59
+msgctxt "media data"
+msgid "Childcare"
+msgstr "Çocuk Bakımı"
+
+#: efe/vocabulary.py:60
+msgctxt "media data"
+msgid "Combat Sports"
+msgstr "Dövüş Sporları"
+
+#: efe/vocabulary.py:61
+msgctxt "media data"
+msgid "Delinquents"
+msgstr "Serseriler"
+
+#: efe/vocabulary.py:62
+msgctxt "media data"
+msgid "Detective"
+msgstr "Dedektif"
+
+#: efe/vocabulary.py:63
+msgctxt "media data"
+msgid "Educational"
+msgstr "Eğitici"
+
+#: efe/vocabulary.py:64
+msgctxt "media data"
+msgid "Gag Humor"
+msgstr "Absürt Mizah"
+
+#: efe/vocabulary.py:65
+msgctxt "media data"
+msgid "Gore"
+msgstr "Vahşet"
+
+#: efe/vocabulary.py:66
+msgctxt "media data"
+msgid "Harem"
+msgstr "Harem"
+
+#: efe/vocabulary.py:67
+msgctxt "media data"
+msgid "High Stakes Game"
+msgstr "Yüksek Riskli Oyun"
+
+#: efe/vocabulary.py:68
+msgctxt "media data"
+msgid "Historical"
+msgstr "Tarihî"
+
+#: efe/vocabulary.py:69
+msgctxt "media data"
+msgid "Idols (Female)"
+msgstr "İdoller (Kadın)"
+
+#: efe/vocabulary.py:70
+msgctxt "media data"
+msgid "Idols (Male)"
+msgstr "İdoller (Erkek)"
+
+#: efe/vocabulary.py:71
+msgctxt "media data"
+msgid "Isekai"
+msgstr "Isekai"
+
+#: efe/vocabulary.py:72
+msgctxt "media data"
+msgid "Iyashikei"
+msgstr "Iyashikei (Huzur Veren)"
+
+#: efe/vocabulary.py:73
+msgctxt "media data"
+msgid "Love Polygon"
+msgstr "Aşk Çokgeni"
+
+#: efe/vocabulary.py:74
+msgctxt "media data"
+msgid "Martial Arts"
+msgstr "Dövüş Sanatları"
+
+#: efe/vocabulary.py:75
+msgctxt "media data"
+msgid "Medical"
+msgstr "Tıp"
+
+#: efe/vocabulary.py:76
+msgctxt "media data"
+msgid "Military"
+msgstr "Askerî"
+
+#: efe/vocabulary.py:77
+msgctxt "media data"
+msgid "Mythology"
+msgstr "Mitoloji"
+
+#: efe/vocabulary.py:78
+msgctxt "media data"
+msgid "Organized Crime"
+msgstr "Organize Suç"
+
+#: efe/vocabulary.py:79
+msgctxt "media data"
+msgid "Otaku Culture"
+msgstr "Otaku Kültürü"
+
+#: efe/vocabulary.py:80
+msgctxt "media data"
+msgid "Parody"
+msgstr "Parodi"
+
+#: efe/vocabulary.py:81
+msgctxt "media data"
+msgid "Performing Arts"
+msgstr "Sahne Sanatları"
+
+#: efe/vocabulary.py:82
+msgctxt "media data"
+msgid "Pets"
+msgstr "Evcil Hayvanlar"
+
+#: efe/vocabulary.py:83
+msgctxt "media data"
+msgid "Reincarnation"
+msgstr "Reenkarnasyon"
+
+#: efe/vocabulary.py:84
+msgctxt "media data"
+msgid "Reverse Harem"
+msgstr "Ters Harem"
+
+#: efe/vocabulary.py:85
+msgctxt "media data"
+msgid "Samurai"
+msgstr "Samuray"
+
+#: efe/vocabulary.py:86
+msgctxt "media data"
+msgid "School"
+msgstr "Okul"
+
+#: efe/vocabulary.py:87
+msgctxt "media data"
+msgid "Showbiz"
+msgstr "Şov Dünyası"
+
+#: efe/vocabulary.py:88
+msgctxt "media data"
+msgid "Space"
+msgstr "Uzay"
+
+#: efe/vocabulary.py:89
+msgctxt "media data"
+msgid "Strategy Game"
+msgstr "Strateji Oyunu"
+
+#: efe/vocabulary.py:90
+msgctxt "media data"
+msgid "Super Power"
+msgstr "Süper Güç"
+
+#: efe/vocabulary.py:91
+msgctxt "media data"
+msgid "Survival"
+msgstr "Hayatta Kalma"
+
+#: efe/vocabulary.py:92
+msgctxt "media data"
+msgid "Team Sports"
+msgstr "Takım Sporları"
+
+#: efe/vocabulary.py:93
+msgctxt "media data"
+msgid "Time Travel"
+msgstr "Zaman Yolculuğu"
+
+#: efe/vocabulary.py:94
+msgctxt "media data"
+msgid "Vampire"
+msgstr "Vampir"
+
+#: efe/vocabulary.py:95
+msgctxt "media data"
+msgid "Video Game"
+msgstr "Video Oyunu"
+
+#: efe/vocabulary.py:96
+msgctxt "media data"
+msgid "Visual Arts"
+msgstr "Görsel Sanatlar"
+
+#: efe/vocabulary.py:97
+msgctxt "media data"
+msgid "Workplace"
+msgstr "İş Yeri"
+
+#: efe/vocabulary.py:98
+msgctxt "media data"
+msgid "Urban Fantasy"
+msgstr "Kentsel Fantastik"
+
+#: efe/vocabulary.py:99
+msgctxt "media data"
+msgid "Villainess"
+msgstr "Kötü Kadın (Villainess)"
+
+#: efe/vocabulary.py:100
+msgctxt "media data"
+msgid "Josei"
+msgstr "Josei"
+
+#: efe/vocabulary.py:101
+msgctxt "media data"
+msgid "Seinen"
+msgstr "Seinen"
+
+#: efe/vocabulary.py:102
+msgctxt "media data"
+msgid "Shoujo"
+msgstr "Shoujo"
+
+#: efe/vocabulary.py:103
+msgctxt "media data"
+msgid "Shounen"
+msgstr "Shounen"
+
+#: efe/vocabulary.py:105
+msgctxt "media data"
+msgid "Point-and-click"
+msgstr "Tıkla ve İlerle"
+
+#: efe/vocabulary.py:106
+msgctxt "media data"
+msgid "Fighting"
+msgstr "Dövüş"
+
+#: efe/vocabulary.py:107
+msgctxt "media data"
+msgid "Shooter"
+msgstr "Nişancı"
+
+#: efe/vocabulary.py:108
+msgctxt "media data"
+msgid "Platform"
+msgstr "Platform"
+
+#: efe/vocabulary.py:109
+msgctxt "media data"
+msgid "Puzzle"
+msgstr "Bulmaca"
+
+#: efe/vocabulary.py:110
+msgctxt "media data"
+msgid "Racing"
+msgstr "Yarış"
+
+#: efe/vocabulary.py:111
+msgctxt "media data"
+msgid "Real Time Strategy (RTS)"
+msgstr "Gerçek Zamanlı Strateji (RTS)"
+
+#: efe/vocabulary.py:112
+msgctxt "media data"
+msgid "Role-playing (RPG)"
+msgstr "Rol Yapma (RPG)"
+
+#: efe/vocabulary.py:113
+msgctxt "media data"
+msgid "Simulator"
+msgstr "Simülasyon"
+
+#: efe/vocabulary.py:114
+msgctxt "media data"
+msgid "Sport"
+msgstr "Spor"
+
+#: efe/vocabulary.py:115
+msgctxt "media data"
+msgid "Strategy"
+msgstr "Strateji"
+
+#: efe/vocabulary.py:117
+msgctxt "media data"
+msgid "Turn-based strategy (TBS)"
+msgstr "Sıra Tabanlı Strateji (TBS)"
+
+#: efe/vocabulary.py:119
+msgctxt "media data"
+msgid "Tactical"
+msgstr "Taktik"
+
+#: efe/vocabulary.py:121
+msgctxt "media data"
+msgid "Hack and slash/Beat 'em up"
+msgstr "Hack and Slash/Beat 'em up"
+
+#: efe/vocabulary.py:123
+msgctxt "media data"
+msgid "Quiz/Trivia"
+msgstr "Bilgi Yarışması"
+
+#: efe/vocabulary.py:124
+msgctxt "media data"
+msgid "Pinball"
+msgstr "Langırt"
+
+#: efe/vocabulary.py:125
+msgctxt "media data"
+msgid "Indie"
+msgstr "Bağımsız"
+
+#: efe/vocabulary.py:126
+msgctxt "media data"
+msgid "Arcade"
+msgstr "Arcade"
+
+#: efe/vocabulary.py:127
+msgctxt "media data"
+msgid "Visual Novel"
+msgstr "Görsel Roman"
+
+#: efe/vocabulary.py:128
+msgctxt "media data"
+msgid "Card & Board Game"
+msgstr "Kart ve Kutu Oyunu"
+
+#: efe/vocabulary.py:129
+msgctxt "media data"
+msgid "MOBA"
+msgstr "MOBA"
+
+#: efe/vocabulary.py:131
+msgctxt "media data"
+msgid "Main game"
+msgstr "Ana oyun"
+
+#: efe/vocabulary.py:132
+msgctxt "media data"
+msgid "DLC"
+msgstr "DLC"
+
+#: efe/vocabulary.py:133
+msgctxt "media data"
+msgid "Expansion"
+msgstr "Genişleme paketi"
+
+#: efe/vocabulary.py:134
+msgctxt "media data"
+msgid "Bundle"
+msgstr "Paket"
+
+#: efe/vocabulary.py:135
+msgctxt "media data"
+msgid "Standalone expansion"
+msgstr "Bağımsız genişleme paketi"
+
+#: efe/vocabulary.py:136
+msgctxt "media data"
+msgid "Mod"
+msgstr "Mod"
+
+#: efe/vocabulary.py:137
+msgctxt "media data"
+msgid "Episode"
+msgstr "Bölüm"
+
+#: efe/vocabulary.py:138
+msgctxt "media data"
+msgid "Season"
+msgstr "Sezon"
+
+#: efe/vocabulary.py:139
+msgctxt "media data"
+msgid "Remake"
+msgstr "Yeniden yapım"
+
+#: efe/vocabulary.py:140
+msgctxt "media data"
+msgid "Remaster"
+msgstr "Remaster"
+
+#: efe/vocabulary.py:141
+msgctxt "media data"
+msgid "Expanded game"
+msgstr "Genişletilmiş oyun"
+
+#: efe/vocabulary.py:142
+msgctxt "media data"
+msgid "Port"
+msgstr "Uyarlama (port)"
+
+#: efe/vocabulary.py:143
+msgctxt "media data"
+msgid "Fork"
+msgstr "Türev (fork)"
+
+#: efe/vocabulary.py:144
+msgctxt "media data"
+msgid "Pack"
+msgstr "İçerik paketi"
+
+#: efe/vocabulary.py:145
+msgctxt "media data"
+msgid "Update"
+msgstr "Güncelleme"
+
+#: efe/vocabulary.py:147
+msgctxt "media data"
+msgid "Rumored"
+msgstr "Söylenti"
+
+#: efe/vocabulary.py:148
+msgctxt "media data"
+msgid "Planned"
+msgstr "Planlandı"
+
+#: efe/vocabulary.py:149
+msgctxt "media data"
+msgid "In Production"
+msgstr "Yapım aşamasında"
+
+#: efe/vocabulary.py:150
+msgctxt "media data"
+msgid "Post Production"
+msgstr "Post prodüksiyonda"
+
+#: efe/vocabulary.py:151
+msgctxt "media data"
+msgid "Released"
+msgstr "Yayınlandı"
+
+#: efe/vocabulary.py:152 efe/vocabulary.py:153
+msgctxt "media data"
+msgid "Canceled"
+msgstr "İptal edildi"
+
+#: efe/vocabulary.py:154
+msgctxt "media data"
+msgid "Returning Series"
+msgstr "Devam eden dizi"
+
+#: efe/vocabulary.py:155
+msgctxt "media data"
+msgid "Ended"
+msgstr "Sona erdi"
+
+#: efe/vocabulary.py:156
+msgctxt "media data"
+msgid "Pilot"
+msgstr "Pilot"
+
+#: efe/vocabulary.py:157
+msgctxt "media data"
+msgid "Finished Airing"
+msgstr "Yayını tamamlandı"
+
+#: efe/vocabulary.py:158
+msgctxt "media data"
+msgid "Currently Airing"
+msgstr "Yayında"
+
+#: efe/vocabulary.py:159
+msgctxt "media data"
+msgid "Not Yet Aired"
+msgstr "Henüz yayınlanmadı"
+
+#: efe/vocabulary.py:160
+msgctxt "media data"
+msgid "Finished"
+msgstr "Tamamlandı"
+
+#: efe/vocabulary.py:161
+msgctxt "media data"
+msgid "Airing"
+msgstr "Yayında"
+
+#: efe/vocabulary.py:162 efe/vocabulary.py:163
+msgctxt "media data"
+msgid "Publishing"
+msgstr "Yayımlanıyor"
+
+#: efe/vocabulary.py:164
+msgctxt "media data"
+msgid "Upcoming"
+msgstr "Yakında"
+
+#: efe/vocabulary.py:165
+msgctxt "media data"
+msgid "Discontinued"
+msgstr "Durduruldu"
+
+#: efe/vocabulary.py:166
+msgctxt "media data"
+msgid "On Hiatus"
+msgstr "Ara verildi"
+
+#: efe/vocabulary.py:167
+msgctxt "media data"
+msgid "Not Yet Published"
+msgstr "Henüz yayımlanmadı"
+
+#: efe/vocabulary.py:168
+msgctxt "media data"
+msgid "Completed"
+msgstr "Tamamlandı"
+
+#: efe/vocabulary.py:169
+msgctxt "media data"
+msgid "Ongoing"
+msgstr "Devam ediyor"
+
+#: efe/vocabulary.py:171
+msgctxt "media data"
+msgid "Movie"
+msgstr "Film"
+
+#: efe/vocabulary.py:172
+msgctxt "media data"
+msgid "TV"
+msgstr "TV"
+
+#: efe/vocabulary.py:173
+msgctxt "media data"
+msgid "TV Short"
+msgstr "Kısa TV"
+
+#: efe/vocabulary.py:174
+msgctxt "media data"
+msgid "Special"
+msgstr "Özel bölüm"
+
+#: efe/vocabulary.py:175
+msgctxt "media data"
+msgid "TV Special"
+msgstr "TV özel bölümü"
+
+#: efe/vocabulary.py:176
+msgctxt "media data"
+msgid "Light Novel"
+msgstr "Hafif roman (light novel)"
+
+#: efe/vocabulary.py:177
+msgctxt "media data"
+msgid "Novel"
+msgstr "Roman"
+
+#: efe/vocabulary.py:178 efe/vocabulary.py:179
+msgctxt "media data"
+msgid "One-shot"
+msgstr "Tek bölüm (one-shot)"
+
+#: efe/vocabulary.py:180
+msgctxt "media data"
+msgid "Manga"
+msgstr "Manga"
+
+#: efe/vocabulary.py:181
+msgctxt "media data"
+msgid "Manhwa"
+msgstr "Manhwa"
+
+#: efe/vocabulary.py:182
+msgctxt "media data"
+msgid "Manhua"
+msgstr "Manhua"
+
+#: efe/vocabulary.py:183
+msgctxt "media data"
+msgid "Doujinshi"
+msgstr "Doujinshi"
+
+#: efe/vocabulary.py:184
+msgctxt "media data"
+msgid "Hardcover"
+msgstr "Ciltli"
+
+#: efe/vocabulary.py:185
+msgctxt "media data"
+msgid "Paperback"
+msgstr "Karton kapak"
+
+#: efe/vocabulary.py:186 efe/vocabulary.py:187
+msgctxt "media data"
+msgid "E-book"
+msgstr "E-kitap"
+
+#: efe/vocabulary.py:188
+msgctxt "media data"
+msgid "Audiobook"
+msgstr "Sesli kitap"
+
+#: efe/vocabulary.py:189
+msgctxt "media data"
+msgid "Book"
+msgstr "Kitap"
+
+#: efe/vocabulary.py:190
+msgctxt "media data"
+msgid "Comic"
+msgstr "Çizgi roman"
+
+#: efe/vocabulary.py:191
+msgctxt "media data"
+msgid "Game"
+msgstr "Oyun"
+
+#: efe/vocabulary.py:192
+msgctxt "media data"
+msgid "Board game"
+msgstr "Kutu oyunu"
+
+#: efe/vocabulary.py:194
+msgctxt "media data"
+msgid "Original"
+msgstr "Orijinal"
+
+#: efe/vocabulary.py:195
+msgctxt "media data"
+msgid "Web Manga"
+msgstr "Web manga"
+
+#: efe/vocabulary.py:196
+msgctxt "media data"
+msgid "Web Novel"
+msgstr "Web romanı"
+
+#: efe/vocabulary.py:197
+msgctxt "media data"
+msgid "4-koma Manga"
+msgstr "4-koma manga"
+
+#: efe/vocabulary.py:198
+msgctxt "media data"
+msgid "Picture Book"
+msgstr "Resimli kitap"
+
+#: efe/vocabulary.py:199
+msgctxt "media data"
+msgid "Card Game"
+msgstr "Kart oyunu"
+
+#: efe/vocabulary.py:200
+msgctxt "media data"
+msgid "Mixed Media"
+msgstr "Karma medya"
+
+#: efe/vocabulary.py:201
+msgctxt "media data"
+msgid "Other"
+msgstr "Diğer"
+
+#: efe/vocabulary.py:202
+msgctxt "media data"
+msgid "Live Action"
+msgstr "Canlı çekim"
+
+#: efe/vocabulary.py:203
+msgctxt "media data"
+msgid "Multimedia Project"
+msgstr "Çoklu medya projesi"
+
+#: efe/vocabulary.py:205
+msgctxt "media data"
+msgid "No synopsis available."
+msgstr "Özet bulunmuyor."
+
+#: efe/vocabulary.py:206
+msgctxt "media data"
+msgid "Unknown"
+msgstr "Bilinmiyor"
+
+#: efe/vocabulary.py:210
+msgctxt "anime season"
+msgid "Winter"
+msgstr "Kış"
+
+#: efe/vocabulary.py:211
+msgctxt "anime season"
+msgid "Spring"
+msgstr "İlkbahar"
+
+#: efe/vocabulary.py:212
+msgctxt "anime season"
+msgid "Summer"
+msgstr "Yaz"
+
+#: efe/vocabulary.py:213
+msgctxt "anime season"
+msgid "Fall"
+msgstr "Sonbahar"
+
+#: efe/vocabulary.py:217
+msgctxt "weekday"
+msgid "Monday"
+msgstr "Pazartesi"
+
+#: efe/vocabulary.py:218
+msgctxt "weekday"
+msgid "Tuesday"
+msgstr "Salı"
+
+#: efe/vocabulary.py:219
+msgctxt "weekday"
+msgid "Wednesday"
+msgstr "Çarşamba"
+
+#: efe/vocabulary.py:220
+msgctxt "weekday"
+msgid "Thursday"
+msgstr "Perşembe"
+
+#: efe/vocabulary.py:221
+msgctxt "weekday"
+msgid "Friday"
+msgstr "Cuma"
+
+#: efe/vocabulary.py:222
+msgctxt "weekday"
+msgid "Saturday"
+msgstr "Cumartesi"
+
+#: efe/vocabulary.py:223
+msgctxt "weekday"
+msgid "Sunday"
+msgstr "Pazar"
+
+#: efe/vocabulary.py:224
+msgctxt "weekday plural"
+msgid "Mondays"
+msgstr "Pazartesileri"
+
+#: efe/vocabulary.py:225
+msgctxt "weekday plural"
+msgid "Tuesdays"
+msgstr "Salıları"
+
+#: efe/vocabulary.py:226
+msgctxt "weekday plural"
+msgid "Wednesdays"
+msgstr "Çarşambaları"
+
+#: efe/vocabulary.py:227
+msgctxt "weekday plural"
+msgid "Thursdays"
+msgstr "Perşembeleri"
+
+#: efe/vocabulary.py:228
+msgctxt "weekday plural"
+msgid "Fridays"
+msgstr "Cumaları"
+
+#: efe/vocabulary.py:229
+msgctxt "weekday plural"
+msgid "Saturdays"
+msgstr "Cumartesileri"
+
+#: efe/vocabulary.py:230
+msgctxt "weekday plural"
+msgid "Sundays"
+msgstr "Pazarları"
+
+#: efe/vocabulary.py:289
+msgctxt "broadcast time"
+msgid "at"
+msgstr "saat"
+
+#: efe/models.py:22 efe/models.py:23
+msgid "Film series"
+msgstr "Film serisi"
+
+#: efe/models.py:52
+msgid "Released"
+msgstr "Yayınlandı"
+
+#: efe/views.py:174
+msgid "In progress"
+msgstr "Devam ediyor"
+
+#: efe/views.py:207
+msgid "Invalid theme."
+msgstr "Geçersiz tema."
+
+#: efe/views.py:225
+msgid "Invalid volume."
+msgstr "Geçersiz ses seviyesi."
+
+#: efe/watch_providers.py:10
+msgctxt "watch offer"
+msgid "Subscription"
+msgstr "Abonelikle"
+
+#: efe/watch_providers.py:11
+msgctxt "watch offer"
+msgid "Free"
+msgstr "Ücretsiz"
+
+#: efe/watch_providers.py:12
+msgctxt "watch offer"
+msgid "Free with ads"
+msgstr "Reklamlı ücretsiz"
+
+#: efe/watch_providers.py:13
+msgctxt "watch offer"
+msgid "Rent"
+msgstr "Kirala"
+
+#: efe/watch_providers.py:14
+msgctxt "watch offer"
+msgid "Buy"
+msgstr "Satın al"
+
+#: efe/templatetags/efe_tags.py:41
+msgid "Tomorrow"
+msgstr "Yarın"
+
+#: efe/templatetags/efe_tags.py:45
+#, python-format
+msgid "in %(count)d day"
+msgid_plural "in %(count)d days"
+msgstr[0] "%(count)d gün sonra"
+msgstr[1] "%(count)d gün sonra"
+
+#: efe/templatetags/efe_tags.py:48
+#, python-format
+msgid "%(count)d day ago"
+msgid_plural "%(count)d days ago"
+msgstr[0] "%(count)d gün önce"
+msgstr[1] "%(count)d gün önce"
+
+#: efe/templatetags/efe_tags.py:66
+#, python-format
+msgid "in %(count)d minute"
+msgid_plural "in %(count)d minutes"
+msgstr[0] "%(count)d dakika sonra"
+msgstr[1] "%(count)d dakika sonra"
+
+#: efe/templatetags/efe_tags.py:72
+#, python-format
+msgid "in %(count)d hour"
+msgid_plural "in %(count)d hours"
+msgstr[0] "%(count)d saat sonra"
+msgstr[1] "%(count)d saat sonra"
+
+msgid "Follows macOS"
+msgstr "macOS'a uyar"
+
+msgid "Classic"
+msgstr "Klasik"
+
+msgid "Dark tones"
+msgstr "Karanlık tonlar"
+
+msgid "Light tones"
+msgstr "Aydınlık tonlar"
+
+msgid "Ember"
+msgstr "Kor"
+
+msgid "Dark · red"
+msgstr "Karanlık · kırmızı"
+
+msgid "Amethyst"
+msgstr "Ametist"
+
+msgid "Dark · purple"
+msgstr "Karanlık · mor"
+
+msgid "Deep Sea"
+msgstr "Derin Deniz"
+
+msgid "Dark · blue"
+msgstr "Karanlık · mavi"
+
+msgid "Rose"
+msgstr "Gül"
+
+msgid "Light · red"
+msgstr "Aydınlık · kırmızı"
+
+msgid "Lavender"
+msgstr "Lavanta"
+
+msgid "Light · purple"
+msgstr "Aydınlık · mor"
+
+msgid "Sky"
+msgstr "Gökyüzü"
+
+msgid "Light · blue"
+msgstr "Aydınlık · mavi"
+
+msgid "Font"
+msgstr "Yazı tipi"
+
+msgid "System (SF Pro)"
+msgstr "Sistem (SF Pro)"
+
+msgid "Invalid media type."
+msgstr "Geçersiz medya türü."
+
+msgid "Accent colour"
+msgstr "Vurgu rengi"
+
+msgid "Buttons, icons and highlights. “Theme” follows the selected theme."
+msgstr "Düğmeler, simgeler ve vurgular. “Temaya göre” seçili temanın rengini kullanır."
+
+msgid "Sound pack"
+msgstr "Ses paketi"
+
+msgid "Listen"
+msgstr "Dinle"
+
+msgid "Click sounds volume"
+msgstr "Tıklama sesleri düzeyi"
+
+msgid "Separate from the volume above, which is used for tracking, completion and notification sounds."
+msgstr "Yukarıdaki ses düzeyinden ayrıdır; o düzey takip, tamamlama ve bildirim sesleri içindir."
+
+msgid "Sidebar"
+msgstr "Kenar çubuğu"
+
+msgid "Show only icons in the sidebar. Drag items in the sidebar to reorder them."
+msgstr "Kenar çubuğunda yalnız simgeleri göster. Sırayı değiştirmek için öğeleri sürükleyip bırak."
+
+msgid "Reset order"
+msgstr "Sırayı sıfırla"
+
+msgid "Collapse sidebar"
+msgstr "Kenar çubuğunu daralt"
+
+msgid "Soft"
+msgstr "Yumuşak"
+
+msgid "Gentle clicks and chimes"
+msgstr "Hafif tıklar ve çınlamalar"
+
+msgid "Mechanical"
+msgstr "Mekanik"
+
+msgid "Keyboard clacks and a desk bell"
+msgstr "Klavye tıkırtısı ve masa zili"
+
+msgid "Retro"
+msgstr "Retro"
+
+msgid "8-bit blips"
+msgstr "8-bit bip sesleri"
+
+msgid "Summary"
+msgstr "Özet"
+
+msgid "Watched this week"
+msgstr "Bu hafta izlenen"
+
+msgid "Streak"
+msgstr "Seri"
+
+msgid "Watch something today to keep it going"
+msgstr "Seriyi sürdürmek için bugün bir şey izle"
+
+msgid "Keep it up!"
+msgstr "Böyle devam!"
+
+msgid "Watch something to start a streak"
+msgstr "Seri başlatmak için bir şey izle"
+
+msgid "best %(best)s"
+msgstr "en iyi %(best)s"
+
+msgid "Upcoming episodes"
+msgstr "Yaklaşan bölümler"
+
+msgid "Nothing in the next 7 days"
+msgstr "Önümüzdeki 7 günde yok"
+
+msgid "%(count)s episode"
+msgid_plural "%(count)s episodes"
+msgstr[0] "%(count)s bölüm"
+msgstr[1] "%(count)s bölüm"
+
+msgid "%(count)s movie"
+msgid_plural "%(count)s movies"
+msgstr[0] "%(count)s film"
+msgstr[1] "%(count)s film"
+
+msgid "Nothing in the next %(days)s day"
+msgid_plural "Nothing in the next %(days)s days"
+msgstr[0] "Önümüzdeki %(days)s günde yok"
+msgstr[1] "Önümüzdeki %(days)s günde yok"
+
+msgid "Change watch date"
+msgstr "İzleme tarihini değiştir"
+
+msgid "Watch date"
+msgstr "İzleme tarihi"
+
+msgid "Finished on"
+msgstr "Bitirdiğin gün"
+
+msgid "Started on"
+msgstr "Başladığın gün"
+
+msgid "The episodes you watched last move to this day. Earlier episodes keep their dates."
+msgstr "En son izlediğin bölümler bu güne taşınır. Daha önceki bölümlerin tarihleri değişmez."
+
+msgid "The date could not be saved."
+msgstr "Tarih kaydedilemedi."
+
+msgid "Stop this task? What it has done so far is kept."
+msgstr "Bu işlem durdurulsun mu? Şimdiye kadar yapılanlar korunur."
+
+msgid "Cancel this queued task?"
+msgstr "Sıradaki bu işlem iptal edilsin mi?"
+
+msgid "Stop task"
+msgstr "Durdur"
+
+msgid "Cancel task"
+msgstr "İptal et"
+
+msgid "Cancelled"
+msgstr "İptal edildi"
+
+msgid "This task was cancelled."
+msgstr "Bu işlem iptal edildi."
+
+msgid "This task stopped because the app was closed. You can start it again."
+msgstr "Uygulama kapandığı için bu işlem yarıda kaldı. Yeniden başlatabilirsin."
+
+msgid "The task was cancelled."
+msgstr "İşlem iptal edildi."
+
+msgid "This task has already finished or cannot be cancelled."
+msgstr "Bu işlem zaten bitmiş ya da iptal edilemiyor."
+
+msgid "Upcoming releases are already being refreshed."
+msgstr "Yaklaşan yayınlar zaten yenileniyor."
+
+msgid "Fetching releases…"
+msgstr "Yayınlar getiriliyor…"
+
+msgid "Queued…"
+msgstr "Sırada…"
+
+msgid "%(count)s release"
+msgid_plural "%(count)s releases"
+msgstr[0] "%(count)s yayın"
+msgstr[1] "%(count)s yayın"

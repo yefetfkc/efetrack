@@ -1,0 +1,13 @@
+{# efeTrack: total watch time chip. Needs: length (media_facts result) — empty when unknown #}
+{% if length %}
+  <span class="efe-fact" title="{% if length.estimated %}Süresi bilinmeyen bölümler ortalamayla sayıldı. {% endif %}{% if length.days %}≈ {{ length.days }}{% endif %}">
+    {% include "app/icons/clock.svg" with classes="w-4 h-4" %}
+    <span>{% if length.episodes %}Toplam {% else %}Süre {% endif %}{% if length.estimated %}≈ {% endif %}<b>{{ length.total }}</b>{% if length.seasons and length.seasons > 1 %} · {{ length.seasons }} sezon{% endif %}{% if length.episodes %} · {{ length.episodes }} bölüm{% endif %}</span>
+  </span>
+  {% if length.remaining %}
+    <span class="efe-fact efe-fact-soft" title="İzlemediğin bölümlerin süresi">
+      {% include "app/icons/clock-reversing.svg" with classes="w-4 h-4" %}
+      <span>Kalan <b>{{ length.remaining }}</b></span>
+    </span>
+  {% endif %}
+{% endif %}

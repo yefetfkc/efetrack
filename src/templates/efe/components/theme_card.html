@@ -1,0 +1,26 @@
+{# efeTrack theme picker card. Params: id, name, sub, side, body, accent, bar, split (optional) #}
+<button type="button"
+        role="radio"
+        class="efe-theme-card text-left"
+        :aria-checked="preset === '{{ id }}' ? 'true' : 'false'"
+        @click="efe.theme.choose('{{ id }}')"
+        data-efe-silent>
+  <span class="efe-theme-check" aria-hidden="true">
+    <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5l3 3 6-7"/></svg>
+  </span>
+  <span class="efe-theme-preview"
+        style="background: {% if split %}linear-gradient(110deg, #212529 0 50%, #f3f4f7 50% 100%){% else %}{{ body }}{% endif %}">
+    <span class="side" style="background: {% if split %}linear-gradient(110deg, #1a1d20 0 50%, #ffffff 50% 100%){% else %}{{ side }}{% endif %}">
+      <i style="background: {{ accent }}"></i><i style="background: {{ bar }}"></i><i style="background: {{ bar }}"></i>
+    </span>
+    <span class="body">
+      <b style="background: {{ accent }}"></b>
+      <s style="background: {{ bar }}"></s>
+      <u><em style="background: {{ bar }}; opacity:.45"></em><em style="background: {{ bar }}; opacity:.45"></em><em style="background: {{ bar }}; opacity:.45"></em></u>
+    </span>
+  </span>
+  <span class="block px-1 pt-2 pb-0.5 min-w-0">
+    <span class="block text-sm font-medium text-ef-fg truncate">{{ name }}</span>
+    <span class="block text-[11px] text-gray-400 truncate">{{ sub }}</span>
+  </span>
+</button>

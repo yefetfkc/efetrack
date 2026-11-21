@@ -1,0 +1,46 @@
+{# efeTrack: "Afişi değiştir" — the posters the title's source offers; pressing one keeps it. #}
+<div class="efe-pc-overlay" x-data="{ open: true, busy: '' }" x-show="open" x-cloak
+     @keydown.escape.window="open = false" @click.self="open = false"
+     role="dialog" aria-modal="true" aria-labelledby="efe-pc-title">
+  <div class="efe-pc-box">
+    <div class="efe-pc-head">
+      <div class="min-w-0">
+        <h2 id="efe-pc-title" class="text-lg font-semibold">Afişi değiştir</h2>
+        <p class="text-xs text-gray-400">
+          {% if choices %}{{ item.get_source_display|default:item.source }} kaynağındaki {{ choices|length }} afiş{% if item.source == "tmdb" %} · Türkçe olanlar önce{% endif %}. Seçtiğin afiş her yerde kullanılır.{% endif %}
+        </p>
+      </div>
+      <button type="button" class="efe-pc-close" @click="open = false" aria-label="Kapat">✕</button>
+    </div>
+
+    {% if choices is None %}
+      <p class="text-sm text-gray-400 py-8 text-center">Kaynağa şu an ulaşılamadı, biraz sonra tekrar dene.</p>
+    {% elif not choices and not default %}
+      <p class="text-sm text-gray-400 py-8 text-center">Bu yapım için başka afiş bulunamadı.</p>
+    {% else %}
+      <div class="efe-pc-grid">
+        {% if default and not default_listed %}
+          <form hx-post="{% url 'efe_poster_choice' item.id %}" hx-swap="none" @submit="busy = '{{ default|escapejs }}'">
+            {% csrf_token %}
+            <input type="hidden" name="url" value="{{ default }}">
+            <button type="submit" class="efe-pc-card{% if item.image == default %} is-current{% endif %}" :class="{ 'is-busy': busy === '{{ default|escapejs }}' }">
+              <img src="{{ default }}" alt="" loading="lazy" decoding="async">
+              <span class="efe-pc-tag">Varsayılan</span>
+            </button>
+          </form>
+        {% endif %}
+        {% for choice in choices %}
+          <form hx-post="{% url 'efe_poster_choice' item.id %}" hx-swap="none" @submit="busy = '{{ choice.url|escapejs }}'">
+            {% csrf_token %}
+            <input type="hidden" name="url" value="{{ choice.url }}">
+            <button type="submit" class="efe-pc-card{% if item.image == choice.url %} is-current{% endif %}" :class="{ 'is-busy': busy === '{{ choice.url|escapejs }}' }"
+                    title="{% if choice.label %}{{ choice.label }} afiş{% else %}Afiş {{ forloop.counter }}{% endif %}">
+              <img src="{{ choice.thumb }}" alt="" loading="lazy" decoding="async">
+              {% if choice.url == default %}<span class="efe-pc-tag">Varsayılan</span>{% elif choice.label %}<span class="efe-pc-tag is-soft">{{ choice.label }}</span>{% endif %}
+            </button>
+          </form>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>

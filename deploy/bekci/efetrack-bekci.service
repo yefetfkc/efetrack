@@ -1,0 +1,10 @@
+[Unit]
+Description=efeTrack sunucu bekçisi (sorun olursa Telegram'a yazar)
+After=docker.service network-online.target
+
+[Service]
+Type=oneshot
+# Site to check (optional):
+# Environment=BEKCI_SITE_URL=https://track.example.com/static/favicon/apple-touch-icon.png
+ExecStart=/usr/bin/python3 /opt/efeTrack/bekci/bekci.py
+TimeoutStartSec=120

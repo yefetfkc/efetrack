@@ -1,0 +1,10 @@
+{# efeTrack: "Fragman" tab. Nothing is loaded until the tab is opened (then from TMDB, YouTube videos). #}
+{% load app_tags %}
+{% media_section_count media user_medias watch_providers watch_provider_region watch_offers=watch_offers film_series=film_series trailers_url=trailers_url universe_url=universe_url crew_url=crew_url as efe_trailer_sections %}
+<section class="mb-8" x-show="tab === 'trailers'{% if efe_trailer_sections <= 1 %} || tab === 'overview'{% endif %}" x-cloak>
+  <h2 class="text-xl font-bold mb-4">Fragman</h2>
+  {# Hidden (x-show) until the tab opens, so "intersect" fires only then, like the rating heatmap. #}
+  <div hx-get="{{ trailers_url }}" hx-trigger="intersect once" hx-swap="innerHTML">
+    <p class="text-sm text-gray-400">Fragmanlar yükleniyor…</p>
+  </div>
+</section>

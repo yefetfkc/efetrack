@@ -1,0 +1,86 @@
+{# efeTrack: "Undo" toast. Shown after a page load (undo_toast from the session) or #}
+{# when an htmx response sends the "efe-undo" event (home page +/−). Needs: csrf_token #}
+{% load l10n %}
+{% if user.is_authenticated %}
+  <div x-data="{
+         show: false,
+         busy: false,
+         failed: false,
+         left: 0,
+         token: '',
+         label: '',
+         count: 1,
+         timer: null,
+         open(d) {
+           this.token = d.token; this.label = d.label; this.count = d.count || 1;
+           this.failed = false; this.busy = false; this.left = 10; this.show = true;
+           clearInterval(this.timer);
+           this.timer = setInterval(() => { if (!this.busy && --this.left <= 0) { this.show = false; clearInterval(this.timer); } }, 1000);
+         },
+         async undo() {
+           this.busy = true;
+           try {
+             const r = await fetch('{% url "efe_undo" "TOKEN" %}'.replace('TOKEN', encodeURIComponent(this.token)), {
+               method: 'POST', headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+             });
+             if (!r.ok) throw new Error(r.status);
+             window.location.reload();
+           } catch (e) { this.failed = true; this.busy = false; }
+         },
+       }"
+       x-init="{% if undo_toast %}open({ token: '{{ undo_toast.token|escapejs }}', label: '{{ undo_toast.label|escapejs }}', count: {{ undo_toast.count|unlocalize }} }){% endif %}"
+       @efe-undo.window="open($event.detail)"
+       x-show="show"
+       x-cloak
+       x-transition.opacity
+       role="status"
+       class="fixed z-50 flex items-center gap-3 bg-ef-raised border border-gray-600 rounded-lg shadow-xl text-sm"
+       style="bottom: 1.5rem; left: 50%; transform: translateX(-50%); padding: .75rem 1rem; max-width: calc(100vw - 2rem);">
+    <span class="text-ef-fg"><span x-text="label"></span><span x-show="count > 1" x-text="' (' + count + ' bölüm)'"></span></span>
+    <span x-show="failed" class="text-xs text-red-400">Geri alma süresi doldu.</span>
+    <button type="button" @click="undo()" :disabled="busy || failed"
+            class="px-3 py-1 rounded-md bg-indigo-600 text-white font-semibold cursor-pointer disabled:opacity-40">
+      Geri al <span class="text-xs" style="font-weight: 400;" x-text="'(' + left + ')'"></span>
+    </button>
+    <button type="button" @click="show = false" class="text-gray-400 hover:text-white cursor-pointer" aria-label="Kapat">✕</button>
+  </div>
+
+  {# Episode rating after "+" on the home page (event "efe-rate"). Optional: "Şimdi değil" closes it. #}
+  <div x-data="{
+         open: false, url: '', label: '', saving: false, failed: false,
+         show(d) { this.url = d.url; this.label = d.label; this.failed = false; this.saving = false; this.open = true; },
+         async save(n) {
+           this.saving = true; this.failed = false;
+           try {
+             const r = await fetch(this.url, {
+               method: 'POST', headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+               body: new URLSearchParams({ score: String(n) }),
+             });
+             if (!r.ok) throw new Error(r.status);
+             this.open = false;
+           } catch (e) { this.failed = true; }
+           this.saving = false;
+         },
+       }"
+       @efe-rate.window="show($event.detail)"
+       @keydown.escape.window="open = false"
+       x-show="open"
+       x-cloak
+       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div @click.outside="open = false" class="w-72 p-4 bg-ef-raised border border-gray-600 rounded-lg shadow-xl">
+      <p class="text-sm font-semibold mb-1" x-text="label"></p>
+      <p class="text-xs text-gray-400 mb-3">Bölüme puan ver (isteğe bağlı)</p>
+      <div class="grid gap-1" style="grid-template-columns: repeat(5, minmax(0, 1fr))">
+        <template x-for="n in [1,2,3,4,5,6,7,8,9,10]" :key="n">
+          <button type="button" @click="save(n)" :disabled="saving"
+                  class="h-8 rounded-md text-sm font-semibold cursor-pointer bg-ef-hover hover:bg-indigo-600 hover:text-white disabled:opacity-40"
+                  x-text="n"></button>
+        </template>
+      </div>
+      <div class="flex items-center justify-between mt-3">
+        <span x-show="failed" class="text-xs text-red-400">Kaydedilemedi.</span>
+        <button type="button" @click="open = false" class="ml-auto text-xs text-gray-400 hover:text-white cursor-pointer">Şimdi değil</button>
+      </div>
+    </div>
+  </div>
+{% endif %}

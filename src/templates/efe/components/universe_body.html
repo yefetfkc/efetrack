@@ -1,0 +1,26 @@
+{# efeTrack: universe cards, in the style of the related-media grid. #}
+{% load efe_tags %}
+{% if error %}
+  <p class="text-sm text-gray-400">Bağlantılı yapımlar şu an yüklenemedi. Biraz sonra tekrar dene.</p>
+{% elif not links %}
+  <p class="text-sm text-gray-400">Bu yapımla bağlantılı başka dizi ya da film bulunamadı.</p>
+{% else %}
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:1rem">
+    {% for link in links %}
+      <a href="{{ link.url }}" class="group block" title="{{ link.title }}{% if link.year %} ({{ link.year }}){% endif %}">
+        <div class="relative overflow-hidden rounded-md bg-ef-card" style="aspect-ratio:2/3">
+          {% if link.image|efe_has_poster %}
+            <img src="{{ link.image|efe_poster:'w342' }}" alt="{{ link.title }}" loading="lazy"
+                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" style="width:100%;height:100%;object-fit:cover">
+          {% endif %}
+          <span class="absolute top-2 left-2 px-2 py-0.5 rounded font-semibold bg-indigo-600 text-white shadow" style="font-size:11px">{{ link.label }}</span>
+          {% if link.status %}
+            <span style="font-size:11px" class="absolute bottom-2 left-2 px-2 py-0.5 rounded font-medium {% if link.done %}bg-emerald-600{% else %}bg-ef-raised{% endif %} text-white shadow">{{ link.status }}</span>
+          {% endif %}
+        </div>
+        <p class="mt-2 text-sm font-medium text-ef-fg truncate group-hover:text-indigo-400">{{ link.title }}</p>
+        <p class="text-xs text-gray-400">{{ link.kind_label }}{% if link.year %} · {{ link.year }}{% endif %}</p>
+      </a>
+    {% endfor %}
+  </div>
+{% endif %}

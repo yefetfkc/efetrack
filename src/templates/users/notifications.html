@@ -1,0 +1,167 @@
+{% extends "users/base.html" %}
+
+{% load widget_tweaks %}
+{% load app_tags %}
+{% load i18n %}
+
+{% block title %}
+  {% trans "Notifications" %} - efeTrack
+{% endblock title %}
+
+{% block settings_content %}
+  <div class="space-y-6">
+
+    <div class="bg-ef-card rounded-lg p-6">
+      <div class="flex items-center mb-4">
+        {% include "app/icons/bell.svg" with classes="w-6 h-6 text-indigo-400 mr-3" %}
+        <h2 class="text-xl font-semibold">{% trans "Notifications" %}</h2>
+      </div>
+
+      <p class="text-gray-400 mb-5 text-sm">{% trans "Configure how you want to receive notifications about your media." %}</p>
+
+      <form class="space-y-6" method="post">
+        {% csrf_token %}
+
+        {# Notification URLS #}
+        <div x-data="{ showInfo: false }">
+          <div class="flex items-center justify-between mb-2">
+            <label for="apprise-urls" class="block text-sm font-medium text-gray-300">{% trans "Apprise URLs" %}</label>
+            <button type="button"
+                    class="text-gray-400 hover:text-gray-300 cursor-pointer"
+                    @click="showInfo = !showInfo">{% include "app/icons/info.svg" with classes="w-4 h-4" %}</button>
+          </div>
+
+          <div class="mb-4 p-3 bg-ef-raised rounded-md text-sm text-gray-300"
+               x-show="showInfo">
+            <p class="mb-2">
+              {# Translators: In "Apprise is a notification service that supports many platforms including:", this is the linked product name. #}
+              {% trans "Apprise" as apprise_link_label %}
+              {# Translators: In "Apprise is a notification service that supports many platforms including:", this is the linked phrase. #}
+              {% trans "many platforms" as platforms_link_label %}
+              {% with html_class="text-indigo-400 hover:underline" %}
+                {% inline_link "https://github.com/caronc/apprise" html_class apprise_link_label new_tab=True as apprise_link %}
+                {% inline_link "https://github.com/caronc/apprise/wiki" html_class platforms_link_label new_tab=True as platforms_link %}
+                {% blocktrans trimmed %}
+                  {{ apprise_link }} is a notification service that supports {{ platforms_link }} including:
+                {% endblocktrans %}
+              {% endwith %}
+            </p>
+            <ul class="list-disc pl-5 space-y-1 text-gray-400">
+              <li>{% trans "Discord" %}</li>
+              <li>{% trans "Telegram" %}</li>
+              <li>{% trans "Slack" %}</li>
+              <li>{% trans "Email" %}</li>
+              <li>{% trans "Pushover" %}</li>
+              <li>{% trans "ntfy" %}</li>
+              <li>{% trans "And many more..." %}</li>
+            </ul>
+            <p class="mt-2">
+              {% inline_code "discord://webhook_id/webhook_token" "bg-ef-card px-1 py-0.5 rounded" as webhook_example %}
+              {% blocktrans trimmed %}
+                Enter one URL per line. Example: {{ webhook_example }}
+              {% endblocktrans %}
+            </p>
+          </div>
+
+          {{ form.notification_urls|add_class:"w-full p-3 bg-ef-raised rounded-md text-ef-fg text-sm border border-gray-600 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 min-h-[150px]" }}
+          <p class="mt-1 text-xs text-gray-400">
+            {% trans "Enter each Apprise URL on a separate line to send notifications to multiple services." %}
+          </p>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-medium text-gray-300 mb-2">{% trans "Notification Settings" %}</h3>
+
+          {# Notification Settings #}
+          <div class="bg-ef-raised p-4 rounded-md space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <label for="id_daily_digest_enabled"
+                       class="text-sm font-medium text-gray-200 flex items-center">
+                  {% include "app/icons/alarm-clock.svg" with classes="w-4 h-4 mr-2 text-indigo-400" %}
+                  {% trans "Enable Daily Digest" %}
+                </label>
+                <p class="text-xs text-gray-400 mt-1 ml-6">
+                  {% trans "Receive a single notification each day with all media scheduled to release that day" %}
+                </p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input class="sr-only peer"
+                       type="checkbox"
+                       name="daily_digest_enabled"
+                       id="id_daily_digest_enabled"
+                       {% if form.daily_digest_enabled.value %}checked{% endif %}>
+                <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+                </div>
+              </label>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-gray-600">
+              <div>
+                <label for="id_release_notifications_enabled"
+                       class="text-sm font-medium text-gray-200 flex items-center">
+                  {% include "app/icons/bell-ringing.svg" with classes="w-4 h-4 mr-2 text-indigo-400" %}
+                  {% trans "Receive notifications for recently released media" %}
+                </label>
+                <p class="text-xs text-gray-400 mt-1 ml-6">
+                  {% trans "Get notified when new episodes, chapters, or other media are released" %}
+                </p>
+              </div>
+
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input class="sr-only peer"
+                       type="checkbox"
+                       name="release_notifications_enabled"
+                       id="id_release_notifications_enabled"
+                       {% if form.release_notifications_enabled.value %}checked{% endif %}>
+                <div class="w-9 h-5 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-px after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-indigo-600">
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-gray-700 flex justify-between">
+          <a href="{% url 'test_notification' %}"
+             class="flex items-center px-4 py-2 bg-ef-raised text-ef-fg rounded-md hover:bg-ef-hover transition-colors text-sm cursor-pointer">
+            {% include "app/icons/bell.svg" with classes="w-4 h-4 mr-2" %}
+            {% trans "Test Notifications" %}
+          </a>
+          <button type="submit"
+                  class="flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors text-sm cursor-pointer">
+            {% include "app/icons/save.svg" with classes="w-4 h-4 mr-2" %}
+            {% trans "Save Settings" %}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    {# Excluded Media Items #}
+    <div class="bg-ef-card rounded-lg p-6">
+      <div class="flex items-center mb-5">
+        {% include "app/icons/funnel.svg" with classes="lucide lucide-user w-6 h-6 text-indigo-400 mr-3" %}
+        <h2 class="text-xl font-semibold">{% trans "Excluded Media Items" %}</h2>
+      </div>
+
+      <p class="text-sm text-gray-300 mb-3">{% trans "Exclude specific media items from notifications:" %}</p>
+
+      <div class="relative mb-4">
+        <input placeholder="{% trans 'Search for media to exclude...' %}"
+               class="w-full p-2 pl-8 bg-ef-raised rounded-md text-ef-fg border border-gray-600 focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm"
+               name="q"
+               type="text"
+               autocomplete="off"
+               hx-get="{% url 'search_notification_items' %}"
+               hx-trigger="keyup changed delay:300ms"
+               hx-target="#search-results">
+        {% include "app/icons/magnifying-glass.svg" with classes="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" %}
+      </div>
+
+      <div id="search-results"></div>
+
+      <div id="excluded-items-container">
+        {% include "users/components/excluded_items.html" with excluded_items=user.notification_excluded_items.all %}
+      </div>
+    </div>
+  </div>
+{% endblock settings_content %}

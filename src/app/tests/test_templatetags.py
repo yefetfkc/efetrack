@@ -1,0 +1,601 @@
+from unittest.mock import MagicMock, patch
+
+from django.conf import settings
+from django.test import TestCase, override_settings
+from django.urls import reverse
+from django.utils import timezone, translation
+from django.utils.translation import pgettext
+
+from app import config
+from app.models import Item, MediaTypes, Sources
+from app.templatetags import app_tags
+
+
+class AppTagsTests(TestCase):
+    """Test the app template tags."""
+
+    def setUp(self):
+        """Set up test data."""
+        # Create a sample item for testing
+        self.tv_item = Item(
+            media_id="1668",
+            source=Sources.TMDB.value,
+            media_type=MediaTypes.TV.value,
+            title="Test TV Show",
+        )
+
+        self.season_item = Item(
+            media_id="1668",
+            source=Sources.TMDB.value,
+            media_type=MediaTypes.SEASON.value,
+            title="Test TV Show",
+            season_number=1,
+        )
+
+        self.episode_item = Item(
+            media_id="1668",
+            source=Sources.TMDB.value,
+            media_type=MediaTypes.EPISODE.value,
+            title="Test TV Show",
+            season_number=1,
+            episode_number=1,
+        )
+
+        # Create a dict version for testing dict-based functions
+        self.tv_dict = {
+            "media_id": "1668",
+            "source": Sources.TMDB.value,
+            "media_type": MediaTypes.TV.value,
+            "title": "Test TV Show",
+        }
+
+        self.season_dict = {
+            "media_id": "1668",
+            "source": Sources.TMDB.value,
+            "media_type": MediaTypes.SEASON.value,
+            "title": "Test TV Show",
+            "season_number": 1,
+        }
+
+        self.episode_dict = {
+            "media_id": "1668",
+            "source": Sources.TMDB.value,
+            "media_type": MediaTypes.EPISODE.value,
+            "title": "Test TV Show",
+            "season_number": 1,
+            "episode_number": 1,
+        }
+
+    @patch("pathlib.Path.stat")
+    def test_get_static_file_mtime(self, mock_stat):
+        """Test the get_static_file_mtime tag."""
+        # Mock the stat method to return a fixed mtime
+        mock_stat_result = MagicMock()
+        mock_stat_result.st_mtime = 1234567890
+        mock_stat.return_value = mock_stat_result
+
+        # Test with a valid file
+        result = app_tags.get_static_file_mtime("css/style.css")
+        self.assertEqual(result, "?1234567890")
+
+        # Test with file not found
+        mock_stat.side_effect = OSError()
+        result = app_tags.get_static_file_mtime("nonexistent.css")
+        self.assertEqual(result, "")
+
+    @override_settings(STATIC_ROOT="/nonexistent-static-root")
+    def test_get_static_file_mtime_without_collectstatic(self):
+        """Without collected files the version comes from the source static folder."""
+        result = app_tags.get_static_file_mtime("js/efe.js")
+        self.assertRegex(result, r"^\?\d+$")
+        self.assertEqual(app_tags.get_static_file_mtime("js/no-such-file.js"), "")
+
+    @override_settings(URLS=["https://yamtrack.example.com:8924"])
+    def test_absolute_app_url(self):
+        """Test the absolute_app_url tag."""
+        result = app_tags.absolute_app_url({}, "/webhook/jellyfin/token")
+
+        self.assertEqual(
+            result,
+            "https://yamtrack.example.com:8924/webhook/jellyfin/token",
+        )
+
+    def test_no_underscore(self):
+        """Test the no_underscore filter."""
+        self.assertEqual(app_tags.no_underscore("hello_world"), "hello world")
+        self.assertEqual(
+            app_tags.no_underscore("test_string_with_underscores"),
+            "test string with underscores",
+        )
+        self.assertEqual(
+            app_tags.no_underscore("no_underscores_here"),
+            "no underscores here",
+        )
+
+    def test_slug(self):
+        """Test the slug filter."""
+        # Test normal slugification
+        self.assertEqual(app_tags.slug("Hello World"), "hello-world")
+
+        # Test with special characters
+        self.assertEqual(app_tags.slug("Anime: 31687"), "anime-31687")
+        self.assertEqual(app_tags.slug("★★★"), "%E2%98%85%E2%98%85%E2%98%85")
+        self.assertEqual(app_tags.slug("[Oshi no Ko]"), "oshi-no-ko")
+        self.assertEqual(app_tags.slug("_____"), "_____")
+
+    def test_media_type_readable(self):
+        """Test the media_type_readable filter."""
+        # Test all media types from the MediaTypes class
+        for media_type, label in MediaTypes.choices:
+            self.assertEqual(app_tags.media_type_readable(media_type), label)
+
+    def test_media_type_readable_plural(self):
+        """Test the media_type_readable_plural filter."""
+        expected_plurals = {
+            MediaTypes.TV.value: "TV Shows",
+            MediaTypes.SEASON.value: "TV Seasons",
+            MediaTypes.EPISODE.value: "Episodes",
+            MediaTypes.MOVIE.value: "Movies",
+            MediaTypes.ANIME.value: "Anime",
+            MediaTypes.MANGA.value: "Manga",
+            MediaTypes.GAME.value: "Games",
+            MediaTypes.BOOK.value: "Books",
+            MediaTypes.COMIC.value: "Comics",
+            MediaTypes.BOARDGAME.value: "Boardgames",
+        }
+
+        for media_type, _label in MediaTypes.choices:
+            with self.subTest(media_type=media_type):
+                self.assertIn(media_type, expected_plurals)
+                self.assertEqual(
+                    app_tags.media_type_readable_plural(media_type),
+                    expected_plurals[media_type],
+                )
+
+        with self.assertRaises(KeyError):
+            app_tags.media_type_readable_plural("unknown")
+
+    def test_default_source(self):
+        """Test the default_source filter."""
+        # Test all media types from the MediaTypes class
+        for media_type in MediaTypes.values:
+            result = app_tags.default_source(media_type)
+
+            # Check that it returns a non-empty string
+            self.assertTrue(isinstance(result, str))
+            self.assertTrue(len(result) > 0)
+
+            # This implicitly checks that all media types are handled
+        try:
+            app_tags.default_source(media_type)
+        except KeyError:
+            self.fail(f"default_source raised KeyError for {media_type}")
+
+    def test_media_past_verb(self):
+        """Test the media_past_verb filter."""
+        # Test all media types
+        for media_type in MediaTypes.values:
+            result = app_tags.media_past_verb(media_type)
+
+            # Lazy translations resolve to strings when rendered.
+            self.assertTrue(str(result))
+
+    def test_media_verbs_are_translated(self):
+        """Each media type uses its own present and past verb in every language."""
+        verb_contexts = {
+            MediaTypes.TV.value: ("tv", "watch", "watched"),
+            MediaTypes.SEASON.value: ("season", "watch", "watched"),
+            MediaTypes.EPISODE.value: ("episode", "watch", "watched"),
+            MediaTypes.MOVIE.value: ("movie", "watch", "watched"),
+            MediaTypes.ANIME.value: ("anime", "watch", "watched"),
+            MediaTypes.MANGA.value: ("manga", "read", "read"),
+            MediaTypes.GAME.value: ("game", "play", "played"),
+            MediaTypes.BOOK.value: ("book", "read", "read"),
+            MediaTypes.COMIC.value: ("comic", "read", "read"),
+            MediaTypes.BOARDGAME.value: ("board game", "play", "played"),
+        }
+        self.assertEqual(set(verb_contexts), set(MediaTypes.values))
+
+        for language, _name in settings.LANGUAGES:
+            with translation.override(language):
+                for media_type, (context, present, past) in verb_contexts.items():
+                    with self.subTest(language=language, media_type=media_type):
+                        self.assertEqual(
+                            config.get_translated_verb(media_type, past_tense=False),
+                            pgettext(f"{context} tracking verb present", present),
+                        )
+                        self.assertEqual(
+                            config.get_translated_verb(media_type, past_tense=True),
+                            pgettext(f"{context} tracking verb past", past),
+                        )
+                        self.assertEqual(
+                            app_tags.media_past_verb(media_type),
+                            pgettext(f"{context} tracking verb past", past),
+                        )
+
+    def test_media_units_are_translated(self):
+        """Each media type uses its own units in every language."""
+        unit_contexts = {
+            MediaTypes.SEASON.value: ("season", "Episode", "Episodes", "E"),
+            MediaTypes.ANIME.value: ("anime", "Episode", "Episodes", "E"),
+            MediaTypes.MANGA.value: ("manga", "Chapter", "Chapters", "#"),
+            MediaTypes.BOOK.value: ("book", "Page", "Pages", "P"),
+            MediaTypes.COMIC.value: ("comic", "Issue", "Issues", "#"),
+            MediaTypes.BOARDGAME.value: ("board game", "Play", "Plays", "#"),
+        }
+        self.assertEqual(
+            set(unit_contexts),
+            {
+                media_type
+                for media_type in MediaTypes.values
+                if "unit" in config.get_config(media_type)
+            },
+        )
+
+        for language, _name in settings.LANGUAGES:
+            with translation.override(language):
+                for media_type, units in unit_contexts.items():
+                    context, singular, plural, short = units
+                    with self.subTest(language=language, media_type=media_type):
+                        expected_singular = pgettext(
+                            f"{context} progress unit singular", singular
+                        )
+                        expected_plural = pgettext(
+                            f"{context} progress unit plural", plural
+                        )
+                        expected_short = pgettext(
+                            f"{context} progress unit short", short
+                        )
+
+                        self.assertEqual(
+                            config.get_translated_unit(media_type),
+                            expected_singular,
+                        )
+                        self.assertEqual(
+                            config.get_translated_unit(media_type, plural=True),
+                            expected_plural,
+                        )
+                        self.assertEqual(
+                            app_tags.unit_for_count(media_type, 1),
+                            expected_singular,
+                        )
+                        self.assertEqual(
+                            app_tags.unit_for_count(media_type, 2),
+                            expected_plural,
+                        )
+                        self.assertEqual(
+                            config.get_translated_short_unit(media_type),
+                            expected_short,
+                        )
+                        self.assertEqual(
+                            app_tags.short_unit(media_type),
+                            expected_short,
+                        )
+
+    def test_related_section_label(self):
+        """Known related sections get a translated heading in every language."""
+        for language, _name in settings.LANGUAGES:
+            with self.subTest(language=language), translation.override(language):
+                self.assertEqual(
+                    app_tags.related_section_label("related_anime"),
+                    pgettext("related section", "Related Anime"),
+                )
+                self.assertEqual(
+                    app_tags.related_section_label("dlcs"),
+                    pgettext("related section", "DLCs"),
+                )
+
+    def test_related_section_label_unknown_key(self):
+        """Unknown sections fall back to a title-cased version of the key."""
+        self.assertEqual(
+            app_tags.related_section_label("new_section"),
+            "New Section",
+        )
+
+    def test_media_detail_label(self):
+        """Known media detail keys get a translated label."""
+        with translation.override("it-it"):
+            label = app_tags.media_detail_label("start_date")
+            expected = pgettext("media detail", "Start date")
+        self.assertEqual(label, expected)
+        self.assertNotEqual(expected, "Start date")
+
+    def test_media_detail_label_unknown_key(self):
+        """Unknown detail keys fall back to the key without underscores."""
+        self.assertEqual(
+            app_tags.media_detail_label("new_detail"),
+            "new detail",
+        )
+
+    def test_sample_search(self):
+        """Test the sample_search filter."""
+        # Test all media types
+        for media_type in MediaTypes.values:
+            if media_type in (MediaTypes.SEASON.value, MediaTypes.EPISODE.value):
+                # Skip season and episode for sample_search
+                continue
+
+            result = app_tags.sample_search(media_type)
+
+            self.assertIn("/search", result)
+            self.assertIn(f"media_type={media_type}", result)
+            self.assertIn("q=", result)
+
+    def test_media_color(self):
+        """Test the media_color filter."""
+        # Test all media types
+        for media_type in MediaTypes.values:
+            result = app_tags.media_color(media_type)
+
+            # Check that it returns a non-empty string
+            self.assertTrue(isinstance(result, str))
+
+    @override_settings(TRACK_TIME=False)
+    def test_natural_day(self):
+        """Test the natural_day filter."""
+        # Create mock user with date_format preference
+        mock_user = MagicMock()
+        mock_user.date_format = "Y-m-d"
+        mock_user.time_format = "H:i"
+
+        # Mock current date to March 29, 2025
+        with patch("django.utils.timezone.now") as mock_now:
+            # Use timezone.datetime to create timezone-aware datetimes
+            mock_now.return_value = timezone.datetime(
+                2025,
+                3,
+                29,
+                12,
+                0,
+                0,
+                tzinfo=timezone.get_current_timezone(),
+            )
+
+            # Test today
+            today = timezone.datetime(
+                2025,
+                3,
+                29,
+                15,
+                0,
+                0,
+                tzinfo=timezone.get_current_timezone(),
+            )
+            self.assertEqual(app_tags.natural_day(today, mock_user), "Today 15:00")
+
+            # Test tomorrow
+            tomorrow = timezone.datetime(
+                2025,
+                3,
+                30,
+                15,
+                0,
+                0,
+                tzinfo=timezone.get_current_timezone(),
+            )
+            self.assertEqual(
+                app_tags.natural_day(tomorrow, mock_user),
+                "Tomorrow 15:00",
+            )
+
+            # Test further away
+            further = timezone.datetime(
+                2025,
+                4,
+                10,
+                15,
+                0,
+                0,
+                tzinfo=timezone.get_current_timezone(),
+            )
+            self.assertEqual(
+                app_tags.natural_day(further, mock_user),
+                "2025-04-10 15:00",
+            )
+
+    def test_media_url(self):
+        """Test the media_url filter."""
+        # Test with object for TV
+        tv_url = app_tags.media_url(self.tv_item)
+        expected_tv_url = reverse(
+            "media_details",
+            kwargs={
+                "source": Sources.TMDB.value,
+                "media_type": MediaTypes.TV.value,
+                "media_id": "1668",
+                "title": "test-tv-show",
+            },
+        )
+        self.assertEqual(tv_url, expected_tv_url)
+
+        # Test with dict for TV
+        tv_dict_url = app_tags.media_url(self.tv_dict)
+        self.assertEqual(tv_dict_url, expected_tv_url)
+
+        # Test with object for Season
+        season_url = app_tags.media_url(self.season_item)
+        expected_season_url = reverse(
+            "season_details",
+            kwargs={
+                "source": Sources.TMDB.value,
+                "media_id": "1668",
+                "title": "test-tv-show",
+                "season_number": 1,
+            },
+        )
+        self.assertEqual(season_url, expected_season_url)
+
+        # Test with dict for Season
+        season_dict_url = app_tags.media_url(self.season_dict)
+        self.assertEqual(season_dict_url, expected_season_url)
+
+    def test_component_id(self):
+        """Test the component_id tag."""
+        # Test with object for TV
+        tv_id = app_tags.component_id("card", self.tv_item)
+        self.assertEqual(tv_id, "card-tv-1668")
+
+        # Test with dict for TV
+        tv_dict_id = app_tags.component_id("card", self.tv_dict)
+        self.assertEqual(tv_dict_id, "card-tv-1668")
+
+        # Test with object for Season
+        season_id = app_tags.component_id("card", self.season_item)
+        self.assertEqual(season_id, "card-season-1668-1")
+
+        # Test with dict for Season
+        season_dict_id = app_tags.component_id("card", self.season_dict)
+        self.assertEqual(season_dict_id, "card-season-1668-1")
+
+        # Test with object for Episode
+        episode_id = app_tags.component_id("card", self.episode_item)
+        self.assertEqual(episode_id, "card-episode-1668-1-1")
+
+        # Test with dict for Episode
+        episode_dict_id = app_tags.component_id("card", self.episode_dict)
+        self.assertEqual(episode_dict_id, "card-episode-1668-1-1")
+
+    def test_media_view_url(self):
+        """Test the media_view_url tag."""
+        # Test with object for TV
+        tv_modal = app_tags.media_view_url("track_modal", self.tv_item)
+        expected_tv_modal = reverse(
+            "track_modal",
+            kwargs={
+                "source": Sources.TMDB.value,
+                "media_type": MediaTypes.TV.value,
+                "media_id": "1668",
+            },
+        )
+        self.assertEqual(tv_modal, expected_tv_modal)
+
+        # Test with dict for TV
+        tv_dict_modal = app_tags.media_view_url("track_modal", self.tv_dict)
+        self.assertEqual(tv_dict_modal, expected_tv_modal)
+
+        # Test with object for Episode
+        episode_modal = app_tags.media_view_url("history_modal", self.episode_item)
+        expected_episode_modal = reverse(
+            "history_modal",
+            kwargs={
+                "source": Sources.TMDB.value,
+                "media_type": MediaTypes.EPISODE.value,
+                "media_id": "1668",
+                "season_number": 1,
+                "episode_number": 1,
+            },
+        )
+        self.assertEqual(episode_modal, expected_episode_modal)
+
+        # Test with dict for Episode
+        episode_dict_modal = app_tags.media_view_url("history_modal", self.episode_dict)
+        self.assertEqual(episode_dict_modal, expected_episode_modal)
+
+    def test_unicode_icon(self):
+        """Test the unicode_icon tag for all media types."""
+        # Test all media types from MediaTypes
+        for media_type in MediaTypes.values:
+            try:
+                result = app_tags.unicode_icon(media_type)
+                # Just check that we get a non-empty string
+                self.assertTrue(isinstance(result, str))
+                self.assertTrue(len(result) > 0)
+            except KeyError:
+                self.fail(f"unicode_icon raised KeyError for {media_type}")
+
+    def test_icon_media_types(self):
+        """Test the icon tag for all media types."""
+        # Test all media types from MediaTypes
+        for media_type in MediaTypes.values:
+            try:
+                # Test with both active and inactive states
+                active_result = app_tags.icon(media_type, is_active=True)
+                inactive_result = app_tags.icon(media_type, is_active=False)
+
+                # Just check that we get a non-empty string
+                self.assertTrue(isinstance(active_result, str))
+                self.assertTrue(len(active_result) > 0)
+                self.assertTrue(isinstance(inactive_result, str))
+                self.assertTrue(len(inactive_result) > 0)
+            except KeyError:
+                self.fail(f"icon raised KeyError for {media_type}")
+
+    def test_show_media_score(self):
+        """Test if we should show media rating or not."""
+        # Create mock users
+        mock_user_show = MagicMock()
+        mock_user_show.hide_zero_rating = False
+
+        mock_user_hide = MagicMock()
+        mock_user_hide.hide_zero_rating = True
+
+        # With hide_zero_rating=False, show all non-None scores
+        self.assertTrue(app_tags.show_media_score(1, mock_user_show))
+        self.assertTrue(app_tags.show_media_score(0, mock_user_show))
+        self.assertFalse(app_tags.show_media_score(None, mock_user_show))
+
+        # With hide_zero_rating=True, hide zero scores
+        self.assertTrue(app_tags.show_media_score(1, mock_user_hide))
+        self.assertFalse(app_tags.show_media_score(0, mock_user_hide))
+        self.assertFalse(app_tags.show_media_score(None, mock_user_hide))
+
+    def test_seconds_to_duration(self):
+        """Test conversion of seconds to human-readable duration."""
+        self.assertIsNone(app_tags.seconds_to_duration(None))
+        self.assertIsNone(app_tags.seconds_to_duration(0))
+
+        cases = [
+            (5 * 60, "5m"),  # exactly 5m
+            (10 * 60, "10m"),  # exactly 10m
+            (12 * 60, "10m"),  # 12m -> 10m (< 13m)
+            (13 * 60, "15m"),  # 13m -> 15m
+            (15 * 60, "15m"),  # exactly 15m
+            (20 * 60, "20m"),  # exactly 20m
+            (25 * 60, "25m"),  # exactly 25m
+            (27 * 60, "25m"),  # 27m -> 25m (< 28m)
+            (28 * 60, "30m"),  # 28m -> 30m
+            (30 * 60, "30m"),  # exactly 30m
+            (40 * 60, "30m"),  # 40m -> 30m (< 45m)
+            (45 * 60, "1h"),  # 45m -> 1h
+            (60 * 60, "1h"),  # exactly 1h
+            (65 * 60, "1h"),  # 1h 5m -> 1h
+            (75 * 60, "1h 30m"),  # 1h 15m -> 1h 30m
+            (90 * 60, "1h 30m"),  # exactly 1h 30m
+            (105 * 60, "2h"),  # 1h 45m -> 2h
+        ]
+        for seconds, expected in cases:
+            with self.subTest(seconds=seconds):
+                self.assertEqual(app_tags.seconds_to_duration(seconds), expected)
+
+    def test_inline_link(self):
+        """Test inline_link builds an escaped link."""
+        result = app_tags.inline_link("/path?a=1&b=2", "text-indigo-400", "<label>")
+
+        self.assertEqual(
+            result,
+            '<a href="/path?a=1&amp;b=2" class="text-indigo-400">&lt;label&gt;</a>',
+        )
+
+    def test_inline_link_new_tab(self):
+        """Test inline_link with new_tab opens the link in a new tab."""
+        result = app_tags.inline_link(
+            "https://example.com",
+            "text-indigo-400",
+            "label",
+            new_tab=True,
+        )
+
+        self.assertEqual(
+            result,
+            '<a href="https://example.com" class="text-indigo-400" '
+            'target="_blank" rel="noopener noreferrer">label</a>',
+        )
+
+    def test_inline_code(self):
+        """Test inline_code builds an escaped code fragment."""
+        result = app_tags.inline_code("<URLS>", "text-indigo-400")
+
+        self.assertEqual(
+            result,
+            '<code class="text-indigo-400">&lt;URLS&gt;</code>',
+        )

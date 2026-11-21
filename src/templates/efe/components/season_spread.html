@@ -1,0 +1,52 @@
+{# efeTrack: mark the season's unwatched episodes with dates spread over a past period. Needs: efe_season, efe_spread_count, efe_spread_periods, request #}
+{% if efe_spread_count %}
+  <div x-data="{ open: false, period: '', sure: false, busy: false }" class="mb-4">
+    <button type="button" @click="open = true; period = ''; sure = false"
+            class="text-xs text-gray-400 hover:text-white border border-gray-600 rounded-md px-2 py-1 cursor-pointer">
+      🗓 Bu sezonu geçmişte izledim…
+    </button>
+    <div x-show="open" x-cloak @keydown.escape.window="open = false"
+         class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <form method="post"
+            action="{% url 'efe_season_spread' efe_season.source efe_season.media_id efe_season.season_number %}?next={{ request.get_full_path|urlencode }}"
+            @click.outside="open = false"
+            @submit="busy = true"
+            class="p-4 bg-ef-raised border border-gray-600 rounded-lg shadow-xl" style="width: 26rem; max-width: calc(100vw - 2rem);">
+        {% csrf_token %}
+        <h3 class="text-lg font-semibold mb-1">Geçmişte izlediğim bölümler</h3>
+        <p class="text-sm text-gray-300 mb-3">
+          Bu sezonda izlemediğin <strong>{{ efe_spread_count }} bölüm</strong>, seçtiğin dönemin günlerine eşit dağıtılarak
+          (akşam saatleriyle, bölüm sırasıyla) izlendi olarak işaretlenir. Dönemden sonra yayınlanan bölümler işaretlenmez.
+        </p>
+        <fieldset class="space-y-2 mb-3">
+          <legend class="text-xs text-gray-400 mb-1">Ne zaman izledin?</legend>
+          {% for key, label in efe_spread_periods %}
+            <label class="flex items-center gap-2 text-sm cursor-pointer">
+              <input type="radio" name="period" value="{{ key }}" x-model="period" required>
+              {{ label }}
+            </label>
+          {% endfor %}
+        </fieldset>
+        <div x-show="period === 'custom'" x-cloak class="flex gap-2 mb-3 text-sm">
+          <label class="flex-1">Başlangıç
+            <input type="date" name="start" :required="period === 'custom'"
+                   class="w-full p-1.5 bg-ef-card rounded-md border border-gray-600 text-ef-fg">
+          </label>
+          <label class="flex-1">Bitiş
+            <input type="date" name="end" :required="period === 'custom'"
+                   class="w-full p-1.5 bg-ef-card rounded-md border border-gray-600 text-ef-fg">
+          </label>
+        </div>
+        <label class="flex items-start gap-2 text-sm mb-4 cursor-pointer">
+          <input type="checkbox" name="onay" value="1" x-model="sure" class="mt-0.5">
+          <span>Anladım: izlemediğim bölümler geçmiş tarihlerle işaretlenecek.</span>
+        </label>
+        <div class="flex justify-end gap-2">
+          <button type="button" @click="open = false" class="px-3 py-1.5 text-sm rounded-md bg-ef-hover cursor-pointer">Vazgeç</button>
+          <button type="submit" :disabled="!sure || !period || busy"
+                  class="px-3 py-1.5 text-sm rounded-md bg-indigo-600 text-white font-semibold cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">İşaretle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endif %}

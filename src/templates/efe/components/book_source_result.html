@@ -1,0 +1,7 @@
+{# efeTrack: result of "Kitap listeme ekle". Needs: book, created, url, search_url, books_hidden #}
+{% if book %}
+  <a href="{{ url }}" class="efe-book-btn is-done" data-efe-sound="success">{% if created %}✓ Planlananlara eklendi{% else %}✓ Kitap listende{% endif %}</a>
+  {% if books_hidden %}<span class="text-xs text-gray-400">(Kitaplar Tercihler'de kapalı)</span>{% endif %}
+{% else %}
+  <a href="{{ search_url }}" class="efe-book-btn">Bulamadım · Kitaplarda ara</a>
+{% endif %}

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+{% load static %}
+{% load app_tags %}
+
+{% block title %}
+  {% if country %}{% if country_info %}{{ country_info.word }} yapımları{% else %}Ülke{% endif %} · {% endif %}Planlananlar - efeTrack
+{% endblock title %}
+
+{% block content %}
+  <style>
+    .efe-plan-chips { display: flex; flex-wrap: wrap; gap: .375rem; }
+    .efe-plan-chips a { padding: .3rem .8rem; border-radius: 9999px; font-size: .8125rem; background: var(--ef-raised); color: #cbd5e1; text-decoration: none; transition: background .15s; }
+    .efe-plan-chips a:hover { background: var(--ef-hover); }
+    .efe-plan-chips a.on { background: var(--color-indigo-600, #4f46e5); color: #fff; }
+    .efe-plan-chips a span { opacity: .7; margin-left: .25rem; }
+    .efe-plan-chips a i { font-style: normal; margin-right: .3rem; }
+    .efe-plan-chips a.efe-plan-more { background: transparent; border: 1px dashed var(--ef-strong-line); color: var(--color-indigo-400, #818cf8); }
+    .efe-plan-flag { font-size: .9em; }
+    html.light .efe-plan-chips a { color: #374151; }
+    html.light .efe-plan-chips a.on { color: #fff; }
+    .efe-plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 1rem .75rem; }
+    @media (min-width: 768px) { .efe-plan-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } }
+    .efe-plan-grid a { display: block; text-decoration: none; }
+    .efe-plan-poster { position: relative; aspect-ratio: 2 / 3; border-radius: .375rem; overflow: hidden; background: var(--ef-card); }
+    .efe-plan-poster img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s; }
+    .efe-plan-grid a:hover .efe-plan-poster img { transform: scale(1.05); }
+    .efe-plan-poster .efe-plan-none { display: flex; align-items: center; justify-content: center; height: 100%; padding: .5rem; font-size: .8rem; text-align: center; color: #9ca3af; }
+    .efe-plan-kind { position: absolute; top: .4rem; left: .4rem; padding: .1rem .45rem; border-radius: .25rem; font-size: 11px; font-weight: 600; color: #fff; background: rgba(0,0,0,.65); }
+    .efe-plan-title { margin-top: .4rem; font-size: .85rem; font-weight: 500; line-height: 1.25; color: var(--ef-fg); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .efe-plan-grid a:hover .efe-plan-title { color: var(--color-indigo-400, #818cf8); }
+    .efe-plan-btn { padding: .45rem .9rem; border-radius: .375rem; font-size: .875rem; background: var(--ef-raised); color: var(--ef-fg); border: 0; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; transition: background .15s; }
+    .efe-plan-btn:hover { background: var(--ef-hover); }
+    .efe-plan-btn:disabled { opacity: .6; cursor: progress; }
+    .efe-plan-time { display: inline-block; margin-top: .6rem; padding: .35rem .8rem; border-radius: .5rem; font-size: .875rem; background: var(--ef-card); color: var(--ef-fg); border: 1px solid var(--ef-line); }
+    .efe-plan-time small { opacity: .65; margin-left: .35rem; }
+    .efe-plan-modal { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem; background: rgba(0,0,0,.6); }
+    .efe-plan-modal-box { width: 100%; max-width: 420px; max-height: calc(100vh - 2rem); overflow-y: auto; padding: 1.25rem; border-radius: .75rem; background: var(--ef-card); color: var(--ef-fg); border: 1px solid var(--ef-line); text-align: center; }
+    .efe-plan-qr { margin: .9rem auto .6rem; width: 340px; max-width: 100%; padding: .5rem; background: #fff; border-radius: .5rem; line-height: 0; }
+    .efe-plan-qr svg { width: 100%; height: auto; }
+    .efe-plan-modal-list { margin-top: .5rem; padding: .5rem .75rem; max-height: 7.5rem; overflow-y: auto; border-radius: .5rem; background: var(--ef-raised); font-size: .75rem; line-height: 1.45; text-align: left; white-space: pre-line; color: var(--ef-fg); }
+    .efe-plan-search { width: 100%; max-width: 280px; padding: .45rem .75rem; border-radius: .5rem; font-size: .875rem; background: var(--ef-field); color: var(--ef-fg); border: 1px solid var(--ef-line); }
+  </style>
+
+  <div x-data="efePlanned()" class="flex flex-col gap-5">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+      <div>
+        {% if country %}
+          <a href="{% url 'efe_planned' %}" class="text-sm text-gray-400 hover:text-ef-fg">← Planlananlar</a>
+          <h1 class="text-3xl font-bold mb-1 mt-1">{% if country_info %}<span class="efe-plan-flag">{{ country_info.flag }}</span> {{ country_info.word }} yapımları{% else %}Bu ülkeden yapım yok{% endif %}</h1>
+          <p class="text-gray-400">Planladıklarından bu ülkenin yapımları · {{ total }} yapım · <a href="{% url 'efe_countries' %}" class="text-indigo-400 hover:text-indigo-300">Tüm ülkeler</a></p>
+        {% else %}
+          <h1 class="text-3xl font-bold mb-1">Planlananlar</h1>
+          <p class="text-gray-400">İzlemeyi, okumayı ya da oynamayı planladığın her şey · {{ total }} yapım</p>
+        {% endif %}
+        {% if total_text %}
+          <p class="efe-plan-time">Hepsini {{ verb }} yaklaşık <strong>{{ total_text }}</strong>{% if unknown_count %}<small>· {{ unknown_count }} yapımın süresi bilinmiyor</small>{% endif %}</p>
+        {% endif %}
+        {% if computing %}
+          <p class="efe-plan-time" role="status">Süreler hesaplanıyor… sayfa birazdan kendini yeniler.</p>
+        {% endif %}
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <input type="search" x-model="q" placeholder="Bu listede ara…" class="efe-plan-search" aria-label="Planlananlarda ara">
+        {% if entries %}
+          <button type="button" class="efe-plan-btn" @click="save()" :disabled="busy"
+                  x-text="busy ? `Hazırlanıyor… ${done}/${total}` : '⬇︎ Resim olarak kaydet'">⬇︎ Resim olarak kaydet</button>
+        {% endif %}
+        {% if entries %}
+          <button type="button" class="efe-plan-btn" @click="openQr()">Karekod</button>
+        {% endif %}
+        <a href="{% url 'efe_random' %}" class="px-4 py-2 text-sm bg-ef-raised hover:bg-ef-hover rounded-md transition-colors flex items-center gap-2">
+          {% include "app/icons/dice.svg" with classes="w-4 h-4" %}<span>Rastgele seç</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="efe-plan-modal" x-show="qrOpen" x-cloak @click.self="qrOpen = false" @keydown.escape.window="qrOpen = false"
+         role="dialog" aria-modal="true" aria-label="Karekod">
+      <div class="efe-plan-modal-box">
+        <h2 class="text-lg font-semibold">Karekod</h2>
+        <div class="efe-plan-qr" x-ref="qr"></div>
+        <p class="text-sm">Telefonun kamerasıyla okut; listenin yazısı açılır, siteye giriş gerekmez.</p>
+        <p class="text-xs text-gray-400 mt-1" x-show="qrLeft" x-text="`Karekoda ${qrShown} yapım sığdı; kalan ${qrLeft} yapım için türü ya da aramayı daralt.`"></p>
+        <div class="efe-plan-modal-list" x-text="qrText"></div>
+        <div class="flex justify-center gap-2 mt-3">
+          <button type="button" class="efe-plan-btn" @click="copyList()" x-text="copied ? '✓ Kopyalandı' : 'Listeyi kopyala'">Listeyi kopyala</button>
+          <button type="button" class="efe-plan-btn" @click="qrOpen = false">Kapat</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <div class="efe-plan-chips" role="navigation" aria-label="Tür">
+        <a href="?sira={{ sort }}" class="{% if not kind %}on{% endif %}">Hepsi<span>{{ total }}</span></a>
+        {% for key, label, count in kinds %}
+          <a href="?tur={{ key }}&sira={{ sort }}" class="{% if key == kind %}on{% endif %}">{{ label }}<span>{{ count }}</span></a>
+        {% endfor %}
+      </div>
+      {% if countries %}
+        <div class="efe-plan-chips efe-plan-countries" role="navigation" aria-label="Ülke">
+          <a href="{% url 'efe_planned' %}{% if kind %}?tur={{ kind }}&sira={{ sort }}{% else %}?sira={{ sort }}{% endif %}" class="{% if not country %}on{% endif %}">Tüm ülkeler</a>
+          {% for c in countries|slice:":8" %}
+            <a href="{% url 'efe_country' c.key %}?{% if kind %}tur={{ kind }}&{% endif %}sira={{ sort }}" class="{% if c.key == country %}on{% endif %}">{% if c.flag %}<i>{{ c.flag }}</i>{% endif %}{{ c.word }}<span>{{ c.count }}</span></a>
+          {% endfor %}
+          {% if countries|length > 8 %}<a href="{% url 'efe_countries' %}" class="efe-plan-more">+{{ countries|length|add:"-8" }} ülke</a>{% endif %}
+        </div>
+      {% endif %}
+      <div class="efe-plan-chips" role="navigation" aria-label="Sıralama">
+        {% for key, label in sorts %}
+          <a href="?{% if kind %}tur={{ kind }}&{% endif %}sira={{ key }}" class="{% if key == sort %}on{% endif %}">{{ label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if entries %}
+      <div class="efe-plan-grid">
+        {% for entry in entries %}
+          <a href="{{ entry.url }}" title="{{ entry.title }} · {{ entry.added|date:'j F Y' }} tarihinde eklendi"
+             data-title="{{ entry.title }}" data-poster="{{ entry.image }}" data-kind="{{ entry.label }}" x-show="!q || fold($el.dataset.title).includes(fold(q))">
+            <div class="efe-plan-poster">
+              {% if entry.image %}
+                <img src="{{ entry.image }}" alt="{{ entry.title }}" loading="lazy" decoding="async">
+              {% else %}
+                <span class="efe-plan-none">{{ entry.title }}</span>
+              {% endif %}
+              {% if not kind %}<span class="efe-plan-kind">{{ entry.label }}</span>{% endif %}
+            </div>
+            <p class="efe-plan-title">{{ entry.title }}</p>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-gray-400">{% if kind %}Bu türde planladığın bir şey yok.{% else %}Henüz planladığın bir şey yok.{% endif %}</p>
+    {% endif %}
+  </div>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'js/vendor/qrcode-generator-1.4.4.min.js' %}"></script>
+  <script src="{% static 'js/efe-poster-image.js' %}{% get_static_file_mtime 'js/efe-poster-image.js' %}"></script>
+  <script>
+    window.efePlanned = function () {
+      const proxy = "{% url 'efe_poster_proxy' %}?u=";
+      const kindLabel = "{{ kind_label|escapejs }}";
+      const listTitle = "{% if country_info %}{{ country_info.word|escapejs }} yapımları{% else %}Planlananlarım{% endif %}";
+      const fileKind = "{{ kind_slug }}";
+      const QR_BYTES = 1250;  // larger codes get too dense to scan from a screen
+      return {
+        q: '', qrOpen: false, qrText: '', qrShown: 0, qrLeft: 0, copied: false, busy: false, done: 0, total: 0,
+        fold(t) { return (t || '').toLocaleLowerCase('tr').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/ı/g, 'i'); },
+        visible() {
+          // Only what is on screen: the chosen type, narrowed by the search box.
+          return [...document.querySelectorAll("[data-poster]")].filter((a) => a.style.display !== "none");
+        },
+        listText(cards, limit) {
+          const bytes = (text) => new TextEncoder().encode(text).length;
+          const head = "efeTrack · " + listTitle + (kindLabel ? " · " + kindLabel : "") + " (" + cards.length + ")";
+          const lines = [head, ""];
+          let shown = 0;
+          for (const card of cards) {
+            const line = (shown + 1) + ". " + card.dataset.title + (kindLabel ? "" : " (" + card.dataset.kind + ")");
+            const left = cards.length - shown - 1;
+            const tail = left ? "\n… ve " + left + " yapım daha" : "";
+            if (limit && bytes([...lines, line].join("\n") + tail) > limit) break;
+            lines.push(line);
+            shown++;
+          }
+          if (shown < cards.length) lines.push("… ve " + (cards.length - shown) + " yapım daha");
+          return { text: lines.join("\n"), shown: shown };
+        },
+        openQr() {
+          const cards = this.visible();
+          if (!cards.length) return;
+          const { text, shown } = this.listText(cards, QR_BYTES);
+          this.qrText = text; this.qrShown = shown; this.qrLeft = cards.length - shown; this.copied = false;
+          this.qrOpen = true;
+          this.$nextTick(() => {
+            qrcode.stringToBytes = qrcode.stringToBytesFuncs["UTF-8"];
+            const qr = qrcode(0, "L");
+            qr.addData(text, "Byte");
+            qr.make();
+            this.$refs.qr.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
+          });
+        },
+        async copyList() {
+          const full = this.listText(this.visible(), 0).text;
+          try { await navigator.clipboard.writeText(full); this.copied = true; } catch (e) { alert(full); }
+        },
+        async save() {
+          const cards = this.visible();
+          if (!cards.length || this.busy) return;
+          this.busy = true; this.done = 0; this.total = cards.length;
+          const ok = await efePosterImage.save(
+            cards.map((a) => ({ title: a.dataset.title, poster: a.dataset.poster, kind: a.dataset.kind })),
+            {
+              title: listTitle,
+              subtitle: [kindLabel, cards.length + " yapım"].filter(Boolean).join(" · "),
+              showKind: !kindLabel,
+              fileName: "efeTrack-planlananlar-{% if country %}{{ country }}-{% endif %}" + fileKind + ".jpg",
+              proxy: proxy,
+              onProgress: (done) => { this.done = done; },
+            },
+          );
+          this.busy = false;
+          if (!ok) alert("Resim oluşturulamadı.");
+        },
+      };
+    };
+    {% if computing %}
+      // Reload while the times are computed in the background, at most 15 times (no endless loop).
+      (() => {
+        const url = new URL(location.href);
+        const tries = Number(url.searchParams.get("yenile") || 0);
+        if (tries < 15) setTimeout(() => {
+          if (document.hidden) return;
+          url.searchParams.set("yenile", tries + 1);
+          location.replace(url);
+        }, 20000);
+      })();
+    {% endif %}
+  </script>
+{% endblock js %}
