@@ -38,7 +38,7 @@ sunucuda duruyordu ve düzenli bir yedeği yoktu. efeTrack bu sorunları kendi g
 
 ## 📈 Sunucuda
 
-efeTrack kendi sunucumda Docker ile çalışıyor ve her gün kullanılıyor. Uygulamanın çevresinde:
+efeTrack kendi sunucumda Docker ile çalışıyor ve düzenli olarak kendim kullanıyorum. Uygulamanın çevresinde:
 
 - **Gecelik yedek:** Her gece 03:30'da sunucudaki küçük bir yedek konteyneri veritabanını yedekler; günlük, haftalık ve aylık yedekler saklanır.
 - **Aylık yedek provası** ([`deploy/bekci/yedek_prova.py`](deploy/bekci/yedek_prova.py)): Son yedek internete kapalı, geçici bir konteynerde açılır, veritabanı güncellenir, okunabiliyor mu bakılır ve sonuç bildirilir.
